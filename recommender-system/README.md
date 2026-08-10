@@ -67,10 +67,14 @@ both algorithms on an 80/20 train/test split of MovieLens 100K.
 
 ## 📊 Results
 
-| Model          | RMSE | MAE | Precision@10 | Recall@10 |
-|----------------|------|-----|--------------|-----------|
-| User-Based CF  | _run tests to fill in_ | | | |
-| Item-Based CF  | _run tests to fill in_ | | | |
+| Model          | RMSE   | MAE    | Precision@10 | Recall@10 |
+|----------------|--------|--------|---------------|-----------|
+| User-Based CF  | 1.0105 | 0.8028 | 0.0005        | 0.0006    |
+| Item-Based CF  | 0.9793 | 0.7669 | 0.0350        | 0.0145    |
+
+Item-based CF outperforms user-based CF on both accuracy (RMSE/MAE) and
+ranking quality (Precision/Recall@10) — item-item similarity tends to be
+more stable than user-user similarity, especially without mean-centering.
 
 ## 🗺 Roadmap
 
