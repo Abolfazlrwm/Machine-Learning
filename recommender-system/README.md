@@ -1,90 +1,92 @@
-# 🎬 Multi-Domain Recommender System
+# 🎬 Movie Recommender — Collaborative Filtering
 
-![version](https://img.shields.io/badge/version-0.1.0-blue)
-![python](https://img.shields.io/badge/python-3.9+-blue)
-![status](https://img.shields.io/badge/status-active-brightgreen)
+A from-scratch implementation of **User-Based** and **Item-Based**
+Collaborative Filtering, trained and evaluated on the real
+[MovieLens](https://grouplens.org/datasets/movielens/) `ml-latest-small`
+dataset (105k ratings, 668 users, 10k+ movies).
 
-A collaborative-filtering recommender system built on a **domain-agnostic
-architecture** — starting with movies (MovieLens 100K), with books and
-music planned as drop-in extensions of the same `BaseRecommender` interface.
+No recommendation library (Surprise, LightFM, implicit) is used —
+similarity computation, prediction, and evaluation are all implemented
+directly with pandas/NumPy/scikit-learn so the mechanics are fully
+visible.
 
-> This is Phase 1 (`v0.1.0`). See [Roadmap](#-roadmap) below for what's next.
+## How it works
 
-## ✨ Features (Phase 1)
+**User-Based CF** — to predict how much user U will like movie M, find
+the `k` users most similar to U by cosine similarity on mean-centered
+rating vectors, then take a similarity-weighted average of their
+ratings for M.
 
-- **User-Based Collaborative Filtering** — recommends based on similar users' taste
-- **Item-Based Collaborative Filtering** — recommends based on item-to-item similarity
-- Sparse matrix implementation (`scipy.sparse`) — scales to large user/item counts
-- Clean abstract interface (`BaseRecommender`) so future domains (books, music)
-  only need to implement `fit` / `predict` / `recommend`
-- Evaluation with RMSE, MAE, Precision@K, Recall@K
+**Item-Based CF** — same idea, but similarity is computed between
+*movies* based on how the whole userbase rated them, then a user's own
+past ratings for similar movies predict their rating for M. This is
+the same principle behind "customers who bought this also bought."
 
-## 📁 Project Structure
+Both predictions are clipped to the valid 0.5–5.0 rating scale, and
+both fall back gracefully to a global or per-user mean for cold-start
+users/movies with no overlap.
+
+## Results
+
+Evaluated with an 80/20 per-user train/test split (so every user is
+represented in training — a plain random split can accidentally drop
+a user entirely and break CF for them):
+
+| Model         | RMSE  | MAE   |
+|---------------|-------|-------|
+| User-Based CF | 0.877 | 0.668 |
+| Item-Based CF | 0.925 | 0.709 |
+
+For reference, these are in the same range as published baselines for
+classic CF on MovieLens 100k (typically RMSE ≈ 0.87–0.95), which is
+what you'd expect from a correct, un-tuned implementation.
+
+## Project structure
 
 ```
 recommender-system/
-├── data/                   # datasets (gitignored, auto-downloaded)
+├── data/              MovieLens ml-latest-small (ratings, movies, links, tags)
 ├── src/
-│   ├── data_loader.py      # downloads & loads MovieLens 100K
-│   ├── base_recommender.py # abstract interface, shared eval logic
-│   └── collaborative.py    # UserBasedCF, ItemBasedCF
-├── tests/
-│   └── test_collaborative.py
-├── requirements.txt
-└── README.md
+│   ├── data_loader.py     CSV loading + user-item matrix + train/test split
+│   ├── user_based_cf.py   User-Based CF
+│   ├── item_based_cf.py   Item-Based CF
+│   ├── evaluate.py        RMSE / MAE
+│   └── main.py            End-to-end demo
+└── tests/
+    └── test_recommenders.py   7 unit tests on a hand-built toy matrix
 ```
 
-## 🚀 Quickstart
+## Run it
 
 ```bash
-git clone https://github.com/Abolfazlrwm/Machine-Learning.git
-cd Machine-Learning/recommender-system
-python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-
-# Downloads MovieLens 100K automatically on first run
-python -m src.data_loader
+cd src && python main.py
 ```
 
-```python
-from src.data_loader import load_ratings
-from src.collaborative import ItemBasedCF
+```
+Loading MovieLens ml-latest-small ...
+  105,339 ratings, 668 users, 10,325 movies
+  train: 84,274 ratings | test: 21,065 ratings
 
-ratings = load_ratings()
-model = ItemBasedCF(k_neighbors=30).fit(ratings)
+Training User-Based CF ...
+  done in 0.6s
+Training Item-Based CF ...
+  done in 7.0s
 
-print(model.recommend(user_id=1, n=10))
+Evaluating on held-out test set ...
+  User-Based CF -> RMSE: 0.877  MAE: 0.668
+  Item-Based CF -> RMSE: 0.925  MAE: 0.709
 ```
 
-## 🧪 Running Tests & Evaluation
+## Tests
 
 ```bash
-pytest tests/ -v -s
+pytest tests/ -v
 ```
 
-The evaluation test prints RMSE, MAE, Precision@10, and Recall@10 for
-both algorithms on an 80/20 train/test split of MovieLens 100K.
+## Possible next steps
 
-## 📊 Results
-
-| Model          | RMSE   | MAE    | Precision@10 | Recall@10 |
-|----------------|--------|--------|---------------|-----------|
-| User-Based CF  | 1.0105 | 0.8028 | 0.0005        | 0.0006    |
-| Item-Based CF  | 0.9793 | 0.7669 | 0.0350        | 0.0145    |
-
-Item-based CF outperforms user-based CF on both accuracy (RMSE/MAE) and
-ranking quality (Precision/Recall@10) — item-item similarity tends to be
-more stable than user-user similarity, especially without mean-centering.
-
-## 🗺 Roadmap
-
-- [x] **v0.1.0** — MovieLens collaborative filtering (user-based + item-based)
-- [ ] **v0.2.0** — Add books domain (Goodbooks-10k) via the same `BaseRecommender`
-- [ ] **v0.2.0** — Add music domain (Last.fm)
-- [ ] **v0.3.0** — Matrix Factorization (SVD) for better accuracy at scale
-- [ ] **v0.3.0** — Interactive Streamlit demo (pick a domain, rate a few items, get recommendations)
-- [ ] **v1.0.0** — Deployed live demo + polished docs
-
-## 🛠 Tech Stack
-
-Python · pandas · NumPy · scikit-learn · SciPy (sparse matrices) · Streamlit (planned)
+- Matrix Factorization (SVD/ALS) baseline for comparison
+- Hybrid: blend user-based + item-based predictions
+- Extend beyond movies to books/music (multi-domain, as originally scoped)
+- Cold-start handling via genre-based content similarity
