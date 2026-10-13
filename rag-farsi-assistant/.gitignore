@@ -1,0 +1,15 @@
+# Vector index artifacts (rebuildable)
+storage/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Environment / secrets
+.env
+
+# Streamlit
+.streamlit/secrets.toml
