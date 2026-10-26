@@ -1,0 +1,45 @@
+{
+  "description": "Golden QA pairs for retrieval evaluation. 'expected_doc' is the source document that should be retrieved (Hit@k / MRR).",
+  "pairs": [
+    {
+      "question": "بیش‌برازش یا Overfitting چیست و چطور با آن مقابله می‌شود؟",
+      "expected_doc": "01_machine_learning_basics.txt"
+    },
+    {
+      "question": "تفاوت یادگیری با نظارت و بدون نظارت چیست؟",
+      "expected_doc": "01_machine_learning_basics.txt"
+    },
+    {
+      "question": "الگوریتم پس‌انتشار خطا چگونه کار می‌کند؟",
+      "expected_doc": "02_deep_learning_neural_networks.txt"
+    },
+    {
+      "question": "مکانیزم توجه یا Attention در ترنسفورمر چه کاری انجام می‌دهد؟",
+      "expected_doc": "02_deep_learning_neural_networks.txt"
+    },
+    {
+      "question": "چرا TF-IDF معنای کلمات را از دست می‌دهد و Word Embedding چطور این مشکل را حل می‌کند؟",
+      "expected_doc": "03_nlp_large_language_models.txt"
+    },
+    {
+      "question": "RAG چیست و چه مزیتی نسبت به حافظه مدل زبانی دارد؟",
+      "expected_doc": "03_nlp_large_language_models.txt"
+    },
+    {
+      "question": "شبکه کانولوشنی چطور ویژگی‌های تصویر را استخراج می‌کند؟",
+      "expected_doc": "04_computer_vision.txt"
+    },
+    {
+      "question": "Grad-CAM چه کمکی به توضیح‌پذیری مدل‌های بینایی می‌کند؟",
+      "expected_doc": "04_computer_vision.txt"
+    },
+    {
+      "question": "مسئله شروع سرد در سیستم توصیه‌گر چیست و چگونه حل می‌شود؟",
+      "expected_doc": "05_recommender_systems.txt"
+    },
+    {
+      "question": "رانش داده یا Data Drift چیست و چرا مدل را از کار می‌اندازد؟",
+      "expected_doc": "06_mlops_deployment.txt"
+    }
+  ]
+}
