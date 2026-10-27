@@ -91,7 +91,12 @@ appears in the top-k (`Hit@k`) and the mean reciprocal rank (`MRR`):
 python evaluate.py            # builds/loads the index, prints metrics
 ```
 
-Metric tables will be added once the golden-QA benchmark run is finalised.
+| Embedding model | Hit@1 | Hit@2 | Hit@3 | MRR |
+|---|---|---|---|---|
+| `paraphrase-multilingual-MiniLM-L12-v2` (384d) | 0.80 | 0.90 | 1.00 | 0.883 |
+| **`intfloat/multilingual-e5-base` (768d, default)** | **0.90** | **1.00** | **1.00** | **0.950** |
+
+The E5 query/passage prefixes are applied automatically by the embedder.
 
 ## Tests
 
