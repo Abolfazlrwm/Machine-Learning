@@ -1,0 +1,44 @@
+name: Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  rag-farsi-assistant:
+    name: RAG assistant unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install test dependencies
+        # Unit tests run on the deterministic fake embedding backend and a
+        # mock LLM, so the heavy sentence-transformers/torch stack is not
+        # needed here.
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy requests pytest
+      - name: Run tests
+        working-directory: rag-farsi-assistant
+        run: python -m pytest tests/ -q
+
+  stock-movement-ml:
+    name: Stock pipeline unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: stock-movement-ml/requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r stock-movement-ml/requirements.txt pytest
+      - name: Run tests
+        working-directory: stock-movement-ml
+        run: python -m pytest tests/ -q
