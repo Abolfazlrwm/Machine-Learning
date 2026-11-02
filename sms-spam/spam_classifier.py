@@ -1,3 +1,9 @@
+"""SMS spam classifier: TF-IDF + Logistic Regression, tuned with GridSearchCV.
+
+Train:   python spam_classifier.py --train spam.csv
+Predict: python spam_classifier.py --predict "Free entry in 2 a wkly comp!"
+"""
+
 import os
 import re
 import string
@@ -87,16 +93,16 @@ def train_model(csv_path):
     print("Cross Validation Accuracy:", cv_score)
 
     print("\n Saving model...")
-    joblib.dump(best_model, "advanced_spam_classifier.pkl")
+    joblib.dump(best_model, "spam_classifier.pkl")
 
-    print(" Training complete! Model saved as advanced_spam_classifier.pkl")
+    print(" Training complete! Model saved as spam_classifier.pkl")
 
 def predict_message(message):
-    if not os.path.exists("advanced_spam_classifier.pkl"):
+    if not os.path.exists("spam_classifier.pkl"):
         print(" Model not found. Train first.")
         return
 
-    model = joblib.load("advanced_spam_classifier.pkl")
+    model = joblib.load("spam_classifier.pkl")
     cleaned = clean_text(message)
     prediction = model.predict([cleaned])[0]
 
@@ -123,6 +129,6 @@ if __name__ == "__main__":
     else:
         print("Usage:")
         print("Train model:")
-        print("python advanced_spam_classifier.py --train spam.csv")
+        print("python spam_classifier.py --train spam.csv")
         print("\nPredict message:")
-        print('python advanced_spam_classifier.py --predict "Free entry in 2 a wkly comp!"')
+        print('python spam_classifier.py --predict "Free entry in 2 a wkly comp!"')
