@@ -1,0 +1,9 @@
+# Downloaded market data cache (reproducible via yfinance, do not commit)
+data/*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
