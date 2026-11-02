@@ -1,5 +1,7 @@
 # Machine Learning
 
+[![Tests](https://github.com/Abolfazlrwm/Machine-Learning/actions/workflows/tests.yml/badge.svg)](https://github.com/Abolfazlrwm/Machine-Learning/actions/workflows/tests.yml)
+
 A collection of end-to-end machine learning projects — from classical
 scikit-learn pipelines to LLM-powered retrieval. Every project ships with a
 structured codebase (`src/` + `tests/`), real evaluation numbers and a
@@ -13,6 +15,7 @@ documented methodology.
 | [`ai-text-detector`](ai-text-detector/) | NLP classification | TF-IDF + stylometric features (sentence length variation, punctuation habits), Linear SVM vs NB vs LR | Accuracy 0.897 · F1 0.899 · ROC-AUC 0.964 |
 | [`recommender-system`](recommender-system/) | RecSys | User-based & item-based collaborative filtering **from scratch** (pandas/NumPy) on MovieLens 105k | User-CF RMSE 0.877 · Item-CF RMSE 0.925 |
 | [`stock-movement-ml`](stock-movement-ml/) | Finance / time series | 20 technical indicators, walk-forward validation, leakage-free backtest with costs, Plotly dashboard | OOS ROC-AUC 0.53 (Random Forest), +25.45% on 696 out-of-sample days |
+| [`sms-spam`](sms-spam/) | NLP baseline | TF-IDF (1–2 grams) + Logistic Regression, 5-fold GridSearchCV | Accuracy 0.975 · ROC-AUC 0.987 |
 
 ## 🧭 What each project demonstrates
 
@@ -55,6 +58,9 @@ cd recommender-system && pip install -r requirements.txt
 cd stock-movement-ml && pip install -r requirements.txt
 python main.py --ticker AAPL --start 2018-01-01 --end 2025-01-01
 
+# SMS spam baseline
+cd sms-spam && pip install pandas scikit-learn nltk joblib
+python spam_classifier.py --train spam.csv
 ```
 
 ## 🧪 Testing
