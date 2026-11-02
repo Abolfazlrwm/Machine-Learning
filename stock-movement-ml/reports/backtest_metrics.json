@@ -1,0 +1,12 @@
+{
+  "days": 696,
+  "total_return": 0.2545,
+  "buyhold_return": 0.5041,
+  "cagr": 0.0855,
+  "sharpe": 0.5216,
+  "max_drawdown": -0.1661,
+  "exposure": 0.3329,
+  "n_trades": 142,
+  "directional_accuracy": 0.4784,
+  "model": "Random_Forest"
+}
