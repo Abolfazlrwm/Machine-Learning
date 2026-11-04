@@ -17,3 +17,12 @@ Thumbs.db
 # Rebuildable project artifacts
 rag-farsi-assistant/storage/
 stock-movement-ml/data/
+
+# Datasets and trained artifacts - restore with: python download_data.py
+ai-text-detector/data/
+ai-text-detector/models/
+recommender-system/data/*.csv
+recommender-system/data/ml-100k/
+stock-movement-ml/reports/
+sms-spam/spam_classifier.pkl
+*.joblib
