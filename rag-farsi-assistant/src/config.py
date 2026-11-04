@@ -28,8 +28,14 @@ class RAGConfig:
 
     # --- retrieval ------------------------------------------------------
     top_k: int = 4                 # chunks passed to the LLM
-    candidate_multiplier: int = 4  # MMR searches among top_k * multiplier
+    candidate_multiplier: int = 4  # candidate pool = top_k * multiplier
     mmr_lambda: float = 0.7        # 1.0 = pure relevance, 0.0 = pure diversity
+    # dense = embeddings+MMR | sparse = BM25 | hybrid = RRF fusion
+    retrieval_mode: str = "hybrid"
+    rrf_k: int = 60                # reciprocal rank fusion constant
+    bm25_k1: float = 1.5           # BM25 term-frequency saturation
+    bm25_b: float = 0.75           # BM25 length normalisation
+    reranker: str = "none"         # none | noop | cross-encoder
 
     # --- embeddings -----------------------------------------------------
     # backend: "sentence-transformers" (real) or "fake" (hash-based, no deps)
@@ -65,6 +71,11 @@ class RAGConfig:
             "RAG_CHUNK_OVERLAP": ("chunk_overlap", int),
             "RAG_TOP_K": ("top_k", int),
             "RAG_MMR_LAMBDA": ("mmr_lambda", float),
+            "RAG_RETRIEVAL_MODE": ("retrieval_mode", str),
+            "RAG_RRF_K": ("rrf_k", int),
+            "RAG_BM25_K1": ("bm25_k1", float),
+            "RAG_BM25_B": ("bm25_b", float),
+            "RAG_RERANKER": ("reranker", str),
             "RAG_EMBEDDING_BACKEND": ("embedding_backend", str),
             "RAG_EMBEDDING_MODEL": ("embedding_model", str),
             "RAG_PROVIDER": ("provider", str),
