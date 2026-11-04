@@ -8,9 +8,11 @@ from .chunker import Chunk, chunk_documents
 from .config import RAGConfig
 from .data_loader import load_documents
 from .embedder import BaseEmbedder, create_embedder
+from .hybrid import HybridRetriever
 from .llm import LLMProvider, create_provider
 from .prompts import SYSTEM_PROMPT, build_user_prompt
 from .retriever import Retriever, RetrievalResult
+from .rerank import create_reranker
 from .vector_store import VectorStore
 
 
@@ -52,13 +54,29 @@ class RAGPipeline:
         )
         self.store = store or VectorStore(dimension=self.embedder.dimension)
         self.llm = llm
-        self.retriever = Retriever(
-            embedder=self.embedder,
-            store=self.store,
-            top_k=config.top_k,
-            mmr_lambda=config.mmr_lambda,
-            candidate_multiplier=config.candidate_multiplier,
-        )
+        reranker = create_reranker(config.reranker) if config.reranker != "none" else None
+        if config.retrieval_mode == "dense":
+            self.retriever = Retriever(
+                embedder=self.embedder,
+                store=self.store,
+                top_k=config.top_k,
+                mmr_lambda=config.mmr_lambda,
+                candidate_multiplier=config.candidate_multiplier,
+            )
+        else:
+            # "sparse" (BM25 only) or "hybrid" (BM25 + dense via RRF)
+            self.retriever = HybridRetriever(
+                embedder=self.embedder,
+                store=self.store,
+                top_k=config.top_k,
+                mode=config.retrieval_mode,
+                rrf_k=config.rrf_k,
+                candidate_multiplier=config.candidate_multiplier,
+                mmr_lambda=config.mmr_lambda,
+                bm25_k1=config.bm25_k1,
+                bm25_b=config.bm25_b,
+                reranker=reranker,
+            )
 
     # --------------------------------------------------------------- index
     def build_index(self) -> dict:
