@@ -1,6 +1,6 @@
 # Runtime dependencies for the Persian RAG assistant
 sentence-transformers>=2.2.2
-faiss-cpu>=1.7.4
+faiss-cpu>=1.15.1
 numpy>=1.24.0
 requests>=2.31.0
 streamlit>=1.30.0
