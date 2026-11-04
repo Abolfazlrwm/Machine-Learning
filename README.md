@@ -63,6 +63,25 @@ cd sms-spam && pip install pandas scikit-learn nltk joblib
 python spam_classifier.py --train spam.csv
 ```
 
+## 📦 Datasets
+
+The datasets are not stored in git (they would bloat the repository) — fetch
+them once from the repo root:
+
+```bash
+python download_data.py
+```
+
+| Project | Dataset | Source |
+|---|---|---|
+| `recommender-system` | MovieLens ml-latest-small (`ratings.csv`, `movies.csv`) | [GroupLens](https://grouplens.org/datasets/movielens/) |
+| `ai-text-detector` | Human vs AI Generated Text (`Data`, `Labels`) | Kaggle — mirrored byte-for-byte as a [release asset](https://github.com/Abolfazlrwm/Machine-Learning/releases/tag/datasets-v1) |
+| `sms-spam` | SMS Spam Collection (5,574 messages) | bundled at `sms-spam/spam.csv` |
+
+Trained model artifacts (`*.joblib`, `*.pkl`) and generated reports
+(`stock-movement-ml/reports/`) are git-ignored as well — recreate them by
+running each project's own training pipeline.
+
 ## 🧪 Testing
 
 Projects include pytest suites (unit-level, network-free):
