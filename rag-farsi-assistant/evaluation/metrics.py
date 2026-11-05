@@ -140,9 +140,10 @@ def evaluate_generation(
     """Run the full RAGAS-style suite over golden QA pairs.
 
     Returns aggregate metrics plus one row per question so failures can be
-    inspected individually. ``answer_relevancy`` is only meaningful for
-    generative answers — with the extractive fallback (no LLM) it is set to
-    ``None`` instead of a misleading token-overlap value.
+    inspected individually. ``answer_relevancy`` uses the embedder cosine
+    when one is supplied (meaningful for extractive answers too — does the
+    retrieved span actually answer the question?); without an embedder and
+    without an LLM it is ``None`` rather than a misleading token overlap.
     """
     rows: list[dict] = []
     generative = getattr(pipeline, "llm", None) is not None
@@ -161,7 +162,9 @@ def evaluate_generation(
             "context_recall": context_recall(contexts, pair["gold_answer"]),
             "faithfulness": faithfulness(answer, contexts),
             "answer_relevancy": (
-                answer_relevancy(question, answer, embedder) if generative else None
+                answer_relevancy(question, answer, embedder)
+                if (generative or embedder is not None)
+                else None
             ),
         })
 

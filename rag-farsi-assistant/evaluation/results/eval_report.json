@@ -1,0 +1,34 @@
+{
+  "backend": "sentence-transformers",
+  "retrieval_by_mode": {
+    "dense": {
+      "n_questions": 30,
+      "hit@1": 0.9333,
+      "hit@2": 1.0,
+      "hit@3": 1.0,
+      "mrr": 0.9667
+    },
+    "sparse": {
+      "n_questions": 30,
+      "hit@1": 0.9333,
+      "hit@2": 0.9667,
+      "hit@3": 1.0,
+      "mrr": 0.9611
+    },
+    "hybrid": {
+      "n_questions": 30,
+      "hit@1": 0.9667,
+      "hit@2": 1.0,
+      "hit@3": 1.0,
+      "mrr": 0.9833
+    }
+  },
+  "generation": {
+    "n_questions": 30,
+    "doc_hit_rate": 1.0,
+    "context_precision": 0.9417,
+    "context_recall": 0.9788,
+    "faithfulness": 1.0,
+    "answer_relevancy": 0.8461
+  }
+}
