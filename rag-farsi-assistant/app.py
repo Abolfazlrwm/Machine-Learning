@@ -32,13 +32,14 @@ st.markdown(
 
 @st.cache_resource(show_spinner="در حال آماده‌سازی ایندکس…")
 def build_pipeline(provider: str, model: str, top_k: int, mmr_lambda: float,
-                   backend: str, embedding_model: str) -> RAGPipeline:
+                   backend: str, embedding_model: str, retrieval_mode: str) -> RAGPipeline:
     config = RAGConfig()
     config.provider = provider
     config.embedding_backend = backend
     config.embedding_model = embedding_model
     config.top_k = top_k
     config.mmr_lambda = mmr_lambda
+    config.retrieval_mode = retrieval_mode
     if provider == "ollama":
         config.ollama_model = model
     else:
@@ -57,6 +58,11 @@ with st.sidebar:
     model = st.text_input("نام مدل", value=default_model)
     top_k = st.slider("تعداد قطعه‌های بازیابی (top_k)", 1, 8, 4)
     mmr_lambda = st.slider("تنوع MMR (λ)", 0.0, 1.0, 0.7, 0.1)
+    retrieval_mode = st.radio(
+        "حالت بازیابی",
+        ["hybrid", "dense", "sparse"],
+        help="hybrid = ترکیب بردار معنایی + BM25 با RRF (پیشنهاد‌شده)، dense فقط Embedding، sparse فقط BM25",
+    )
     backend = st.selectbox(
         "بک‌اند Embedding",
         ["sentence-transformers", "fake"],
@@ -73,7 +79,7 @@ with st.sidebar:
 try:
     if rebuild:
         build_pipeline.clear()
-    pipeline = build_pipeline(provider, model, top_k, mmr_lambda, backend, embedding_model)
+    pipeline = build_pipeline(provider, model, top_k, mmr_lambda, backend, embedding_model, retrieval_mode)
     stats = pipeline.stats()
     st.sidebar.success(f"آماده است: {stats['chunks']} قطعه از {stats['documents']} سند")
 except Exception as exc:  # pragma: no cover - UI error path

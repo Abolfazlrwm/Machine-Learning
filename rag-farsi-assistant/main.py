@@ -3,6 +3,7 @@
 Examples:
     python main.py build
     python main.py ask "بیش‌برازش چیست؟"
+    python main.py ask "بیش‌برازش چیست؟" --mode sparse
     python main.py chat
     python main.py info
 """
@@ -26,6 +27,10 @@ def make_pipeline(args: argparse.Namespace) -> RAGPipeline:
     if args.provider:
         config.provider = args.provider
     config.top_k = args.top_k
+    if getattr(args, "mode", None):
+        config.retrieval_mode = args.mode
+    if getattr(args, "reranker", None):
+        config.reranker = args.reranker
     embedder_backend = config.embedding_backend
     from src.embedder import create_embedder
 
@@ -91,6 +96,10 @@ def main() -> None:
     parser.add_argument("--provider", choices=["ollama", "openai"], default=None)
     parser.add_argument("--backend", choices=["sentence-transformers", "fake"], default=None)
     parser.add_argument("--top-k", type=int, default=4)
+    parser.add_argument("--mode", choices=["dense", "sparse", "hybrid"], default=None,
+                        help="retrieval mode: dense embeddings, BM25, or RRF hybrid (default from config = hybrid)")
+    parser.add_argument("--reranker", choices=["none", "noop", "cross-encoder"], default=None,
+                        help="optional cross-encoder re-ranking (needs sentence-transformers)")
     parser.add_argument("--no-llm", action="store_true",
                         help="retrieval only, skip answer generation")
     sub = parser.add_subparsers(dest="command", required=True)
