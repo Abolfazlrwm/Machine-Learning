@@ -47,7 +47,10 @@ class SentenceTransformerEmbedder(BaseEmbedder):
 
     @property
     def dimension(self) -> int:
-        return int(self._model.get_sentence_embedding_dimension())
+        get_dim = getattr(self._model, "get_embedding_dimension", None)
+        if get_dim is None:
+            get_dim = self._model.get_sentence_embedding_dimension
+        return int(get_dim())
 
     def embed(self, texts: list[str]) -> np.ndarray:
         if self._is_e5:
