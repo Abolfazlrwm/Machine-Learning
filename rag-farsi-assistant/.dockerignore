@@ -1,0 +1,6 @@
+# Image context: rag-farsi-assistant/
+storage/
+.env
+__pycache__/
+.pytest_cache/
+tests/
