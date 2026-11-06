@@ -23,7 +23,7 @@ from src.dashboard import make_dashboard
 from src.data_loader import load_data
 from src.evaluate import evaluate_models, get_feature_importance
 from src.features import calculate_technical_indicators, create_target
-from src.train import split_data, train_models
+from src.train import persist_models, split_data, train_models
 
 REPORTS_DIR = Path("reports")
 
@@ -58,6 +58,10 @@ def run(args: argparse.Namespace) -> None:
     comparison = evaluate_models(models, X_test, y_test)
     print(comparison.round(4).to_string(), "\n")
     comparison.to_csv(REPORTS_DIR / "model_comparison.csv")
+
+    # Persist artifacts for the serving layer (serving/ -> /v1/stock/signal)
+    saved = persist_models(models, args.ticker, out_dir="models")
+    print(f"      models persisted: {', '.join(p.name for p in saved)}")
 
     # 4. Walk-forward validation -------------------------------------------
     print(f"[4/5] Walk-forward validation ({args.n_splits} folds, "
