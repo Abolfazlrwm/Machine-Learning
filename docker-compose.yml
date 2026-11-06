@@ -1,0 +1,52 @@
+name: ml-portfolio
+
+services:
+  # ---------------------------------------------------------------- API
+  api:
+    build: .
+    image: ml-portfolio-api:2.2.0
+    ports: ["8000:8000"]
+    environment:
+      # Generation backend for the RAG assistant (service "ollama" below)
+      RAG_PROVIDER: ${RAG_PROVIDER:-ollama}
+      RAG_OLLAMA_BASE_URL: http://ollama:11434
+      RAG_OLLAMA_MODEL: ${RAG_OLLAMA_MODEL:-llama3.1}
+      RAG_RETRIEVAL_MODE: ${RAG_RETRIEVAL_MODE:-hybrid}
+      # Set a key to require X-API-Key on /v1 endpoints
+      SERVING_API_KEY: ${SERVING_API_KEY:-}
+    volumes:
+      # FAISS/BM25 index persists across restarts (built on first request)
+      - rag-index:/app/rag-farsi-assistant/storage
+      # Stock artifacts: produced by `python main.py --ticker AAPL` on the host
+      - ./stock-movement-ml/data:/app/stock-movement-ml/data:ro
+      - ./stock-movement-ml/models:/app/stock-movement-ml/models:ro
+      - ./stock-movement-ml/reports:/app/stock-movement-ml/reports:ro
+      # SMS artifact: produced by `python spam_classifier.py --train spam.csv`
+      # (create the file first, or remove this line to serve RAG/stock only)
+      - ./sms-spam/spam_classifier.pkl:/app/sms-spam/spam_classifier.pkl:ro
+
+  # ------------------------------------------------------------ Ollama
+  # Local, free generation backend. Start with: docker compose --profile llm up
+  # Pull a model once: docker compose --profile llm exec ollama ollama pull llama3.1
+  ollama:
+    image: ollama/ollama:latest
+    volumes: [ollama-models:/root/.ollama]
+    profiles: ["llm"]
+
+  # ---------------------------------------------------------- Streamlit
+  # The original chat UI. Start with: docker compose --profile ui up
+  streamlit:
+    build:
+      context: ./rag-farsi-assistant
+    image: ml-portfolio-chat:2.2.0
+    ports: ["8501:8501"]
+    environment:
+      RAG_PROVIDER: ollama
+      RAG_OLLAMA_BASE_URL: http://ollama:11434
+    volumes:
+      - rag-index:/app/storage
+    profiles: ["ui"]
+
+volumes:
+  rag-index:
+  ollama-models:

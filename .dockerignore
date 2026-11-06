@@ -1,0 +1,28 @@
+# Never bake git, caches, datasets or artifacts into the image
+.git
+.github
+.gitignore
+**/__pycache__
+**/.pytest_cache
+**/.venv
+venv/
+
+# Rebuildable artifacts (mounted as volumes instead)
+rag-farsi-assistant/storage/
+rag-farsi-assistant/.env
+stock-movement-ml/data/
+stock-movement-ml/models/
+stock-movement-ml/reports/
+sms-spam/spam_classifier.pkl
+ai-text-detector/data/
+ai-text-detector/models/
+recommender-system/data/
+
+# Demo + docs (not needed inside the API image)
+hf-space/
+
+# Entrypoints that live outside the serving layer
+download_data.py
+CHANGELOG.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
