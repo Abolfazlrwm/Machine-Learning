@@ -10,6 +10,9 @@ try:
 except ImportError:  # allows running this file directly: python src/train.py
     from features import FEATURE_COLUMNS
 
+import joblib
+from pathlib import Path
+
 
 def split_data(df: pd.DataFrame, train_size: float = 0.8):
     """
@@ -54,6 +57,22 @@ def train_models(X_train, y_train):
 
     print("All models trained successfully!")
     return models
+
+
+def persist_models(models: dict, ticker: str, out_dir: str | Path = "models") -> list:
+    """Save fitted models as ``{out_dir}/{ticker}_{name}.joblib`` for serving.
+
+    The FastAPI layer (``serving/``) loads these artifacts to answer
+    ``GET /v1/stock/signal`` without retraining. Returns the written paths.
+    """
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    paths = []
+    for name, model in models.items():
+        path = out_dir / f"{ticker.upper()}_{name}.joblib"
+        joblib.dump(model, path)
+        paths.append(path)
+    return paths
 
 
 if __name__ == "__main__":
