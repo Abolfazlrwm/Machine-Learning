@@ -4,6 +4,39 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.2.0] — 2026-11-06
+
+### Added — serving/ (new top-level project)
+- **FastAPI serving layer** exposing all three model families behind one
+  versioned API: `POST /v1/rag/ask` (JSON **and SSE streaming**),
+  `POST /v1/sms/classify`, `GET /v1/stock/signal`, `GET /v1/health`.
+- **Clean degradation**: services probe their own artifacts; missing
+  models/indexes answer `503` with a machine-readable error code and a
+  fix-it hint instead of a stack trace (unknown ticker → `404 NOT_FOUND`).
+- **Optional API-key guard** (`SERVING_API_KEY` → `X-API-Key` header; health
+  stays open for probes), CORS, per-request `X-Process-Time-Ms`.
+- Injectable `ServiceRegistry` — the 21-test suite runs network-free in ~2s
+  by swapping fakes in, and additionally exercises the real registry's
+  unavailable paths against an empty root.
+
+### Added — deployment
+- **Multi-stage Dockerfile** (builder venv → slim non-root runtime with
+  healthcheck) plus a `docker-compose.yml` stack: `api` + optional `ollama`
+  and `streamlit` profiles; Streamlit image via a new
+  `rag-farsi-assistant/Dockerfile`.
+- **Hugging Face Spaces demo** (`hf-space/`): standalone Gradio app with E5
+  dense retrieval, cited extractive answers and an automatic lexical
+  fallback — ready to push to a Space for a live CV link.
+
+### Changed — stock-movement-ml
+- Trained models are now persisted (`src/train.py::persist_models` →
+  `models/{TICKER}_{name}.joblib`) so the API can serve signals without
+  retraining; covered by a round-trip test (28 tests, up from 27).
+
+### Meta
+- CI gained a third job (`serving-api`) — 121 tests total across three jobs.
+- README: new Serving API + HF Spaces sections, roadmap and releases updated.
+
 ## [2.1.0] — 2026-11-05
 
 ### Added — rag-farsi-assistant

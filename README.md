@@ -67,6 +67,50 @@ cd sms-spam && pip install pandas scikit-learn nltk joblib
 python spam_classifier.py --train spam.csv
 ```
 
+## 🖥 Serving API — one FastAPI layer over all three model families
+
+[`serving/`](serving/) wraps the RAG assistant, the SMS classifier and the
+stock models behind one versioned HTTP API with SSE streaming, an optional
+API-key guard, structured error codes and per-service health:
+
+| Endpoint | Method | What it does |
+|---|---|---|
+| `/v1/rag/ask` | POST | Grounded Persian QA; JSON or `text/event-stream` (`stream: true`) |
+| `/v1/sms/classify` | POST | spam/ham + probability from the TF-IDF + LogReg model |
+| `/v1/stock/signal` | GET | Next-day movement signal from persisted walk-forward models |
+| `/v1/health` | GET | Aggregate status (`ok` / `degraded`) per service |
+
+```bash
+cd serving && pip install -r requirements.txt
+uvicorn serving.app.main:app --reload          # http://localhost:8000/docs
+
+curl -s localhost:8000/v1/sms/classify -H 'Content-Type: application/json' \
+     -d '{"text": "WIN a free prize now!"}'
+curl -s -N localhost:8000/v1/rag/ask -H 'Content-Type: application/json' \
+     -d '{"question": "بیش‌برازش چیست؟", "stream": true}'   # SSE
+```
+
+Services whose artifacts are missing answer **503** with a machine-readable
+code and a fix-it hint (`{"error": {"code": "SERVICE_UNAVAILABLE", ...}}`) —
+the API boots anywhere and degrades cleanly. The whole stack is containerised:
+
+```bash
+docker compose up --build            # API on :8000
+docker compose --profile llm up      # + Ollama for real generation
+docker compose --profile ui up       # + Streamlit chat on :8501
+```
+
+## 🤗 Live demo (Hugging Face Spaces)
+
+[`hf-space/`](hf-space/) is a ready-to-deploy Gradio demo of the Persian RAG
+assistant (E5 retrieval + cited extractive answers + lexical fallback).
+Deploy it once and link it from your CV:
+
+```bash
+# create a gradio Space, then:
+cp -r hf-space/* <your-space>/ && git push   # full guide inside hf-space/README.md
+```
+
 ## 📦 Datasets
 
 The datasets are not stored in git (they would bloat the repository) — fetch
@@ -92,12 +136,14 @@ Projects include pytest suites (unit-level, network-free):
 
 ```bash
 cd rag-farsi-assistant && python -m pytest tests/ -q   # 72 tests
-cd stock-movement-ml  && python -m pytest tests/ -q    # 27 tests
+cd stock-movement-ml  && python -m pytest tests/ -q    # 28 tests
+cd serving            && python -m pytest tests/ -q    # 21 tests
 ```
 
 ## 🛣 Roadmap
 
 - [x] Hybrid retrieval (BM25 + RRF) and a RAGAS-style evaluation suite for the RAG assistant — v2.1.0
+- [x] FastAPI serving layer, Docker stack and a HF Spaces demo — v2.2.0
 - [ ] Matrix factorization (SVD/ALS) for the recommender system
 - [ ] PDF ingestion for the RAG assistant
 - [ ] Fine-tuning a Persian BERT for sentiment analysis
@@ -110,6 +156,7 @@ Releases are tagged per milestone — see [CHANGELOG.md](CHANGELOG.md) and the
 
 | Tag | Scope |
 |---|---|
+| `v2.2.0` | FastAPI serving (SSE, auth, health), Docker stack, HF Spaces demo |
 | `v2.1.0` · `rag-v1.1.0` | Hybrid search (BM25 + RRF), RAGAS-style eval, 30-pair golden set |
 | `v2.0.0` | Portfolio-wide CI, README overhaul, project restructure |
 | `datasets-v1` | Datasets mirrored as release assets (kept out of git) |
