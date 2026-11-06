@@ -12,6 +12,7 @@ from fastapi.responses import JSONResponse
 
 from . import __version__
 from .exceptions import APIError
+from .routers import rag
 from .schemas import HealthResponse
 from .services import ServiceRegistry
 
@@ -95,6 +96,8 @@ def create_app(
         return JSONResponse(status_code=exc.status_code, content=body)
 
     # ---- routes ---------------------------------------------------------
+    guard = [Depends(_verify_api_key(api_key))] if api_key else None
+    app.include_router(rag.router, prefix="/v1", dependencies=guard)
 
     @app.get("/", tags=["meta"])
     async def root() -> dict:
