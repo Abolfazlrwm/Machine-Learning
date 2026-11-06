@@ -1,0 +1,6 @@
+# Core API runtime — deliberately lean. Model services degrade to a clean
+# 503 when their heavy dependencies/artifacts are absent, so this installs
+# and boots anywhere. For the full image see requirements-docker.txt.
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+pydantic>=2.7.0
