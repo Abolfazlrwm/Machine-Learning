@@ -42,3 +42,23 @@ jobs:
       - name: Run tests
         working-directory: stock-movement-ml
         run: python -m pytest tests/ -q
+
+  serving-api:
+    name: Serving API tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: serving/requirements-dev.txt
+      - name: Install dependencies
+        # The serving suite is network-free: it injects fake services and
+        # exercises the real registry's unavailable path on an empty root.
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r serving/requirements-dev.txt
+      - name: Run tests
+        working-directory: serving
+        run: python -m pytest tests/ -q
