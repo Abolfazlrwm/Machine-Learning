@@ -20,6 +20,10 @@ Designed as a clean, dependency-light reference implementation:
 - a **"fake" hashing embedder** so the whole pipeline runs without model
   downloads — used by the test suite and CI.
 
+> 🔎 **Live demo:** [farsi-rag-assistant on Hugging Face Spaces](https://huggingface.co/spaces/Abol0pati/farsi-rag-assistant)
+> — a browser-only edition of the hybrid retriever (E5 + BM25 + RRF, zero
+> server-side inference). Source: [`../hf-space-static/`](../hf-space-static/)
+
 ## Architecture
 
 ```
