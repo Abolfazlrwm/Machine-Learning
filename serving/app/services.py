@@ -297,9 +297,9 @@ class StockService(BaseLazyService):
         )
 
     def signal(self, ticker: str) -> dict:
-        import joblib  # lazy heavy imports
-        import pandas as pd
-
+        # Guards first: the 404 degradation path must work in the lean
+        # runtime where joblib/pandas are intentionally absent (CI, slim
+        # images) — heavy imports only happen once artifacts exist.
         ticker = ticker.upper()
         data_dir = self._project / "data"
         csvs = sorted(
@@ -310,7 +310,12 @@ class StockService(BaseLazyService):
                 f"no cached OHLCV data for {ticker!r}",
                 hint="run the stock pipeline first: python main.py --ticker AAPL",
             )
+        model_path = self._latest_model_path(ticker)
         self.ensure_ready()
+
+        import joblib  # lazy heavy imports
+        import pandas as pd
+
         raw = pd.read_csv(csvs[-1], index_col=0, parse_dates=True)
         features = self._load_features_module().calculate_technical_indicators(raw)
         feature_cols = self._load_features_module().FEATURE_COLUMNS
@@ -321,7 +326,6 @@ class StockService(BaseLazyService):
                 hint="fetch a longer period (main.py --start 2018-01-01)",
             )
         last_row, as_of = usable.iloc[-1], usable.index[-1]
-        model_path = self._latest_model_path(ticker)
         model = joblib.load(model_path)
         prob_up = float(model.predict_proba(last_row[feature_cols].to_frame().T)[0][1])
         return {
