@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>دستیار پرسش‌وپاسخ فارسی — RAG (نسخهٔ مرورگری)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<main class="card">
+  <header>
+    <h1>🤖 دستیار پرسش‌وپاسخ فارسی <span class="grad">(RAG)</span></h1>
+    <p class="sub">
+      بازیابی معنایی <b>E5</b> + امتیازدهی واژگانی <b>BM25</b> با فیوژن <b>RRF</b> —
+      بدون سرور؛ همه‌چیز داخل مرورگرِ شما اجرا می‌شود.
+      نسخهٔ کامل:
+      <a href="https://github.com/Abolfazlrwm/Machine-Learning/tree/main/rag-farsi-assistant" target="_blank" rel="noopener">مخزن گیت‌هاب</a>
+    </p>
+    <div class="meta">
+      <span class="badge" id="mode-badge">در حال آماده‌سازی …</span>
+      <span id="corpus-info"></span>
+    </div>
+  </header>
+
+  <div id="progress-wrap"><div id="progress-bar"></div></div>
+  <p id="status">شروع …</p>
+
+  <section class="ask">
+    <textarea id="question" rows="2"
+      placeholder="مثلاً: بیش‌برازش چیست و چطور جلوی آن را بگیریم؟"></textarea>
+    <button id="ask-btn" disabled>پاسخ بده</button>
+  </section>
+
+  <section class="examples-row" aria-label="پرسش‌های نمونه">
+    <button class="example">بیش‌برازش (overfitting) چیست و چطور جلوی آن را گرفت؟</button>
+    <button class="example">تفاوت یادگیری نظارت‌شده و بدون نظارت چیست؟</button>
+    <button class="example">attention در ترنسفورمرها چطور کار می‌کند؟</button>
+    <button class="example">رانش داده (data drift) چیست؟</button>
+  </section>
+
+  <section>
+    <h2>پاسخ (استخراجی + ارجاع)</h2>
+    <textarea id="answer" rows="10" readonly></textarea>
+  </section>
+
+  <section id="sources-wrap" style="display:none">
+    <h2>منابع بازیابی‌شده</h2>
+    <table>
+      <thead>
+        <tr><th>سند</th><th>رتبه‌ها</th><th>بخش بازیابی‌شده</th></tr>
+      </thead>
+      <tbody id="sources-body"></tbody>
+    </table>
+  </section>
+
+  <footer>
+    بازیابی و استنتاج به‌صورت محلی در مرورگر اجرا می‌شود (Transformers.js، ONNX quantized).
+    بار اول ~۱۲۰ مگابایت مدل دانلود می‌شود و پس از آن در حافظهٔ مرورگر می‌ماند.
+  </footer>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
