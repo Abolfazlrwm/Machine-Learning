@@ -104,6 +104,9 @@ docker compose --profile ui up       # + Streamlit chat on :8501
 
 [![Open in Spaces](https://huggingface.co/datasets/huggingface/badges/raw/main/open-in-hf-spaces-xl.svg)](https://huggingface.co/spaces/Abol0pati/farsi-rag-assistant)
 
+![Live Persian RAG demo — hybrid E5 + BM25 retrieval with RRF fusion, cited
+answers, running entirely in the browser](assets/live-demo.png)
+
 **The demo is live** — a *browser-only* Persian RAG (`hf-space-static/`):
 passage vectors are precomputed with `multilingual-e5-small` into an 84 KB
 `embeddings.json`, the visitor's browser encodes the query on the fly via
