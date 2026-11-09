@@ -1,5 +1,7 @@
 # Machine Learning
 
+[![Tests](https://img.shields.io/github/actions/workflow/status/Abolfazlrwm/Machine-Learning/tests.yml?branch=main&label=Tests&labelColor=1a1b26)](https://github.com/Abolfazlrwm/Machine-Learning/actions) [![Live demo](https://img.shields.io/badge/Live_demo-HuggingFace_Spaces-FFD21E?style=flat&labelColor=1a1b26)](https://huggingface.co/spaces/Abol0pati/farsi-rag-assistant) [![License: MIT](https://img.shields.io/badge/License-MIT-3fb950?style=flat&labelColor=1a1b26)](LICENSE)
+
 [![Tests](https://github.com/Abolfazlrwm/Machine-Learning/actions/workflows/tests.yml/badge.svg)](https://github.com/Abolfazlrwm/Machine-Learning/actions/workflows/tests.yml)
 
 A collection of end-to-end machine learning projects — from classical
