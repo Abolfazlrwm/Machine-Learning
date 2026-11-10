@@ -10,6 +10,7 @@ from .data_loader import load_documents
 from .embedder import BaseEmbedder, create_embedder
 from .hybrid import HybridRetriever
 from .llm import LLMProvider, create_provider
+from .observability import Trace
 from .prompts import SYSTEM_PROMPT, build_user_prompt
 from .query import QueryPlan, analyse_query
 from .retriever import Retriever, RetrievalResult
@@ -30,6 +31,7 @@ class AnswerResult:
     question: str
     answer: str
     sources: list[Source] = field(default_factory=list)
+    meta: dict = field(default_factory=dict)  # timings / query plan
 
 
 class RAGPipeline:
@@ -114,29 +116,51 @@ class RAGPipeline:
                 self.build_index()
 
     # ------------------------------------------------------------- answers
-    def retrieve(self, question: str, top_k: int | None = None) -> list[RetrievalResult]:
+    def retrieve(
+        self,
+        question: str,
+        top_k: int | None = None,
+        trace: Trace | None = None,
+    ) -> list[RetrievalResult]:
         self.ensure_index()
-        return self._retrieve(analyse_query(question), top_k)
+        return self._retrieve(analyse_query(question), top_k, trace)
 
-    def _retrieve(self, plan: QueryPlan, top_k: int | None) -> list[RetrievalResult]:
+    def _retrieve(
+        self, plan: QueryPlan, top_k: int | None, trace: Trace | None
+    ) -> list[RetrievalResult]:
         """Run retrieval with the query plan applied (see src/query.py).
 
         Expansion terms go to the *lexical* sub-query only; the dense
         sub-query embeds the visitor's original wording.
         """
         if not plan.expansions or self.config.retrieval_mode == "dense":
-            return self.retriever.retrieve(plan.original, top_k=top_k)
+            return self.retriever.retrieve(plan.original, top_k=top_k, trace=trace)
         return self.retriever.retrieve(
-            plan.expanded, top_k=top_k, embed_text=plan.original
+            plan.expanded, top_k=top_k, trace=trace, embed_text=plan.original
         )
 
-    def answer(self, question: str, top_k: int | None = None) -> AnswerResult:
-        """Retrieve -> build prompt -> generate (or fall back to extractive)."""
+    def answer(
+        self,
+        question: str,
+        top_k: int | None = None,
+        trace: Trace | None = None,
+    ) -> AnswerResult:
+        """Retrieve -> build prompt -> generate (or fall back to extractive).
+
+        Pass a :class:`~src.observability.Trace` to collect stage timings;
+        one is created (and returned via ``result.meta``) otherwise.
+        """
+        tr = trace if trace is not None else Trace()
         self.ensure_index()
         plan = analyse_query(question)
-        results = self._retrieve(plan, top_k)
+        with tr.span("retrieve"):
+            results = self._retrieve(plan, top_k, tr)
         if not results:
-            return AnswerResult(question=question, answer=self._no_index_answer())
+            return AnswerResult(
+                question=question,
+                answer=self._no_index_answer(),
+                meta=self._meta(tr, plan),
+            )
 
         chunks = [r.chunk for r in results]
         sources = [
@@ -148,10 +172,28 @@ class RAGPipeline:
             )
             for r in results
         ]
-        answer_text = self._generate(plan.original, chunks)
-        return AnswerResult(question=question, answer=answer_text, sources=sources)
+        with tr.span("generate"):
+            answer_text = self._generate(plan.original, chunks)
+        return AnswerResult(
+            question=question,
+            answer=answer_text,
+            sources=sources,
+            meta=self._meta(tr, plan),
+        )
 
     # -------------------------------------------------------------- helpers
+    def _meta(self, tr: Trace, plan: QueryPlan) -> dict:
+        """Observability block attached to every AnswerResult."""
+        return {
+            "cache": "off",
+            "timings_ms": tr.timings_ms(),
+            "query": {
+                "original": plan.original,
+                "expansions": plan.expansions,
+                "mixed_script": plan.is_mixed,
+            },
+        }
+
     def _generate(self, question: str, chunks: list[Chunk]) -> str:
         if self.llm is None:
             # No LLM configured -> extractive fallback so the pipeline still

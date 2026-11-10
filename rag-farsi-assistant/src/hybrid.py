@@ -25,6 +25,7 @@ import numpy as np
 from .bm25 import BM25Okapi
 from .chunker import Chunk
 from .embedder import BaseEmbedder
+from .observability import Trace
 from .retriever import Retriever, RetrievalResult
 from .rerank import BaseReranker
 from .vector_store import VectorStore
@@ -133,9 +134,13 @@ class HybridRetriever:
         self,
         query: str,
         top_k: int | None = None,
+        trace: Trace | None = None,
         embed_text: str | None = None,
     ) -> list[RetrievalResult]:
         """Retrieve candidates for ``query``.
+
+        ``trace`` (optional) receives cumulative per-stage timings
+        (``dense`` / ``bm25`` / ``rrf`` / ``rerank``) and candidate counts.
 
         ``embed_text`` decouples the two sub-queries of hybrid retrieval:
         BM25 ranks against ``query`` (which may carry cross-language
@@ -144,37 +149,48 @@ class HybridRetriever:
         so expansion never perturbs the evaluated E5 behaviour.
         """
         k = top_k or self.top_k
+        tr = trace if trace is not None else Trace()
+        tr.note("mode", self.mode)
         embed_query_text = embed_text or query
-        if self.mode == "dense":
-            return self._apply_reranker(query, self._dense.retrieve(query, k))
 
-        bm25 = self._ensure_bm25()
+        if self.mode == "dense":
+            with tr.span("dense"):
+                return self._apply_reranker(query, self._dense.retrieve(query, k), tr)
+
+        with tr.span("bm25"):
+            bm25 = self._ensure_bm25()
         if bm25 is None:  # empty store -> graceful fallback to dense path
-            return self._apply_reranker(
-                embed_query_text, self._dense.retrieve(embed_query_text, k)
-            )
+            with tr.span("dense"):
+                return self._apply_reranker(
+                    embed_query_text, self._dense.retrieve(embed_query_text, k), tr
+                )
 
         n_candidates = min(k * self.candidate_multiplier, len(self._store))
         chunk_list = self._store.all_chunks()
 
-        sparse_hits = _min_max(bm25.search(query, n_candidates))
+        with tr.span("bm25"):
+            sparse_hits = _min_max(bm25.search(query, n_candidates))
+        tr.note("bm25_candidates", len(sparse_hits))
 
         if self.mode == "sparse":
             results = [
                 RetrievalResult(chunk_list[i], score) for i, score in sparse_hits[:k]
             ]
-            return self._apply_reranker(query, results)
+            return self._apply_reranker(query, results, tr)
 
         # ---- hybrid: rank-based fusion of the two candidate lists ----
-        query_vec = self.embedder.embed_query(embed_query_text)
-        dense_pairs = self._store.search(query_vec, top_k=n_candidates)
+        with tr.span("dense"):
+            query_vec = self.embedder.embed_query(embed_query_text)
+            dense_pairs = self._store.search(query_vec, top_k=n_candidates)
+        tr.note("dense_candidates", len(dense_pairs))
         dense_by_id = {c.chunk_id: (c, s) for c, s in dense_pairs}
 
         rankings = [
             [c.chunk_id for c, _ in dense_pairs],
             [chunk_list[i].chunk_id for i, _ in sparse_hits],
         ]
-        fused = rrf_fuse(rankings, rrf_k=self.rrf_k, top_k=k)
+        with tr.span("rrf"):
+            fused = rrf_fuse(rankings, rrf_k=self.rrf_k, top_k=k)
 
         results: list[RetrievalResult] = []
         for chunk_id, _rrf_score in fused:
@@ -184,16 +200,21 @@ class HybridRetriever:
                 idx = next(i for i, _ in sparse_hits if chunk_list[i].chunk_id == chunk_id)
                 chunk, score = chunk_list[idx], dict(sparse_hits)[idx]
             results.append(RetrievalResult(chunk, score))
-        return self._apply_reranker(query, results)
+        return self._apply_reranker(query, results, tr)
 
     # ---------------------------------------------------------------- helpers
     def _apply_reranker(
-        self, query: str, results: list[RetrievalResult]
+        self,
+        query: str,
+        results: list[RetrievalResult],
+        trace: Trace | None = None,
     ) -> list[RetrievalResult]:
         """Optional cross-encoder stage: re-order the final candidate list."""
         if self.reranker is None or len(results) <= 1:
             return results
         texts = [r.chunk.text for r in results]
-        scores = self.reranker.score(query, texts)
+        tr = trace if trace is not None else Trace()
+        with tr.span("rerank"):
+            scores = self.reranker.score(query, texts)
         order = sorted(range(len(results)), key=lambda i: -scores[i])
         return [results[i] for i in order]
