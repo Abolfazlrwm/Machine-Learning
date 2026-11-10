@@ -13,6 +13,7 @@ import numpy as np
 
 from .chunker import Chunk
 from .embedder import BaseEmbedder
+from .observability import Trace
 from .vector_store import VectorStore
 
 
@@ -37,7 +38,18 @@ class Retriever:
         self.mmr_lambda = mmr_lambda
         self.candidate_multiplier = candidate_multiplier
 
-    def retrieve(self, query: str, top_k: int | None = None) -> list[RetrievalResult]:
+    def retrieve(
+        self,
+        query: str,
+        top_k: int | None = None,
+        trace: Trace | None = None,
+    ) -> list[RetrievalResult]:
+        """Embed + cosine search + optional MMR.
+
+        ``trace`` is accepted for signature parity with
+        :class:`~src.hybrid.HybridRetriever` (the dense-only path has no
+        sub-stages worth timing).
+        """
         k = top_k or self.top_k
         query_vec = self.embedder.embed_query(query)
         n_candidates = min(k * self.candidate_multiplier, len(self.store))
