@@ -129,14 +129,30 @@ class HybridRetriever:
         return self._bm25
 
     # -------------------------------------------------------------- retrieval
-    def retrieve(self, query: str, top_k: int | None = None) -> list[RetrievalResult]:
+    def retrieve(
+        self,
+        query: str,
+        top_k: int | None = None,
+        embed_text: str | None = None,
+    ) -> list[RetrievalResult]:
+        """Retrieve candidates for ``query``.
+
+        ``embed_text`` decouples the two sub-queries of hybrid retrieval:
+        BM25 ranks against ``query`` (which may carry cross-language
+        expansion terms added by :mod:`src.query`) while the dense
+        sub-search embeds ``embed_text`` — the visitor's original wording —
+        so expansion never perturbs the evaluated E5 behaviour.
+        """
         k = top_k or self.top_k
+        embed_query_text = embed_text or query
         if self.mode == "dense":
             return self._apply_reranker(query, self._dense.retrieve(query, k))
 
         bm25 = self._ensure_bm25()
         if bm25 is None:  # empty store -> graceful fallback to dense path
-            return self._apply_reranker(query, self._dense.retrieve(query, k))
+            return self._apply_reranker(
+                embed_query_text, self._dense.retrieve(embed_query_text, k)
+            )
 
         n_candidates = min(k * self.candidate_multiplier, len(self._store))
         chunk_list = self._store.all_chunks()
@@ -150,7 +166,7 @@ class HybridRetriever:
             return self._apply_reranker(query, results)
 
         # ---- hybrid: rank-based fusion of the two candidate lists ----
-        query_vec = self.embedder.embed_query(query)
+        query_vec = self.embedder.embed_query(embed_query_text)
         dense_pairs = self._store.search(query_vec, top_k=n_candidates)
         dense_by_id = {c.chunk_id: (c, s) for c, s in dense_pairs}
 

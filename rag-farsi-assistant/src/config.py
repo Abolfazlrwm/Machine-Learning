@@ -16,6 +16,11 @@ def _repo_root() -> Path:
     return Path(__file__).resolve().parent.parent
 
 
+def _to_bool(raw: str) -> bool:
+    """Env-style boolean: 1/true/yes/on (case-insensitive) are truthy."""
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
 @dataclass
 class RAGConfig:
     # --- corpus / index -------------------------------------------------
@@ -56,6 +61,11 @@ class RAGConfig:
     openai_model: str = "gpt-4o-mini"
     openai_api_key: str = ""
 
+    # --- query understanding ---------------------------------------------
+    # Append cross-language (Persian <-> English) synonyms to the lexical
+    # sub-query; the dense sub-query keeps the visitor's original wording.
+    query_expansion: bool = True
+
     # --- misc -----------------------------------------------------------
     snippet_chars: int = 220       # sources preview length
     request_timeout: int = 120     # seconds for HTTP calls to LLM backends
@@ -76,6 +86,7 @@ class RAGConfig:
             "RAG_BM25_K1": ("bm25_k1", float),
             "RAG_BM25_B": ("bm25_b", float),
             "RAG_RERANKER": ("reranker", str),
+            "RAG_QUERY_EXPANSION": ("query_expansion", _to_bool),
             "RAG_EMBEDDING_BACKEND": ("embedding_backend", str),
             "RAG_EMBEDDING_MODEL": ("embedding_model", str),
             "RAG_PROVIDER": ("provider", str),
