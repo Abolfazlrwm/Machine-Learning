@@ -61,10 +61,12 @@ class RAGConfig:
     openai_model: str = "gpt-4o-mini"
     openai_api_key: str = ""
 
-    # --- query understanding ---------------------------------------------
+    # --- query understanding & caching -----------------------------------
     # Append cross-language (Persian <-> English) synonyms to the lexical
     # sub-query; the dense sub-query keeps the visitor's original wording.
     query_expansion: bool = True
+    cache_ttl: float = 0.0         # seconds; 0 disables the answer cache
+    cache_maxsize: int = 128       # LRU bound for the answer cache
 
     # --- misc -----------------------------------------------------------
     snippet_chars: int = 220       # sources preview length
@@ -87,6 +89,8 @@ class RAGConfig:
             "RAG_BM25_B": ("bm25_b", float),
             "RAG_RERANKER": ("reranker", str),
             "RAG_QUERY_EXPANSION": ("query_expansion", _to_bool),
+            "RAG_CACHE_TTL": ("cache_ttl", float),
+            "RAG_CACHE_MAXSIZE": ("cache_maxsize", int),
             "RAG_EMBEDDING_BACKEND": ("embedding_backend", str),
             "RAG_EMBEDDING_MODEL": ("embedding_model", str),
             "RAG_PROVIDER": ("provider", str),
