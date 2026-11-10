@@ -1,9 +1,11 @@
 """End-to-end RAG pipeline: index building, retrieval, grounded generation."""
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import dataclass, field
 
+from .cache import TTLCache
 from .chunker import Chunk, chunk_documents
 from .config import RAGConfig
 from .data_loader import load_documents
@@ -31,7 +33,7 @@ class AnswerResult:
     question: str
     answer: str
     sources: list[Source] = field(default_factory=list)
-    meta: dict = field(default_factory=dict)  # timings / query plan
+    meta: dict = field(default_factory=dict)  # cache / timings / query plan
 
 
 class RAGPipeline:
@@ -80,6 +82,13 @@ class RAGPipeline:
                 bm25_b=config.bm25_b,
                 reranker=reranker,
             )
+        # Answer cache: disabled while cache_ttl == 0 (the default keeps
+        # evaluation runs deterministic; the serving layer enables it).
+        self.cache = (
+            TTLCache(maxsize=config.cache_maxsize, ttl=config.cache_ttl)
+            if config.cache_ttl > 0
+            else None
+        )
 
     # --------------------------------------------------------------- index
     def build_index(self) -> dict:
@@ -148,18 +157,37 @@ class RAGPipeline:
         """Retrieve -> build prompt -> generate (or fall back to extractive).
 
         Pass a :class:`~src.observability.Trace` to collect stage timings;
-        one is created (and returned via ``result.meta``) otherwise.
+        one is created (and returned via ``result.meta``) otherwise. When
+        ``config.cache_ttl > 0`` repeated questions are served from the
+        TTL/LRU cache and ``result.meta["cache"]`` says ``"hit"``.
         """
         tr = trace if trace is not None else Trace()
-        self.ensure_index()
         plan = analyse_query(question)
+        self.ensure_index()  # index must exist before the cache key sees it
+
+        cache_key = None
+        if self.cache is not None:
+            cache_key = self._cache_key(plan, top_k)
+            hit, cached = self.cache.get(cache_key)
+            if hit:
+                tr.note("cache", "hit")
+                return AnswerResult(
+                    question=question,
+                    answer=cached[0],
+                    sources=list(cached[1]),
+                    meta={"cache": "hit", "timings_ms": tr.timings_ms()},
+                )
+            tr.note("cache", "miss")
+        else:
+            tr.note("cache", "off")
+
         with tr.span("retrieve"):
             results = self._retrieve(plan, top_k, tr)
         if not results:
             return AnswerResult(
                 question=question,
                 answer=self._no_index_answer(),
-                meta=self._meta(tr, plan),
+                meta=self._meta(tr, plan, cache_state=tr.notes.get("cache", "off")),
             )
 
         chunks = [r.chunk for r in results]
@@ -174,18 +202,22 @@ class RAGPipeline:
         ]
         with tr.span("generate"):
             answer_text = self._generate(plan.original, chunks)
-        return AnswerResult(
+
+        result = AnswerResult(
             question=question,
             answer=answer_text,
             sources=sources,
-            meta=self._meta(tr, plan),
+            meta=self._meta(tr, plan, tr.notes.get("cache", "off")),
         )
+        if self.cache is not None and cache_key:
+            self.cache.put(cache_key, (answer_text, sources))
+        return result
 
     # -------------------------------------------------------------- helpers
-    def _meta(self, tr: Trace, plan: QueryPlan) -> dict:
+    def _meta(self, tr: Trace, plan: QueryPlan, cache_state: str) -> dict:
         """Observability block attached to every AnswerResult."""
         return {
-            "cache": "off",
+            "cache": cache_state,
             "timings_ms": tr.timings_ms(),
             "query": {
                 "original": plan.original,
@@ -193,6 +225,20 @@ class RAGPipeline:
                 "mixed_script": plan.is_mixed,
             },
         }
+
+    def _cache_key(self, plan: QueryPlan, top_k: int | None) -> str:
+        """Cache identity: folded question + the settings that change output."""
+        basis = "|".join(
+            [
+                plan.normalised,
+                str(top_k),
+                self.config.retrieval_mode,
+                self.config.reranker,
+                self.embedder.name,
+                str(len(self.store)),
+            ]
+        )
+        return hashlib.sha1(basis.encode("utf-8")).hexdigest()
 
     def _generate(self, question: str, chunks: list[Chunk]) -> str:
         if self.llm is None:
