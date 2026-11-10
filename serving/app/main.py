@@ -4,14 +4,16 @@ from __future__ import annotations
 import logging
 import os
 import time
+import uuid
 from typing import Literal
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 
 from . import __version__
 from .exceptions import APIError
+from .metrics import metrics as default_metrics
 from .routers import rag, sms, stock
 from .schemas import HealthResponse
 from .services import ServiceRegistry
@@ -38,10 +40,12 @@ def create_app(
     registry: ServiceRegistry | None = None,
     *,
     api_key: str | None = None,
+    metrics=None,
 ) -> FastAPI:
-    """Build the app. ``registry``/``api_key`` are injectable for tests."""
+    """Build the app. ``registry``/``api_key``/``metrics`` are injectable."""
     registry = registry or ServiceRegistry()
     api_key = api_key if api_key is not None else os.environ.get("SERVING_API_KEY") or None
+    metrics_reg = metrics if metrics is not None else default_metrics
 
     app = FastAPI(
         title="ML Portfolio API",
@@ -55,6 +59,7 @@ def create_app(
         ),
     )
     app.state.registry = registry
+    app.state.metrics = metrics_reg
     app.state.started_at = time.monotonic()
 
     # ---- middleware -----------------------------------------------------
@@ -69,14 +74,36 @@ def create_app(
     )
 
     @app.middleware("http")
-    async def add_process_time_header(request: Request, call_next):
+    async def observe_request(request: Request, call_next):
+        """Request ID + latency header + Prometheus metrics in one place."""
+        request_id = request.headers.get("x-request-id") or uuid.uuid4().hex
+        request.state.request_id = request_id
         started = time.perf_counter()
         response = await call_next(request)
         took_ms = (time.perf_counter() - started) * 1000
+        response.headers["X-Request-ID"] = request_id
         response.headers["X-Process-Time-Ms"] = f"{took_ms:.1f}"
-        logger.info("%s %s -> %s (%.1f ms)",
-                    request.method, request.url.path,
-                    response.status_code, took_ms)
+        # Route template ("/v1/rag/ask") keeps label cardinality bounded;
+        # unmatched paths fall back to the raw path.
+        route = getattr(request.scope.get("route"), "path", request.url.path)
+        if metrics_reg is not None:
+            metrics_reg.inc(
+                "http_requests",
+                method=request.method,
+                path=route,
+                status=str(response.status_code),
+            )
+            metrics_reg.observe(
+                "http_request_duration_seconds",
+                took_ms / 1000.0,
+                method=request.method,
+                path=route,
+            )
+        logger.info(
+            "[%s] %s %s -> %s (%.1f ms)",
+            request_id[:8], request.method, request.url.path,
+            response.status_code, took_ms,
+        )
         return response
 
     # ---- error model ----------------------------------------------------
@@ -108,8 +135,19 @@ def create_app(
             "version": __version__,
             "docs": "/docs",
             "health": "/v1/health",
-            "endpoints": ["/v1/rag/ask", "/v1/sms/classify", "/v1/stock/signal"],
+            "endpoints": [
+                "/v1/rag/ask", "/v1/sms/classify", "/v1/stock/signal",
+                "/v1/metrics",
+            ],
         }
+
+    @app.get("/v1/metrics", tags=["meta"])
+    async def prometheus_metrics() -> Response:
+        """Prometheus text exposition (v0.0.4) — rendered from scratch."""
+        return Response(
+            content=metrics_reg.render(),
+            media_type="text/plain; version=0.0.4; charset=utf-8",
+        )
 
     @app.get("/v1/health", response_model=HealthResponse, tags=["meta"])
     async def health() -> HealthResponse:

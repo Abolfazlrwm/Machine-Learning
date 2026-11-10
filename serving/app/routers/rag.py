@@ -14,7 +14,7 @@ from typing import Iterator
 from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
 
-from ..schemas import AskRequest, AskResponse, SourceModel
+from ..schemas import AskRequest, AskResponse, RAGMeta, SourceModel
 
 router = APIRouter(prefix="/rag", tags=["rag"])
 
@@ -39,6 +39,10 @@ def ask(payload: AskRequest, request: Request):
     result = registry.rag.ask(payload.question, top_k=payload.top_k)
     took_ms = int((time.perf_counter() - started) * 1000)
 
+    meta_source = result.get("meta") or {}
+    query_info = meta_source.get("query") or {}
+    request_id = getattr(request.state, "request_id", "-")
+
     if payload.stream:
         def event_stream() -> Iterator[str]:
             yield _sse("sources", {
@@ -47,7 +51,11 @@ def ask(payload: AskRequest, request: Request):
             })
             for chunk in _chunk_answer(result["answer"]):
                 yield _sse("token", {"text": chunk})
-            yield _sse("done", {"took_ms": took_ms})
+            yield _sse("done", {
+                "took_ms": took_ms,
+                "request_id": request_id,
+                "cache": meta_source.get("cache", "off"),
+            })
 
         return StreamingResponse(
             event_stream(), media_type="text/event-stream",
@@ -60,4 +68,11 @@ def ask(payload: AskRequest, request: Request):
         sources=[SourceModel(**s) for s in result["sources"]],
         retrieval_mode=result["retrieval_mode"],
         took_ms=took_ms,
+        meta=RAGMeta(
+            request_id=request_id,
+            cache=meta_source.get("cache", "off"),
+            timings_ms=meta_source.get("timings_ms") or None,
+            query_expansions=query_info.get("expansions") or None,
+            mixed_script=query_info.get("mixed_script"),
+        ),
     )

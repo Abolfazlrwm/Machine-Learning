@@ -28,10 +28,14 @@ from serving.app.services import ServiceStatus  # noqa: E402
 class FakeRAG:
     name = "rag"
 
+    def __init__(self) -> None:
+        self.calls = 0
+
     def available(self) -> ServiceStatus:
         return ServiceStatus(True, "fake")
 
     def ask(self, question: str, top_k: int | None = None) -> dict:
+        self.calls += 1
         return {
             "question": question,
             "answer": (
@@ -53,6 +57,15 @@ class FakeRAG:
                 },
             ],
             "retrieval_mode": "hybrid",
+            "meta": {
+                "cache": "miss" if self.calls == 1 else "hit",
+                "timings_ms": {"bm25": 3, "dense": 5, "rrf": 0, "generate": 11},
+                "query": {
+                    "original": question,
+                    "expansions": ["overfitting"],
+                    "mixed_script": True,
+                },
+            },
         }
 
 

@@ -127,16 +127,25 @@ class RAGService(BaseLazyService):
                 hint="deploy with the full image (serving/requirements-docker.txt)",
             ) from exc
 
-        config = RAGConfig.from_env()
-        config.ensure_dirs()
-        self._retrieval_mode = config.retrieval_mode
-        provider = None
         try:
-            provider = create_provider(config)
-        except Exception:  # noqa: BLE001 - generation is optional
-            provider = None  # extractive fallback keeps the API useful
-        self._pipeline = RAGPipeline(config, llm=provider)
-        self._pipeline.ensure_index()
+            config = RAGConfig.from_env()
+            config.ensure_dirs()
+            self._retrieval_mode = config.retrieval_mode
+            provider = None
+            try:
+                provider = create_provider(config)
+            except Exception:  # noqa: BLE001 - generation is optional
+                provider = None  # extractive fallback keeps the API useful
+            self._pipeline = RAGPipeline(config, llm=provider)
+            self._pipeline.ensure_index()
+        except ImportError as exc:
+            # Heavy backend missing (e.g. sentence-transformers not installed)
+            # -> the clean-degradation contract is a 503, not a stack trace.
+            raise ServiceUnavailable(
+                f"RAG assistant is missing a required backend: {exc}",
+                hint="install serving/requirements-docker.txt or set "
+                     "RAG_EMBEDDING_BACKEND=fake for a smoke deployment",
+            ) from exc
 
     def ask(self, question: str, top_k: int | None = None) -> dict:
         """Return {question, answer, sources, retrieval_mode} — raises on failure."""
@@ -155,6 +164,7 @@ class RAGService(BaseLazyService):
             "answer": result.answer,
             "sources": [vars(s) for s in result.sources],
             "retrieval_mode": self._retrieval_mode,
+            "meta": dict(getattr(result, "meta", {}) or {}),
         }
 
 

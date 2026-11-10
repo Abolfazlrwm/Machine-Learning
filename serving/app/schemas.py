@@ -32,12 +32,23 @@ class SourceModel(BaseModel):
     snippet: str
 
 
+class RAGMeta(BaseModel):
+    """Observability block for one /v1/rag/ask call."""
+
+    request_id: str
+    cache: Literal["hit", "miss", "off"] = "off"
+    timings_ms: dict[str, int] | None = None
+    query_expansions: list[str] | None = None
+    mixed_script: bool | None = None
+
+
 class AskResponse(BaseModel):
     question: str
     answer: str
     sources: list[SourceModel]
     retrieval_mode: str
     took_ms: int
+    meta: RAGMeta | None = None
 
 
 # --------------------------------------------------------------------- SMS

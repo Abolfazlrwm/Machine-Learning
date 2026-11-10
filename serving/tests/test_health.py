@@ -11,7 +11,7 @@ def test_root_lists_api_surface(client):
     assert body["name"] == "ML Portfolio API"
     assert body["version"] == __version__
     assert set(body["endpoints"]) == {
-        "/v1/rag/ask", "/v1/sms/classify", "/v1/stock/signal"
+        "/v1/rag/ask", "/v1/sms/classify", "/v1/stock/signal", "/v1/metrics"
     }
     assert body["health"] == "/v1/health"
 
