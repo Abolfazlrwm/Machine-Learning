@@ -122,6 +122,27 @@ zero-width non-joiner removal, punctuation stripping and a built-in stopword
 list. An optional cross-encoder re-ranker (`src/rerank.py`) can refine the
 fused list when `sentence-transformers` is installed.
 
+## ⚡ Answer caching (exact + semantic)
+
+Repeated traffic is the norm, not the exception. With `RAG_CACHE_TTL` > 0 the
+pipeline memoises final answers behind two interchangeable caches:
+
+| Cache | Identity | Catches | Env |
+|---|---|---|---|
+| exact (`src/cache.py`) | SHA1 of folded question + settings | byte-identical repeats | `RAG_CACHE_TTL=600` |
+| semantic (`src/semantic_cache.py`) | cosine similarity of question embeddings | repeats **and paraphrases** | `RAG_SEMANTIC_CACHE=1`, `RAG_SEMANTIC_CACHE_THRESHOLD=0.92` |
+
+The semantic cache embeds each incoming question once — the same embedder the
+retriever already uses — and serves the best match above the threshold: one
+query embedding replaces the entire retrieval + generation path. Namespaces
+fold the retrieval settings into the cache identity (a `top_k`/mode/reranker
+change never cross-contaminates), byte-equal vectors short-circuit to
+similarity 1.0 so an exact repeat can never miss, and hits carry
+`meta.cache_similarity` for threshold tuning. Both caches are thread-safe
+TTL + LRU with injectable clocks and expose hit/miss/expiry/eviction stats
+through `pipeline.stats()`. Both are off by default — the evaluation suite
+stays deterministic.
+
 ## 📊 Evaluation
 
 ### Retrieval — dense vs sparse vs hybrid
@@ -169,7 +190,7 @@ provider for true generative scoring:
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests/ -q     # 112 tests, no network / no model downloads
+python -m pytest tests/ -q     # 132 tests, no network / no model downloads
 ```
 
 Covers: chunk size & overlap guarantees, determinism and normalisation of
@@ -177,4 +198,5 @@ embeddings, FAISS/numpy store round-trips, MMR de-duplication, prompt
 construction (context numbering, strict system prompt), index save/load
 equivalence, the provider factory, BM25 ranking + Persian normalisation,
 RRF fusion with hand-computed scores, hybrid mode switching, the reranker
-plumbing and the RAGAS-style metrics on hand-computed fixtures.
+plumbing, the exact and semantic answer caches and the RAGAS-style metrics
+on hand-computed fixtures.
