@@ -4,6 +4,49 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.3.0] — 2026-11-11
+
+### Added — rag-farsi-assistant
+- **Bilingual query understanding** (`src/query.py`): every question is
+  folded into the exact canonical form the BM25 tokenizer produces (NFC,
+  Arabic->Persian characters, ZWNJ stripped, casefolded), profiled for
+  Persian/Latin script mix, and expanded with cross-language counterparts
+  from a curated ML glossary («بیش‌برازش» <-> overfitting, رانش داده <-> data
+  drift, ...). Expansion feeds the **lexical sub-query only** — the dense
+  sub-search embeds the visitor's original wording via the new
+  `HybridRetriever(embed_text=...)`, so the evaluated E5 behaviour and the
+  published golden-set numbers are untouched.
+- **Stage tracing** (`src/observability.py::Trace`): cumulative per-stage
+  timings for dense / bm25 / rrf / rerank plus candidate counts, attached
+  to every answer as a `meta` block.
+- **Zero-dependency Prometheus metrics** (`MetricsRegistry`): counters and
+  histograms rendering the text exposition format (v0.0.4) from scratch —
+  sorted escaped labels, cumulative buckets, +Inf/sum/count series,
+  thread-safe. No `prometheus_client`.
+- **TTL + LRU answer cache** (`src/cache.py`): thread-safe, injectable
+  clock, hit/miss/expiry/eviction stats. Cache identity = folded question +
+  retrieval settings + index size; disabled by default (`cache_ttl = 0`)
+  so evaluation stays deterministic.
+
+### Added — serving/
+- **`GET /v1/metrics`** exposing the registry in Prometheus text format.
+- **`X-Request-ID` middleware**: echoes the caller's id or generates a
+  `uuid4` hex, logged per request; `http_requests` counters and
+  `http_request_duration_seconds` histograms per method / route template /
+  status (bounded label cardinality).
+- **RAG `meta` block** in the `ask` response (JSON) and the SSE `done`
+  event: request id, cache hit/miss/off, per-stage timings in ms and the
+  query-expansion terms that were appended.
+
+### Fixed
+- `RAGService._build` degrades a missing heavy backend (e.g. no
+  sentence-transformers) to the usual `503` + fix-it hint instead of a
+  stack trace.
+
+### Meta
+- 171 tests across three CI jobs (RAG 112, stock 28, serving 31) — up from
+  121. Roadmap and READMEs updated; `serving` version bumped to 2.3.0.
+
 ## [2.2.0] — 2026-11-06
 
 ### Added — serving/ (new top-level project)

@@ -27,9 +27,14 @@ Designed as a clean, dependency-light reference implementation:
 ## Architecture
 
 ```
+                          ┌────────────────────────────┐
+question ──► query plan ──►│ fold · script mix · expand │
+                          └─────────────┬──────────────┘
+                     original │        │ expanded (lexical only)
+                              ▼        ▼
 data/*.txt ──► chunker ──► embedder ──► FAISS store ──┐
                                                       ├─► RRF fusion ─► top-k
-question ──► BM25 (from scratch) ─────────────────────┘        │
+lexical query ──► BM25 (from scratch) ────────────────┘        │
                                                                ▼
                                                numbered context prompt
                                                                │
@@ -37,6 +42,7 @@ question ──► BM25 (from scratch) ─────────────�
                                                                │
                                                                ▼
                                      grounded Persian answer + sources [1][2]
+                                               + meta: stage timings · cache
 ```
 
 | Module | Responsibility |
@@ -48,11 +54,14 @@ question ──► BM25 (from scratch) ─────────────�
 | `src/vector_store.py` | FAISS `IndexFlatIP` (cosine on normalised vectors) with pure-NumPy fallback, save/load |
 | `src/retriever.py` | top-k retrieval + Maximal Marginal Relevance for diversity |
 | `src/bm25.py` | **BM25 (Okapi) from scratch** — Persian normalisation (Arabic Yeh/Keh, ZWNJ, stopwords), zero dependencies |
-| `src/hybrid.py` | **Reciprocal Rank Fusion** + `HybridRetriever` with `dense` / `sparse` / `hybrid` modes |
+| `src/query.py` | **bilingual query understanding** — fold to BM25-canonical form, script-mix profile, cross-language synonym expansion (lexical side only) |
+| `src/hybrid.py` | **Reciprocal Rank Fusion** + `HybridRetriever` with `dense` / `sparse` / `hybrid` modes, per-stage trace spans |
 | `src/rerank.py` | optional **cross-encoder re-ranker** hook (e.g. `BAAI/bge-reranker-v2-m3`) |
 | `src/llm/` | `LLMProvider` interface, `OllamaProvider`, `OpenAIProvider`, factory |
 | `src/prompts.py` | strict Persian system prompt: answer only from context, cite `[n]`, admit gaps |
-| `src/pipeline.py` | `RAGPipeline` facade: build/load index, retrieve, generate |
+| `src/cache.py` | thread-safe **TTL + LRU answer cache** with hit/miss/expiry/eviction stats |
+| `src/observability.py` | per-request **stage traces** + **Prometheus text format** metrics registry (stdlib only) |
+| `src/pipeline.py` | `RAGPipeline` facade: build/load index, retrieve (with query plan), generate, cache, meta |
 | `evaluation/metrics.py` | **RAGAS-style suite**: context precision/recall, faithfulness, answer relevancy |
 | `app.py` / `main.py` / `evaluate.py` | Streamlit chat / CLI / retrieval + generation metrics |
 
@@ -160,7 +169,7 @@ provider for true generative scoring:
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests/ -q     # 72 tests, no network / no model downloads
+python -m pytest tests/ -q     # 112 tests, no network / no model downloads
 ```
 
 Covers: chunk size & overlap guarantees, determinism and normalisation of
