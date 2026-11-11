@@ -40,6 +40,21 @@ def ask(payload: AskRequest, request: Request):
     took_ms = int((time.perf_counter() - started) * 1000)
 
     meta_source = result.get("meta") or {}
+    # RAG business metrics: cache effectiveness + per-stage latency. The
+    # pipeline reports stage timings in ms; histograms want seconds. The
+    # registry comes from app.state so tests can inject isolated ones.
+    metrics_reg = request.app.state.metrics
+    if metrics_reg is not None:
+        metrics_reg.inc(
+            "rag_cache_requests", result=meta_source.get("cache", "off")
+        )
+        for stage in ("retrieve", "generate"):
+            if stage in (meta_source.get("timings_ms") or {}):
+                metrics_reg.observe(
+                    "rag_stage_duration_seconds",
+                    meta_source["timings_ms"][stage] / 1000.0,
+                    stage=stage,
+                )
     query_info = meta_source.get("query") or {}
     request_id = getattr(request.state, "request_id", "-")
 

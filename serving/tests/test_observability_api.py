@@ -45,7 +45,9 @@ class MetaFakeRAG:
             "retrieval_mode": "hybrid",
             "meta": {
                 "cache": "miss" if self.calls == 1 else "hit",
-                "timings_ms": {"bm25": 3, "dense": 5, "rrf": 0, "generate": 11},
+                "timings_ms": {
+                    "bm25": 3, "dense": 5, "rrf": 0, "retrieve": 6, "generate": 11
+                },
                 "query": {
                     "original": question,
                     "expansions": ["overfitting"],
@@ -152,3 +154,27 @@ def test_sse_done_event_carries_request_id_and_cache_state(api):
 
 def test_root_lists_metrics_endpoint(api):
     assert "/v1/metrics" in api.get("/").json()["endpoints"]
+
+# ------------------------------------------------------ RAG business metrics
+def test_cache_outcomes_are_counted(api, fresh_metrics):
+    api.post("/v1/rag/ask", json={"question": "بیش‌برازش چیست؟"})  # miss
+    api.post("/v1/rag/ask", json={"question": "بیش‌برازش چیست؟"})  # hit
+    text = fresh_metrics.render()
+    assert "# TYPE rag_cache_requests_total counter" in text
+    assert 'rag_cache_requests_total{result="miss"} 1' in text
+    assert 'rag_cache_requests_total{result="hit"} 1' in text
+
+
+def test_stage_latency_is_observed_per_stage(api, fresh_metrics):
+    api.post("/v1/rag/ask", json={"question": "بیش‌برازش چیست؟"})
+    text = fresh_metrics.render()
+    assert "# TYPE rag_stage_duration_seconds histogram" in text
+    assert 'rag_stage_duration_seconds_count{stage="retrieve"} 1' in text
+    assert 'rag_stage_duration_seconds_count{stage="generate"} 1' in text
+    assert 'rag_stage_duration_seconds_sum{stage="generate"} 0.011' in text
+
+
+def test_cache_counter_is_exposed_at_the_metrics_endpoint(api):
+    api.post("/v1/rag/ask", json={"question": "بیش‌برازش چیست؟"})
+    text = api.get("/v1/metrics").text
+    assert 'rag_cache_requests_total{result="miss"} 1' in text
