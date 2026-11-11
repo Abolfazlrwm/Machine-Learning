@@ -1,4 +1,4 @@
-pandas>=3.1.0
+pandas>=3.1.1
 numpy>=1.24.0
 yfinance>=0.2.0
 scikit-learn>=1.9.1
