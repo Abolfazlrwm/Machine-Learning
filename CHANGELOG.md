@@ -4,6 +4,55 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.4.0] — 2026-11-11
+
+### Added — rag-farsi-assistant
+- **Semantic answer cache** (`src/semantic_cache.py`): the exact-match TTL
+  cache upgraded with embedding-similarity lookup — a paraphrase whose folded
+  question is cosine-similar >= threshold (default 0.92) to a cached one is
+  served with a single query embedding instead of the full retrieval +
+  generation path. Namespaces fold retrieval settings into the cache identity,
+  byte-equal vectors short-circuit to similarity 1.0 (immune to float
+  rounding), and near-miss similarities are reported so threshold tuning is
+  measurable. Off by default; enable with `RAG_SEMANTIC_CACHE=1`.
+- `meta` blocks carry `cache_similarity` on semantic hits; `pipeline.stats()`
+  exposes the cache counters (kind, threshold, hits/misses/hit_rate).
+
+### Added — serving/
+- **RAG business metrics** on `/v1/metrics`:
+  `rag_cache_requests_total{result=hit|miss|off}` and
+  `rag_stage_duration_seconds` histograms (`stage=retrieve|generate`),
+  recorded from the pipeline meta block into the injectable registry
+  (`app.state.metrics`), not the module singleton.
+
+### Added — observability & tooling
+- **Prometheus + Grafana compose stack** (`--profile observability`): scrape
+  config for the API's zero-dependency metrics endpoint, Grafana
+  provisioning-as-code (datasource + dashboard) and the provisioned
+  `RAG API Overview` dashboard — cache hit rate, p50/p95, per-route traffic,
+  5xx rate, per-stage latency and cache outcomes, all plain PromQL.
+- **Offline latency benchmark** (`serving/bench.py`): drives the real app
+  over an ASGI transport (fake embedder, extractive answers, no network)
+  across health / cache-off / cache-exact / cache-semantic; the committed
+  first report (`serving/benchmarks/report.md`, n=200 c=10) shows the exact
+  cache capped at the repeat share (84% hit rate) while the semantic cache
+  absorbs the paraphrases too (96%).
+
+### Changed
+- CI: the RAG suite now runs on Python 3.12 **and** 3.13 (fail-fast off) with
+  pytest-cov — term-missing in the job log, `coverage.xml` artifact from the
+  3.12 run. New `security` job: bandit (medium+ severity gates) over the two
+  shipped packages and pip-audit against a fresh venv holding exactly the
+  serving runtime; the whole workflow also runs weekly (Mondays 05:00 UTC).
+- Fixed a broken `branches:` push filter in the workflow.
+- `hashlib` calls use `usedforsecurity=False` (the MD5 hashing-trick tokens
+  and SHA1 cache keys are not security primitives) — bandit-clean.
+- serving version bumped to 2.4.0; compose image tags aligned.
+
+### Meta
+- 194 tests across the three suites (RAG 132, stock 28, serving 34) — up
+  from 171. READMEs, `.env.example` and roadmap updated.
+
 ## [2.3.0] — 2026-11-11
 
 ### Added — rag-farsi-assistant

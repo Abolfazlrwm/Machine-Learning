@@ -13,7 +13,7 @@ documented methodology.
 
 | Project | Domain | Key techniques | Headline result |
 |---|---|---|---|
-| [`rag-farsi-assistant`](rag-farsi-assistant/) | LLM / Retrieval (RAG) | Persian RAG: E5 embeddings + FAISS **fused with a from-scratch BM25 via RRF**, bilingual query expansion (Persian <-> English), TTL+LRU answer cache, per-stage traces + **Prometheus metrics**, switchable dense/sparse/hybrid modes, optional cross-encoder re-ranking, RAGAS-style eval suite, Ollama/OpenAI providers, Streamlit chat | 30-pair golden set: hybrid Hit@1 = 0.967, MRR = 0.983 (E5+BM25 via RRF) · context recall 0.98 · 112 tests |
+| [`rag-farsi-assistant`](rag-farsi-assistant/) | LLM / Retrieval (RAG) | Persian RAG: E5 embeddings + FAISS **fused with a from-scratch BM25 via RRF**, bilingual query expansion (Persian <-> English), exact + semantic (paraphrase-aware) answer cache, per-stage traces + **Prometheus metrics**, switchable dense/sparse/hybrid modes, optional cross-encoder re-ranking, RAGAS-style eval suite, Ollama/OpenAI providers, Streamlit chat | 30-pair golden set: hybrid Hit@1 = 0.967, MRR = 0.983 (E5+BM25 via RRF) · context recall 0.98 · 132 tests |
 | [`ai-text-detector`](ai-text-detector/) | NLP classification | TF-IDF + stylometric features (sentence length variation, punctuation habits), Linear SVM vs NB vs LR | Accuracy 0.897 · F1 0.899 · ROC-AUC 0.964 |
 | [`recommender-system`](recommender-system/) | RecSys | User-based & item-based collaborative filtering **from scratch** (pandas/NumPy) on MovieLens 105k | User-CF RMSE 0.877 · Item-CF RMSE 0.925 |
 | [`stock-movement-ml`](stock-movement-ml/) | Finance / time series | 20 technical indicators, walk-forward validation, leakage-free backtest with costs, Plotly dashboard | OOS ROC-AUC 0.53 (Random Forest), +25.45% on 696 out-of-sample days |
@@ -150,9 +150,9 @@ running each project's own training pipeline.
 Projects include pytest suites (unit-level, network-free):
 
 ```bash
-cd rag-farsi-assistant && python -m pytest tests/ -q   # 112 tests
+cd rag-farsi-assistant && python -m pytest tests/ -q   # 132 tests
 cd stock-movement-ml  && python -m pytest tests/ -q    # 28 tests
-cd serving            && python -m pytest tests/ -q    # 31 tests
+cd serving            && python -m pytest tests/ -q    # 34 tests
 ```
 
 ## 🛣 Roadmap
@@ -160,6 +160,7 @@ cd serving            && python -m pytest tests/ -q    # 31 tests
 - [x] Hybrid retrieval (BM25 + RRF) and a RAGAS-style evaluation suite for the RAG assistant — v2.1.0
 - [x] FastAPI serving layer, Docker stack and a HF Spaces demo — v2.2.0
 - [x] Query intelligence & observability: bilingual query expansion, TTL answer cache, stage traces + Prometheus metrics — v2.3.0
+- [x] Semantic answer cache (paraphrase-aware), Prometheus + Grafana stack, bandit + pip-audit security gates, py3.13 matrix + coverage CI, offline latency benchmark — v2.4.0
 - [ ] Matrix factorization (SVD/ALS) for the recommender system
 - [ ] PDF ingestion for the RAG assistant
 - [ ] Fine-tuning a Persian BERT for sentiment analysis
@@ -172,6 +173,8 @@ Releases are tagged per milestone — see [CHANGELOG.md](CHANGELOG.md) and the
 
 | Tag | Scope |
 |---|---|
+| `v2.4.0` | Semantic answer cache, RAG business metrics, Grafana observability stack, security scans + coverage CI, offline benchmark |
+| `v2.3.0` | Query intelligence (bilingual expansion), stage traces, Prometheus metrics, TTL+LRU answer cache |
 | `v2.2.0` | FastAPI serving (SSE, auth, health), Docker stack, HF Spaces demo |
 | `v2.1.0` · `rag-v1.1.0` | Hybrid search (BM25 + RRF), RAGAS-style eval, 30-pair golden set |
 | `v2.0.0` | Portfolio-wide CI, README overhaul, project restructure |

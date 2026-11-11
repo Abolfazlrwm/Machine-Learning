@@ -99,6 +99,8 @@ curl -s "localhost:8000/v1/stock/signal?ticker=AAPL"
 | `SERVING_API_KEY` | unset | If set, `/v1/*` requires `X-API-Key` (health stays open) |
 | `CORS_ORIGINS` | `*` | Comma-separated allowed origins |
 | `RAG_*` | see RAG `.env.example` | All RAG knobs (backend, provider, retrieval mode, …) |
+| `RAG_SEMANTIC_CACHE` | `0` | Paraphrase-aware answer reuse via embedding similarity |
+| `RAG_SEMANTIC_CACHE_THRESHOLD` | `0.92` | Cosine gate for the semantic cache |
 
 ## Docker
 
@@ -139,9 +141,24 @@ hit rate, end-to-end p50/p95, request rate per route, 5xx rate and the
 per-stage (retrieve / generate) latency split — every panel is a plain
 PromQL query over the metrics the API exports itself.
 
+## Benchmarks
+
+`serving/bench.py` measures the serving path offline — the real FastAPI app
+over an in-process ASGI transport, RAG on the deterministic fake embedder
+with extractive answers (no network, no model inference):
+
+```bash
+python serving/bench.py -n 200 -c 10 --output serving/benchmarks/report.md
+```
+
+The committed report (`benchmarks/report.md`) compares health / cache-off /
+cache-exact / cache-semantic under an 80%-repeats + 20%-paraphrases workload:
+the exact cache tops out at the repeat share while the semantic cache absorbs
+the paraphrases too (84% -> 96% hit rate in the first run).
+
 ## Tests
 
 ```bash
 cd serving && pip install -r requirements-dev.txt
-python -m pytest tests/ -q      # 21 tests: routes, SSE, auth, 422/404/503 paths
+python -m pytest tests/ -q      # 34 tests: routes, SSE, auth, metrics, 422/404/503 paths
 ```
