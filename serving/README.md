@@ -120,6 +120,25 @@ python stock-movement-ml/main.py --ticker AAPL     # data + models/ + reports/
 cd sms-spam && python spam_classifier.py --train spam.csv   # spam_classifier.pkl
 ```
 
+## Observability stack
+
+`GET /v1/metrics` renders the Prometheus text exposition format from the
+API's own zero-dependency registry — HTTP counters/latency histograms plus
+RAG business series (`rag_cache_requests_total{result=…}`,
+`rag_stage_duration_seconds_bucket{stage=…}`). One command wires it to a
+provisioned Grafana:
+
+```bash
+docker compose --profile observability up
+# Grafana  -> http://localhost:3000  (admin / admin — datasource + dashboard auto-provisioned)
+# Prometheus -> http://localhost:9090
+```
+
+The dashboard (`deploy/grafana/dashboards/rag-overview.json`) tracks cache
+hit rate, end-to-end p50/p95, request rate per route, 5xx rate and the
+per-stage (retrieve / generate) latency split — every panel is a plain
+PromQL query over the metrics the API exports itself.
+
 ## Tests
 
 ```bash

@@ -47,6 +47,34 @@ services:
       - rag-index:/app/storage
     profiles: ["ui"]
 
+  # -------------------------------------------------------- Prometheus
+  # Scrapes the API's zero-dependency /v1/metrics endpoint.
+  # Start with: docker compose --profile observability up
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    volumes:
+      - ./deploy/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports: ["9090:9090"]
+    profiles: ["observability"]
+
+  # ----------------------------------------------------------- Grafana
+  # Provisioned automatically: Prometheus datasource + the "RAG API
+  # Overview" dashboard (cache hit rate, p50/p95, per-stage latency).
+  # http://localhost:3000 — login admin / ${GRAFANA_ADMIN_PASSWORD:-admin}
+  grafana:
+    image: grafana/grafana:11.1.0
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+    volumes:
+      - ./deploy/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./deploy/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    ports: ["3000:3000"]
+    profiles: ["observability"]
+    depends_on: [prometheus]
+
 volumes:
   rag-index:
   ollama-models:
+  grafana-data:
