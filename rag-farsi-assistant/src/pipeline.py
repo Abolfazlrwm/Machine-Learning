@@ -17,6 +17,7 @@ from .prompts import SYSTEM_PROMPT, build_user_prompt
 from .query import QueryPlan, analyse_query
 from .retriever import Retriever, RetrievalResult
 from .rerank import create_reranker
+from .semantic_cache import SemanticCache
 from .vector_store import VectorStore
 
 
@@ -84,11 +85,22 @@ class RAGPipeline:
             )
         # Answer cache: disabled while cache_ttl == 0 (the default keeps
         # evaluation runs deterministic; the serving layer enables it).
-        self.cache = (
-            TTLCache(maxsize=config.cache_maxsize, ttl=config.cache_ttl)
-            if config.cache_ttl > 0
-            else None
-        )
+        # With `semantic_cache` on, the exact-match TTL cache is upgraded to
+        # an embedding-similarity cache so paraphrased questions hit too.
+        if config.cache_ttl > 0:
+            if config.semantic_cache:
+                self.cache: TTLCache | SemanticCache = SemanticCache(
+                    embedder=self.embedder,
+                    threshold=config.semantic_cache_threshold,
+                    maxsize=config.cache_maxsize,
+                    ttl=config.cache_ttl,
+                )
+            else:
+                self.cache = TTLCache(
+                    maxsize=config.cache_maxsize, ttl=config.cache_ttl
+                )
+        else:
+            self.cache = None
 
     # --------------------------------------------------------------- index
     def build_index(self) -> dict:
@@ -167,15 +179,27 @@ class RAGPipeline:
 
         cache_key = None
         if self.cache is not None:
-            cache_key = self._cache_key(plan, top_k)
-            hit, cached = self.cache.get(cache_key)
+            if isinstance(self.cache, SemanticCache):
+                cache_key = plan.normalised
+                hit, cached, similarity = self.cache.lookup(
+                    plan.normalised, namespace=self._cache_namespace(top_k)
+                )
+            else:
+                cache_key = self._cache_key(plan, top_k)
+                hit, cached = self.cache.get(cache_key)
+                similarity = None
             if hit:
                 tr.note("cache", "hit")
+                if similarity is not None:
+                    tr.note("cache_similarity", similarity)
+                meta: dict = {"cache": "hit", "timings_ms": tr.timings_ms()}
+                if similarity is not None:
+                    meta["cache_similarity"] = round(similarity, 4)
                 return AnswerResult(
                     question=question,
                     answer=cached[0],
                     sources=list(cached[1]),
-                    meta={"cache": "hit", "timings_ms": tr.timings_ms()},
+                    meta=meta,
                 )
             tr.note("cache", "miss")
         else:
@@ -210,13 +234,20 @@ class RAGPipeline:
             meta=self._meta(tr, plan, tr.notes.get("cache", "off")),
         )
         if self.cache is not None and cache_key:
-            self.cache.put(cache_key, (answer_text, sources))
+            if isinstance(self.cache, SemanticCache):
+                self.cache.put(
+                    cache_key,
+                    (answer_text, sources),
+                    namespace=self._cache_namespace(top_k),
+                )
+            else:
+                self.cache.put(cache_key, (answer_text, sources))
         return result
 
     # -------------------------------------------------------------- helpers
     def _meta(self, tr: Trace, plan: QueryPlan, cache_state: str) -> dict:
         """Observability block attached to every AnswerResult."""
-        return {
+        meta: dict = {
             "cache": cache_state,
             "timings_ms": tr.timings_ms(),
             "query": {
@@ -225,12 +256,14 @@ class RAGPipeline:
                 "mixed_script": plan.is_mixed,
             },
         }
+        if "cache_similarity" in tr.notes:
+            meta["cache_similarity"] = round(tr.notes["cache_similarity"], 4)
+        return meta
 
-    def _cache_key(self, plan: QueryPlan, top_k: int | None) -> str:
-        """Cache identity: folded question + the settings that change output."""
-        basis = "|".join(
+    def _cache_namespace(self, top_k: int | None) -> str:
+        """The settings that change the answer for a given question."""
+        return "|".join(
             [
-                plan.normalised,
                 str(top_k),
                 self.config.retrieval_mode,
                 self.config.reranker,
@@ -238,7 +271,11 @@ class RAGPipeline:
                 str(len(self.store)),
             ]
         )
-        return hashlib.sha1(basis.encode("utf-8")).hexdigest()
+
+    def _cache_key(self, plan: QueryPlan, top_k: int | None) -> str:
+        """Cache identity: folded question + the settings that change output."""
+        basis = "|".join([plan.normalised, self._cache_namespace(top_k)])
+        return hashlib.sha1(basis.encode("utf-8"), usedforsecurity=False).hexdigest()
 
     def _generate(self, question: str, chunks: list[Chunk]) -> str:
         if self.llm is None:
@@ -260,8 +297,11 @@ class RAGPipeline:
     # -------------------------------------------------------------- meta
     def stats(self) -> dict:
         docs = {c.doc_id for c in self.store.all_chunks()}
-        return {"documents": len(docs), "chunks": len(self.store),
-                "backend": self.embedder.name}
+        out = {"documents": len(docs), "chunks": len(self.store),
+               "backend": self.embedder.name}
+        if self.cache is not None:
+            out["cache"] = self.cache.stats
+        return out
 
     def dump_stats(self) -> str:
         return json.dumps(self.stats(), ensure_ascii=False, indent=2)

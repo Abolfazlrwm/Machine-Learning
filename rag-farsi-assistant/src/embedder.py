@@ -84,7 +84,7 @@ class FakeHashEmbedder(BaseEmbedder):
         return self._dim
 
     def _hash_row(self, token: str) -> int:
-        digest = hashlib.md5(token.encode("utf-8")).digest()
+        digest = hashlib.md5(token.encode("utf-8"), usedforsecurity=False).digest()
         return int.from_bytes(digest[:4], "little") % self._dim
 
     def embed(self, texts: list[str]) -> np.ndarray:

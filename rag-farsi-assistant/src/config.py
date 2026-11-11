@@ -67,6 +67,12 @@ class RAGConfig:
     query_expansion: bool = True
     cache_ttl: float = 0.0         # seconds; 0 disables the answer cache
     cache_maxsize: int = 128       # LRU bound for the answer cache
+    # Paraphrase-aware cache lookup: embed the folded question and reuse a
+    # cached answer when cosine similarity >= threshold. One query embedding
+    # replaces retrieval + generation, so the break-even is easily met.
+    # Off by default so evaluation runs stay deterministic.
+    semantic_cache: bool = False
+    semantic_cache_threshold: float = 0.92
 
     # --- misc -----------------------------------------------------------
     snippet_chars: int = 220       # sources preview length
@@ -91,6 +97,8 @@ class RAGConfig:
             "RAG_QUERY_EXPANSION": ("query_expansion", _to_bool),
             "RAG_CACHE_TTL": ("cache_ttl", float),
             "RAG_CACHE_MAXSIZE": ("cache_maxsize", int),
+            "RAG_SEMANTIC_CACHE": ("semantic_cache", _to_bool),
+            "RAG_SEMANTIC_CACHE_THRESHOLD": ("semantic_cache_threshold", float),
             "RAG_EMBEDDING_BACKEND": ("embedding_backend", str),
             "RAG_EMBEDDING_MODEL": ("embedding_model", str),
             "RAG_PROVIDER": ("provider", str),
