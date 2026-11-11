@@ -3,4 +3,4 @@
 # and boots anywhere. For the full image see requirements-docker.txt.
 fastapi>=0.162.2
 uvicorn[standard]>=0.30.0
-pydantic>=2.7.0
+pydantic>=2.14.3
