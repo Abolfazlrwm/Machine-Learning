@@ -36,6 +36,24 @@ def _verify_api_key(api_key: str | None):
     return verify
 
 
+def _route_template(request: Request) -> str:
+    """Version-stable route template for metric labels.
+
+    FastAPI >= 0.13x exposes the *router-relative* path on
+    ``scope["route"]`` (``/rag/ask``) while older versions expose the
+    mounted one (``/v1/rag/ask``). Re-attach the URL prefix so metric
+    labels do not depend on the installed FastAPI version.
+    """
+    route = request.scope.get("route")
+    route_path = getattr(route, "path", None)
+    if not route_path:
+        return request.url.path
+    url_path = request.url.path
+    if url_path != route_path and url_path.endswith(route_path):
+        return url_path[: len(url_path) - len(route_path)] + route_path
+    return route_path
+
+
 def create_app(
     registry: ServiceRegistry | None = None,
     *,
@@ -85,7 +103,7 @@ def create_app(
         response.headers["X-Process-Time-Ms"] = f"{took_ms:.1f}"
         # Route template ("/v1/rag/ask") keeps label cardinality bounded;
         # unmatched paths fall back to the raw path.
-        route = getattr(request.scope.get("route"), "path", request.url.path)
+        route = _route_template(request)
         if metrics_reg is not None:
             metrics_reg.inc(
                 "http_requests",

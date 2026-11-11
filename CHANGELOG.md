@@ -42,6 +42,9 @@ and versioning follows SemVer on the repository-level tags (`v*`).
 - `RAGService._build` degrades a missing heavy backend (e.g. no
   sentence-transformers) to the usual `503` + fix-it hint instead of a
   stack trace.
+- Metric route labels are version-stable across FastAPI releases
+  (0.12x reports mounted paths on `scope["route"]`, 0.16x reports
+  router-relative ones) — the middleware re-attaches the URL prefix.
 
 ### Meta
 - 171 tests across three CI jobs (RAG 112, stock 28, serving 31) — up from
