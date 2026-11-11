@@ -1,0 +1,15 @@
+# Prometheus scrape configuration for the ml-portfolio serving API.
+#
+# Start the whole observability stack (API + Prometheus + Grafana):
+#   docker compose --profile observability up
+# The API renders the text exposition format itself (v0.0.4) at /v1/metrics —
+# no prometheus_client, no extra exporter process.
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: ml-portfolio-api
+    metrics_path: /v1/metrics
+    static_configs:
+      - targets: ["api:8000"]
