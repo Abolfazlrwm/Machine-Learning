@@ -32,7 +32,14 @@ serving/
 | `/v1/sms/classify` | POST | `{"text": "..."}` | `{"label": "spam"/"ham", "probability_spam": ...}` |
 | `/v1/stock/signal` | GET | `?ticker=AAPL` | `{"signal": "up"/"down", "probability_up": ..., "as_of": ...}` |
 | `/v1/health` | GET | — | `{"status": "ok"/"degraded", "services": {...}}` |
+| `/v1/metrics` | GET | — | Prometheus text exposition (v0.0.4) — request counters + latency histograms |
 | `/` | GET | — | API index (version, endpoint list) |
+
+Every response carries an `X-Request-ID` header (the caller's value is
+echoed, otherwise a `uuid4` hex is generated) and `X-Process-Time-Ms`.
+The RAG `ask` response additionally embeds a `meta` block: request id,
+answer-cache state (`hit` / `miss` / `off`), per-stage retrieval timings
+in milliseconds and the query-expansion terms that were appended.
 
 ### RAG ask — JSON
 
