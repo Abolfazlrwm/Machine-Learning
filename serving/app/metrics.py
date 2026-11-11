@@ -35,3 +35,11 @@ metrics.describe("http_requests", "HTTP requests processed by the serving layer.
 metrics.describe(
     "http_request_duration_seconds", "End-to-end request latency in seconds."
 )
+metrics.describe(
+    "rag_cache_requests",
+    "RAG answers by cache outcome: hit, miss or off.",
+)
+metrics.describe(
+    "rag_stage_duration_seconds",
+    "RAG pipeline stage latency (retrieve, generate) in seconds.",
+)
