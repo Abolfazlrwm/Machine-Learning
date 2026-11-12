@@ -74,6 +74,14 @@ class RAGConfig:
     semantic_cache: bool = False
     semantic_cache_threshold: float = 0.92
 
+    # --- safety ----------------------------------------------------------
+    # Prompt-injection screening (src/guardrails.py): "off" | "flag"
+    # (answer anyway, attach meta["injection"]) | "block" (refuse up front).
+    # "flag" is the default so evaluation runs keep their answers while
+    # still reporting attempts; serving deployments often prefer "block".
+    guardrails: str = "flag"
+    injection_threshold: float = 0.6
+
     # --- misc -----------------------------------------------------------
     snippet_chars: int = 220       # sources preview length
     request_timeout: int = 120     # seconds for HTTP calls to LLM backends
@@ -99,6 +107,8 @@ class RAGConfig:
             "RAG_CACHE_MAXSIZE": ("cache_maxsize", int),
             "RAG_SEMANTIC_CACHE": ("semantic_cache", _to_bool),
             "RAG_SEMANTIC_CACHE_THRESHOLD": ("semantic_cache_threshold", float),
+            "RAG_GUARDRAILS": ("guardrails", str),
+            "RAG_INJECTION_THRESHOLD": ("injection_threshold", float),
             "RAG_EMBEDDING_BACKEND": ("embedding_backend", str),
             "RAG_EMBEDDING_MODEL": ("embedding_model", str),
             "RAG_PROVIDER": ("provider", str),

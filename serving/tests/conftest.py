@@ -36,6 +36,25 @@ class FakeRAG:
 
     def ask(self, question: str, top_k: int | None = None) -> dict:
         self.calls += 1
+        meta: dict = {
+            "cache": "miss" if self.calls == 1 else "hit",
+            "timings_ms": {"bm25": 3, "dense": 5, "rrf": 0, "generate": 11},
+            "query": {
+                "original": question,
+                "expansions": ["overfitting"],
+                "mixed_script": True,
+            },
+        }
+        # Mirror the real pipeline contract (guardrails="flag"): flagged
+        # questions keep their answer but carry the injection report.
+        injection_trigger = "نادیده بگیر" in question or "system prompt" in question.lower()
+        if injection_trigger:
+            meta["guardrails"] = "flag"
+            meta["injection"] = {
+                "flagged": True,
+                "score": 1.0,
+                "rules": ["override-fa" if "نادیده بگیر" in question else "probe-system-prompt-en"],
+            }
         return {
             "question": question,
             "answer": (
@@ -57,15 +76,7 @@ class FakeRAG:
                 },
             ],
             "retrieval_mode": "hybrid",
-            "meta": {
-                "cache": "miss" if self.calls == 1 else "hit",
-                "timings_ms": {"bm25": 3, "dense": 5, "rrf": 0, "generate": 11},
-                "query": {
-                    "original": question,
-                    "expansions": ["overfitting"],
-                    "mixed_script": True,
-                },
-            },
+            "meta": meta,
         }
 
 
