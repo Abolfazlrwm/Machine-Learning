@@ -1,0 +1,45 @@
+{
+  "backend": "fake",
+  "retrieval_by_mode": {
+    "dense": {
+      "n_questions": 30,
+      "hit@1": 0.7,
+      "hit@2": 0.9,
+      "hit@3": 0.9,
+      "mrr": 0.8,
+      "ndcg@1": 0.7,
+      "ndcg@2": 0.8262,
+      "ndcg@3": 0.8262
+    },
+    "sparse": {
+      "n_questions": 30,
+      "hit@1": 0.9,
+      "hit@2": 0.9667,
+      "hit@3": 1.0,
+      "mrr": 0.9444,
+      "ndcg@1": 0.9,
+      "ndcg@2": 0.9421,
+      "ndcg@3": 0.9587
+    },
+    "hybrid": {
+      "n_questions": 30,
+      "hit@1": 0.8,
+      "hit@2": 0.9667,
+      "hit@3": 1.0,
+      "mrr": 0.8944,
+      "ndcg@1": 0.8,
+      "ndcg@2": 0.9052,
+      "ndcg@3": 0.9218
+    },
+    "hybrid+rerank": {
+      "n_questions": 30,
+      "hit@1": 0.9,
+      "hit@2": 0.9667,
+      "hit@3": 1.0,
+      "mrr": 0.9444,
+      "ndcg@1": 0.9,
+      "ndcg@2": 0.9421,
+      "ndcg@3": 0.9587
+    }
+  }
+}

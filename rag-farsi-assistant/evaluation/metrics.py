@@ -19,6 +19,7 @@ answers they double as an end-to-end smoke check.
 """
 from __future__ import annotations
 
+import math
 import re
 
 import numpy as np
@@ -54,6 +55,21 @@ def _coverage(numerator: set[str], denominator: set[str]) -> float:
     if not denominator:
         return 0.0
     return len(numerator & denominator) / len(denominator)
+
+
+def ndcg_at_k(ranked_docs: list[str], expected_doc: str, k: int) -> float:
+    """Binary-relevance nDCG@k for a single question.
+
+    The golden set has exactly one relevant document per question, so the
+    ideal DCG places it at rank 1 (``IDCG = 1 / log2(2) = 1``) and nDCG
+    reduces to ``1 / log2(rank + 1)`` when the expected doc sits inside
+    the top-k — 0 otherwise. Unlike MRR, it discounts deeper hits the
+    same way but integrates cleanly with graded relevance later.
+    """
+    for rank, doc in enumerate(ranked_docs[:k], start=1):
+        if doc == expected_doc:
+            return 1.0 / math.log2(rank + 1)
+    return 0.0
 
 
 # ---------------------------------------------------------------------------
