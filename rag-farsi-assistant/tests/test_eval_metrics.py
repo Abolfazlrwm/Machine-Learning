@@ -1,13 +1,35 @@
 """Tests for the RAGAS-lite evaluation metrics — hand-computed fixtures."""
+import math
+
 from evaluation.metrics import (
     answer_relevancy,
     context_precision,
     context_recall,
     evaluate_generation,
     faithfulness,
+    ndcg_at_k,
     split_sentences,
     token_f1,
 )
+
+
+class TestNdcgAtK:
+    def test_expected_doc_at_rank_one_scores_one(self):
+        assert ndcg_at_k(["d1", "d2", "d3"], "d1", k=3) == 1.0
+
+    def test_expected_doc_at_rank_two_gets_log_discount(self):
+        assert ndcg_at_k(["d9", "d1", "d3"], "d1", k=3) == 1.0 / math.log2(3)
+
+    def test_expected_doc_outside_top_k_scores_zero(self):
+        assert ndcg_at_k(["d9", "d8", "d1"], "d1", k=2) == 0.0
+
+    def test_expected_doc_absent_entirely_scores_zero(self):
+        assert ndcg_at_k(["d9", "d8", "d7"], "d1", k=3) == 0.0
+
+    def test_deeper_hits_discount_monotonically(self):
+        r2 = ndcg_at_k(["d9", "d1", "d3"], "d1", k=3)
+        r3 = ndcg_at_k(["d9", "d8", "d1"], "d1", k=3)
+        assert 0.0 < r3 < r2 < 1.0
 
 
 class TestTokenF1:
