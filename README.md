@@ -9,6 +9,9 @@ scikit-learn pipelines to LLM-powered retrieval. Every project ships with a
 structured codebase (`src/` + `tests/`), real evaluation numbers and a
 documented methodology.
 
+<p align="center"><img src="assets/demo.gif" alt="demo" width="100%"></p>
+
+
 ## 🗂 Projects
 
 | Project | Domain | Key techniques | Headline result |
