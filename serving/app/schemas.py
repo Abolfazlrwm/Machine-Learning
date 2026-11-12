@@ -32,6 +32,14 @@ class SourceModel(BaseModel):
     snippet: str
 
 
+class InjectionMeta(BaseModel):
+    """Prompt-injection screening summary (src/guardrails.py in the RAG project)."""
+
+    flagged: bool
+    score: float = Field(ge=0.0, le=1.0)
+    rules: list[str]
+
+
 class RAGMeta(BaseModel):
     """Observability block for one /v1/rag/ask call."""
 
@@ -40,6 +48,8 @@ class RAGMeta(BaseModel):
     timings_ms: dict[str, int] | None = None
     query_expansions: list[str] | None = None
     mixed_script: bool | None = None
+    guardrails: Literal["flag", "block"] | None = None
+    injection: InjectionMeta | None = None
 
 
 class AskResponse(BaseModel):

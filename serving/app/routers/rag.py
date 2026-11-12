@@ -14,7 +14,7 @@ from typing import Iterator
 from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
 
-from ..schemas import AskRequest, AskResponse, RAGMeta, SourceModel
+from ..schemas import AskRequest, AskResponse, InjectionMeta, RAGMeta, SourceModel
 
 router = APIRouter(prefix="/rag", tags=["rag"])
 
@@ -89,5 +89,11 @@ def ask(payload: AskRequest, request: Request):
             timings_ms=meta_source.get("timings_ms") or None,
             query_expansions=query_info.get("expansions") or None,
             mixed_script=query_info.get("mixed_script"),
+            guardrails=meta_source.get("guardrails"),
+            injection=(
+                InjectionMeta(**meta_source["injection"])
+                if meta_source.get("injection")
+                else None
+            ),
         ),
     )

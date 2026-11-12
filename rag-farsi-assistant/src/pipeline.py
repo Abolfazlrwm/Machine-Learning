@@ -10,6 +10,7 @@ from .chunker import Chunk, chunk_documents
 from .config import RAGConfig
 from .data_loader import load_documents
 from .embedder import BaseEmbedder, create_embedder
+from .guardrails import Detection, InjectionDetector, REFUSAL_ANSWER
 from .hybrid import HybridRetriever
 from .llm import LLMProvider, create_provider
 from .observability import Trace
@@ -101,6 +102,12 @@ class RAGPipeline:
                 )
         else:
             self.cache = None
+        # Prompt-injection screening (src/guardrails.py): None = disabled.
+        self._detector = (
+            InjectionDetector(config.injection_threshold)
+            if config.guardrails != "off"
+            else None
+        )
 
     # --------------------------------------------------------------- index
     def build_index(self) -> dict:
@@ -161,6 +168,50 @@ class RAGPipeline:
         )
 
     def answer(
+        self,
+        question: str,
+        top_k: int | None = None,
+        trace: Trace | None = None,
+    ) -> AnswerResult:
+        """Guardrail policy -> the full retrieve/prompt/generate path.
+
+        With ``guardrails="flag"`` (the default) every question is screened
+        and flagged attempts keep their answer but carry
+        ``result.meta["injection"]``. With ``"block"`` a flagged question
+        never reaches retrieval or the LLM — the caller receives
+        :data:`~src.guardrails.REFUSAL_ANSWER` plus the detection report.
+        See :mod:`src.guardrails` for the policy details.
+        """
+        detection: Detection | None = None
+        if self._detector is not None:
+            detection = self._detector.detect(question)
+            if detection.flagged and self.config.guardrails == "block":
+                tr = trace if trace is not None else Trace()
+                return self._blocked_result(question, detection, tr)
+
+        result = self._answer_impl(question, top_k, trace)
+        if detection is not None and detection.flagged:
+            result.meta["injection"] = detection.to_meta()
+            result.meta["guardrails"] = "flag"
+        return result
+
+    def _blocked_result(
+        self, question: str, detection: Detection, tr: Trace
+    ) -> AnswerResult:
+        """The up-front refusal returned when ``guardrails="block"``."""
+        return AnswerResult(
+            question=question,
+            answer=REFUSAL_ANSWER,
+            sources=[],
+            meta={
+                "cache": "off",
+                "guardrails": "block",
+                "injection": detection.to_meta(),
+                "timings_ms": tr.timings_ms(),
+            },
+        )
+
+    def _answer_impl(
         self,
         question: str,
         top_k: int | None = None,
