@@ -40,7 +40,7 @@ class RAGConfig:
     rrf_k: int = 60                # reciprocal rank fusion constant
     bm25_k1: float = 1.5           # BM25 term-frequency saturation
     bm25_b: float = 0.75           # BM25 length normalisation
-    reranker: str = "none"         # none | noop | cross-encoder
+    reranker: str = "none"         # none | noop | lexical | cross-encoder
 
     # --- embeddings -----------------------------------------------------
     # backend: "sentence-transformers" (real) or "fake" (hash-based, no deps)
