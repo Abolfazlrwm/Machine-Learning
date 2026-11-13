@@ -6,6 +6,9 @@ Prerequisites: install Ollama (https://ollama.com), then
 """
 from __future__ import annotations
 
+import json
+from collections.abc import Iterator
+
 import requests
 
 from .base import LLMProvider
@@ -35,6 +38,35 @@ class OllamaProvider(LLMProvider):
         )
         response.raise_for_status()
         return response.json()["message"]["content"].strip()
+
+    def stream(self, system: str, user: str, temperature: float = 0.2) -> Iterator[str]:
+        """Yield deltas from Ollama's NDJSON chat stream.
+
+        Each response line is one JSON object: ``{"message": {"content":
+        "..."}, "done": false}`` while generating, then a final ``done:
+        true`` record that carries only token stats. Every non-empty
+        ``message.content`` is yielded as one delta; concatenating the
+        yielded deltas reproduces the full reply byte-for-byte.
+        """
+        payload = {
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+            "stream": True,
+            "options": {"temperature": temperature},
+        }
+        response = requests.post(
+            f"{self.base_url}/api/chat", json=payload, timeout=self.timeout, stream=True
+        )
+        response.raise_for_status()
+        for line in response.iter_lines(decode_unicode=True):
+            if not line:
+                continue
+            content = json.loads(line).get("message", {}).get("content")
+            if content:
+                yield content
 
     def is_available(self) -> bool:
         try:
