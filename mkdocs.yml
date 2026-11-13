@@ -1,0 +1,63 @@
+site_name: Machine-Learning Portfolio
+site_description: >-
+  A resume-grade ML portfolio: Persian RAG assistant with hybrid retrieval,
+  honest evaluation, a FastAPI serving layer, observability and safety —
+  built in the open, one verified step at a time.
+site_url: https://abolfazlrwm.github.io/Machine-Learning/
+repo_url: https://github.com/Abolfazlrwm/Machine-Learning
+repo_name: Abolfazlrwm/Machine-Learning
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: en
+  palette:
+    # toggle between light and dark
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: switch to light mode
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+    - announce.dismiss
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+
+nav:
+  - Home: index.md
+  - RAG assistant:
+      - Architecture: rag/architecture.md
+      - Retrieval: rag/retrieval.md
+      - Evaluation: rag/evaluation.md
+      - Guardrails: rag/safety.md
+  - Serving API:
+      - Endpoints: serving/api.md
+      - Observability: serving/observability.md
+  - Deployment: deployment.md
+  - Stock ML: stock.md
+
+strict: true
