@@ -4,6 +4,43 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.5.0] — 2026-11-13
+
+### Added — rag-farsi-assistant
+- **Prompt-injection guardrails** (`src/guardrails.py`, OWASP LLM01):
+  deterministic bilingual (fa/en) rule set — instruction override, prompt
+  exfiltration, filter bypass, jailbreak lexicon, credential fishing — with
+  weighted scoring (capped at 1.0) and a configurable threshold. Policies on
+  `RAG_GUARDRAILS`: `flag` (default: answer anyway, attach
+  `meta["injection"]` with score + matched rules) or `block` (refuse before
+  retrieval and the LLM with a grounded Persian refusal). Weak lexicon
+  matches need corroboration, so benign questions containing «نادیده» stay
+  below the threshold — pinned by false-positive tests.
+- **LexicalReranker** (`src/rerank.py`): offline, dependency-free pointwise
+  re-ranker — rarity-weighted query-term coverage over the candidate batch
+  (`w(t) = log(1 + N/df(t))`). Same `BaseReranker` call site as the neural
+  cross-encoder, so swapping is a config change. Available as
+  `RAG_RERANKER=lexical`.
+- **nDCG@k metric** (`evaluation/metrics.py`): binary-relevance nDCG
+  alongside Hit@k / MRR in the retrieval harness.
+
+### Changed — evaluation
+- `evaluate.py --compare` adds a `hybrid+rerank` column (hybrid candidates
+  re-ordered by the lexical re-ranker on the shared index; `--no-rerank` to
+  skip). On the CI-reproducible baseline it lifts hybrid hit@1 0.80 → 0.90
+  and MRR 0.894 → 0.944, matching BM25 while fusing both signals — see the
+  new committed report `evaluation/results/eval_report_ci.{md,json}`.
+- Test suites grew 132 → 162 (rag) and 34 → 36 (serving): guardrail rules +
+  pipeline policies, reranker scoring, nDCG fixtures, API meta contract.
+
+### Added — repository
+- **MkDocs documentation site** (`mkdocs.yml` + `docs/`, Material theme,
+  strict mode): RAG architecture / retrieval / evaluation / guardrails,
+  serving endpoints & observability, deployment shapes, stock methodology —
+  all numbers pulled from the committed reports. Deployed to GitHub Pages on
+  every push touching `docs/` via the new `Docs` workflow
+  (build `--strict` → `actions/deploy-pages`, concurrency-guarded).
+
 ## [2.4.0] — 2026-11-11
 
 ### Added — rag-farsi-assistant
