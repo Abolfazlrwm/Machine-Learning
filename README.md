@@ -1,6 +1,6 @@
 # Machine Learning
 
-[![Tests](https://img.shields.io/github/actions/workflow/status/Abolfazlrwm/Machine-Learning/tests.yml?branch=main&label=Tests&labelColor=1a1b26)](https://github.com/Abolfazlrwm/Machine-Learning/actions) [![Live demo](https://img.shields.io/badge/Live_demo-HuggingFace_Spaces-FFD21E?style=flat&labelColor=1a1b26)](https://huggingface.co/spaces/Abol0pati/farsi-rag-assistant) [![License: MIT](https://img.shields.io/badge/License-MIT-3fb950?style=flat&labelColor=1a1b26)](LICENSE)
+[![Tests](https://img.shields.io/github/actions/workflow/status/Abolfazlrwm/Machine-Learning/tests.yml?branch=main&label=Tests&labelColor=1a1b26)](https://github.com/Abolfazlrwm/Machine-Learning/actions) [![Docs](https://img.shields.io/badge/Docs-mkdocs_material-4b7bff?style=flat&labelColor=1a1b26)](https://abolfazlrwm.github.io/Machine-Learning/) [![Live demo](https://img.shields.io/badge/Live_demo-HuggingFace_Spaces-FFD21E?style=flat&labelColor=1a1b26)](https://huggingface.co/spaces/Abol0pati/farsi-rag-assistant) [![License: MIT](https://img.shields.io/badge/License-MIT-3fb950?style=flat&labelColor=1a1b26)](LICENSE)
 
 [![Tests](https://github.com/Abolfazlrwm/Machine-Learning/actions/workflows/tests.yml/badge.svg)](https://github.com/Abolfazlrwm/Machine-Learning/actions/workflows/tests.yml)
 
@@ -16,7 +16,7 @@ documented methodology.
 
 | Project | Domain | Key techniques | Headline result |
 |---|---|---|---|
-| [`rag-farsi-assistant`](rag-farsi-assistant/) | LLM / Retrieval (RAG) | Persian RAG: E5 embeddings + FAISS **fused with a from-scratch BM25 via RRF**, bilingual query expansion (Persian <-> English), exact + semantic (paraphrase-aware) answer cache, per-stage traces + **Prometheus metrics**, switchable dense/sparse/hybrid modes, optional cross-encoder re-ranking, RAGAS-style eval suite, Ollama/OpenAI providers, Streamlit chat | 30-pair golden set: hybrid Hit@1 = 0.967, MRR = 0.983 (E5+BM25 via RRF) · context recall 0.98 · 132 tests |
+| [`rag-farsi-assistant`](rag-farsi-assistant/) | LLM / Retrieval (RAG) | Persian RAG: E5 embeddings + FAISS **fused with a from-scratch BM25 via RRF**, bilingual query expansion (Persian <-> English), exact + semantic (paraphrase-aware) answer cache, per-stage traces + **Prometheus metrics**, switchable dense/sparse/hybrid modes, re-rank stage (offline lexical / neural cross-encoder), **bilingual prompt-injection guardrails**, RAGAS-style eval suite, Ollama/OpenAI providers, Streamlit chat | 30-pair golden set: hybrid Hit@1 = 0.967, MRR = 0.983 (E5+BM25 via RRF) · context recall 0.98 · 162 tests |
 | [`ai-text-detector`](ai-text-detector/) | NLP classification | TF-IDF + stylometric features (sentence length variation, punctuation habits), Linear SVM vs NB vs LR | Accuracy 0.897 · F1 0.899 · ROC-AUC 0.964 |
 | [`recommender-system`](recommender-system/) | RecSys | User-based & item-based collaborative filtering **from scratch** (pandas/NumPy) on MovieLens 105k | User-CF RMSE 0.877 · Item-CF RMSE 0.925 |
 | [`stock-movement-ml`](stock-movement-ml/) | Finance / time series | 20 technical indicators, walk-forward validation, leakage-free backtest with costs, Plotly dashboard | OOS ROC-AUC 0.53 (Random Forest), +25.45% on 696 out-of-sample days |
@@ -38,8 +38,14 @@ documented methodology.
   synonym expansion feeding BM25 only — the evaluated E5 behaviour is
   untouched), answers are memoised in a TTL+LRU cache, and every stage
   emits timings that render as **Prometheus metrics** at the API's
-  `/v1/metrics`. Ships a Streamlit chat UI, CLI, and a dependency-free
-  "fake" embedding backend for CI.
+  `/v1/metrics`. A re-rank stage refines the fused ranking — a
+  deterministic lexical scorer in CI (lifts hybrid hit@1 0.80 → 0.90 on
+  the reproducible baseline) or a neural cross-encoder (e.g.
+  BAAI/bge-reranker-v2-m3) in production — and **bilingual
+  prompt-injection guardrails** screen every question with flag/block
+  policies (OWASP LLM01). Ships a Streamlit chat UI, CLI, and a
+  dependency-free "fake" embedding backend for CI; full docs live at the
+  [documentation site](https://abolfazlrwm.github.io/Machine-Learning/).
 - **ai-text-detector** — classic feature engineering: does *style* reveal
   machine text better than *vocabulary*? Hybrid TF-IDF + stylometric features
   beat plain TF-IDF across all three classifiers.
@@ -153,9 +159,9 @@ running each project's own training pipeline.
 Projects include pytest suites (unit-level, network-free):
 
 ```bash
-cd rag-farsi-assistant && python -m pytest tests/ -q   # 132 tests
+cd rag-farsi-assistant && python -m pytest tests/ -q   # 162 tests
 cd stock-movement-ml  && python -m pytest tests/ -q    # 28 tests
-cd serving            && python -m pytest tests/ -q    # 34 tests
+cd serving            && python -m pytest tests/ -q    # 36 tests
 ```
 
 ## 🛣 Roadmap
@@ -164,6 +170,7 @@ cd serving            && python -m pytest tests/ -q    # 34 tests
 - [x] FastAPI serving layer, Docker stack and a HF Spaces demo — v2.2.0
 - [x] Query intelligence & observability: bilingual query expansion, TTL answer cache, stage traces + Prometheus metrics — v2.3.0
 - [x] Semantic answer cache (paraphrase-aware), Prometheus + Grafana stack, bandit + pip-audit security gates, py3.13 matrix + coverage CI, offline latency benchmark — v2.4.0
+- [x] Bilingual prompt-injection guardrails (flag/block), lexical re-ranker + nDCG in the eval harness, MkDocs documentation site on GitHub Pages — v2.5.0
 - [ ] Matrix factorization (SVD/ALS) for the recommender system
 - [ ] PDF ingestion for the RAG assistant
 - [ ] Fine-tuning a Persian BERT for sentiment analysis
@@ -176,6 +183,7 @@ Releases are tagged per milestone — see [CHANGELOG.md](CHANGELOG.md) and the
 
 | Tag | Scope |
 |---|---|
+| `v2.5.0` | Prompt-injection guardrails (OWASP LLM01), lexical re-ranker + nDCG metric + rerank eval column, MkDocs docs site on GitHub Pages |
 | `v2.4.0` | Semantic answer cache, RAG business metrics, Grafana observability stack, security scans + coverage CI, offline benchmark |
 | `v2.3.0` | Query intelligence (bilingual expansion), stage traces, Prometheus metrics, TTL+LRU answer cache |
 | `v2.2.0` | FastAPI serving (SSE, auth, health), Docker stack, HF Spaces demo |
