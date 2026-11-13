@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import time
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 
 from .cache import TTLCache
@@ -10,14 +12,14 @@ from .chunker import Chunk, chunk_documents
 from .config import RAGConfig
 from .data_loader import load_documents
 from .embedder import BaseEmbedder, create_embedder
-from .guardrails import Detection, InjectionDetector, REFUSAL_ANSWER
+from .guardrails import REFUSAL_ANSWER, Detection, InjectionDetector
 from .hybrid import HybridRetriever
-from .llm import LLMProvider, create_provider
+from .llm import LLMProvider
 from .observability import Trace
 from .prompts import SYSTEM_PROMPT, build_user_prompt
 from .query import QueryPlan, analyse_query
-from .retriever import Retriever, RetrievalResult
 from .rerank import create_reranker
+from .retriever import RetrievalResult, Retriever
 from .semantic_cache import SemanticCache
 from .vector_store import VectorStore
 
@@ -36,6 +38,23 @@ class AnswerResult:
     answer: str
     sources: list[Source] = field(default_factory=list)
     meta: dict = field(default_factory=dict)  # cache / timings / query plan
+
+
+def _word_chunks(text: str, words_per_event: int = 3) -> Iterator[dict]:
+    """Re-chunk a ready-made answer into small ``token`` events.
+
+    Used where there is no incremental source to stream — cached, extractive
+    and refused answers — so consumers always see the same progressive
+    rendering. Chunks carry their trailing space (except the last) so
+    ``"".join(chunk["text"] for ...)`` reproduces the whitespace-normalised
+    input exactly.
+    """
+    words = text.split()
+    for i in range(0, len(words), words_per_event):
+        chunk = " ".join(words[i:i + words_per_event])
+        if i + words_per_event < len(words):
+            chunk += " "
+        yield {"type": "token", "text": chunk}
 
 
 class RAGPipeline:
@@ -210,6 +229,183 @@ class RAGPipeline:
                 "timings_ms": tr.timings_ms(),
             },
         )
+
+    # ------------------------------------------------------------- streaming
+    def answer_stream(
+        self,
+        question: str,
+        top_k: int | None = None,
+        trace: Trace | None = None,
+    ) -> Iterator[dict]:
+        """Stream one answer as a sequence of event dicts.
+
+        The streaming twin of :meth:`answer`: same guardrail policy, same
+        cache identity, same retrieval — but the LLM reply is consumed as it
+        is generated and forwarded as deltas instead of buffered. Event
+        contract, in order:
+
+        * ``{"type": "sources", "sources": [Source, ...],
+          "retrieval_mode": str[, "guardrails", "injection"]}`` — grounding
+          first, so a UI can render citations before the first token;
+        * ``{"type": "token", "text": delta}`` — answer fragments whose
+          concatenation (``"".join``) reproduces the full answer exactly,
+          the same string :meth:`answer` would return and cache;
+        * ``{"type": "done", "cache": str, "took_ms": int, "meta": {...}}``
+          — the observability block (timings, query plan, injection report
+          when flagged, cache similarity when the semantic cache hit).
+
+        Cached, extractive and refused answers have no incremental source,
+        so they are re-chunked into small word-group deltas to keep the
+        progressive-rendering UX. ``"".join``-exactness still holds.
+        """
+        tr = trace if trace is not None else Trace()
+        started = time.perf_counter()
+        plan = analyse_query(question)
+        self.ensure_index()
+
+        detection: Detection | None = None
+        if self._detector is not None:
+            detection = self._detector.detect(question)
+            if detection.flagged and self.config.guardrails == "block":
+                yield from self._blocked_stream(detection, started)
+                return
+
+        cache_state = tr.notes.get("cache", "off")
+        cache_key = None
+        cache_namespace = None
+        if self.cache is not None:
+            if isinstance(self.cache, SemanticCache):
+                cache_key = plan.normalised
+                cache_namespace = self._cache_namespace(top_k)
+                hit, cached, similarity = self.cache.lookup(
+                    plan.normalised, namespace=cache_namespace
+                )
+            else:
+                cache_key = self._cache_key(plan, top_k)
+                hit, cached = self.cache.get(cache_key)
+                similarity = None
+            if hit:
+                tr.note("cache", "hit")
+                cache_state = "hit"
+                if similarity is not None:
+                    tr.note("cache_similarity", similarity)
+                yield self._sources_event(list(cached[1]), detection)
+                yield from _word_chunks(cached[0])
+                yield self._done_event(
+                    cache_state, started, tr, plan, detection, similarity
+                )
+                return
+            tr.note("cache", "miss")
+            cache_state = "miss"
+        else:
+            tr.note("cache", "off")
+            cache_state = "off"
+
+        with tr.span("retrieve"):
+            results = self._retrieve(plan, top_k, tr)
+        if not results:
+            yield self._sources_event([], detection)
+            yield from _word_chunks(self._no_index_answer())
+            yield self._done_event(cache_state, started, tr, plan, detection)
+            return
+
+        chunks = [r.chunk for r in results]
+        sources = [
+            Source(
+                title=r.chunk.title,
+                chunk_id=r.chunk.chunk_id,
+                score=round(r.score, 4),
+                snippet=self._snippet(r.chunk.text),
+            )
+            for r in results
+        ]
+        # Grounding goes out before generation starts: citations render
+        # while the first tokens are still in flight.
+        yield self._sources_event(sources, detection)
+
+        answer_parts: list[str] = []
+        with tr.span("generate"):
+            if self.llm is None:
+                # Extractive fallback: one event per numbered chunk so the
+                # reconstruction matches answer()'s "\n\n".join exactly
+                # (separator goes *before* each chunk but the first).
+                for i, chunk in enumerate(chunks, 1):
+                    delta = ("\n\n" if i > 1 else "") + f"[{i}] {chunk.text}"
+                    answer_parts.append(delta)
+                    yield {"type": "token", "text": delta}
+            else:
+                user_prompt = build_user_prompt(plan.original, chunks)
+                for delta in self.llm.stream(
+                    SYSTEM_PROMPT, user_prompt, temperature=self.config.temperature
+                ):
+                    answer_parts.append(delta)
+                    yield {"type": "token", "text": delta}
+
+        if self.cache is not None and cache_key:
+            answer_text = "".join(answer_parts)
+            if isinstance(self.cache, SemanticCache):
+                self.cache.put(
+                    cache_key, (answer_text, sources), namespace=cache_namespace
+                )
+            else:
+                self.cache.put(cache_key, (answer_text, sources))
+        yield self._done_event(cache_state, started, tr, plan, detection)
+
+    def _blocked_stream(self, detection: Detection, started: float) -> Iterator[dict]:
+        """The streamed twin of :meth:`_blocked_result` (``guardrails="block"``)."""
+        yield {
+            "type": "sources",
+            "sources": [],
+            "retrieval_mode": self.config.retrieval_mode,
+        }
+        yield {"type": "token", "text": REFUSAL_ANSWER}
+        tr = Trace()
+        yield {
+            "type": "done",
+            "cache": "off",
+            "took_ms": int((time.perf_counter() - started) * 1000),
+            "meta": {
+                "cache": "off",
+                "guardrails": "block",
+                "injection": detection.to_meta(),
+                "timings_ms": tr.timings_ms(),
+            },
+        }
+
+    def _sources_event(
+        self, sources: list[Source], detection: Detection | None = None
+    ) -> dict:
+        event: dict = {
+            "type": "sources",
+            "sources": sources,
+            "retrieval_mode": self.config.retrieval_mode,
+        }
+        if detection is not None and detection.flagged:
+            event["guardrails"] = "flag"
+            event["injection"] = detection.to_meta()
+        return event
+
+    def _done_event(
+        self,
+        cache_state: str,
+        started: float,
+        tr: Trace,
+        plan: QueryPlan,
+        detection: Detection | None = None,
+        similarity: float | None = None,
+    ) -> dict:
+        meta = self._meta(tr, plan, cache_state)
+        if similarity is not None:
+            meta["cache_similarity"] = round(similarity, 4)
+        if detection is not None and detection.flagged:
+            meta["guardrails"] = "flag"
+            meta["injection"] = detection.to_meta()
+        return {
+            "type": "done",
+            "cache": cache_state,
+            "took_ms": int((time.perf_counter() - started) * 1000),
+            "meta": meta,
+        }
 
     def _answer_impl(
         self,
