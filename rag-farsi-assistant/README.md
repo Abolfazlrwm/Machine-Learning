@@ -56,7 +56,8 @@ lexical query ──► BM25 (from scratch) ────────────
 | `src/bm25.py` | **BM25 (Okapi) from scratch** — Persian normalisation (Arabic Yeh/Keh, ZWNJ, stopwords), zero dependencies |
 | `src/query.py` | **bilingual query understanding** — fold to BM25-canonical form, script-mix profile, cross-language synonym expansion (lexical side only) |
 | `src/hybrid.py` | **Reciprocal Rank Fusion** + `HybridRetriever` with `dense` / `sparse` / `hybrid` modes, per-stage trace spans |
-| `src/rerank.py` | optional **cross-encoder re-ranker** hook (e.g. `BAAI/bge-reranker-v2-m3`) |
+| `src/rerank.py` | **re-ranker hook** — offline `LexicalReranker` or neural `CrossEncoderReranker` (e.g. `BAAI/bge-reranker-v2-m3`) |
+| `src/guardrails.py` | **prompt-injection screening** (OWASP LLM01): bilingual fa/en rules, `off`/`flag`/`block` policies |
 | `src/llm/` | `LLMProvider` interface, `OllamaProvider`, `OpenAIProvider`, factory |
 | `src/prompts.py` | strict Persian system prompt: answer only from context, cite `[n]`, admit gaps |
 | `src/cache.py` | thread-safe **TTL + LRU answer cache** with hit/miss/expiry/eviction stats |
@@ -170,6 +171,13 @@ retrieval mode. (With the dependency-free `--backend fake` hash embedder the
 picture flips and sparse dominates — a good reminder that fusion is only as
 good as the signals you feed it.)
 
+The same harness now also reports **nDCG@k** and a `hybrid+rerank` column:
+the hybrid candidates passed through the offline `LexicalReranker`. On the
+CI-reproducible baseline (`evaluation/results/eval_report_ci.md`) the
+re-rank stage lifts hybrid hit@1 0.80 → **0.90** and MRR 0.894 → **0.944**,
+matching BM25 while keeping both fused signals — the neural cross-encoder
+plugs into the same call site when the model can be downloaded.
+
 ### Generation — RAGAS-style suite (`evaluation/metrics.py`)
 
 Deterministic, judge-free proxies of the four RAGAS dimensions, computed over
@@ -186,11 +194,21 @@ provider for true generative scoring:
 | faithfulness | 1.000 |
 | answer relevancy (E5 cosine) | 0.846 |
 
+### Safety — prompt-injection guardrails (`src/guardrails.py`)
+
+Every question is screened against a deterministic bilingual rule set
+(instruction override, prompt exfiltration, filter bypass, jailbreak
+lexicon, credential fishing — fa *and* en). `RAG_GUARDRAILS` picks the
+policy: `flag` (default — answer anyway, attach `meta["injection"]` with
+score + matched rules) or `block` (refuse before retrieval and the LLM).
+Weak lexicon matches need corroboration, so ordinary questions that merely
+contain «نادیده» stay below the threshold — pinned by tests.
+
 ## Tests
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests/ -q     # 132 tests, no network / no model downloads
+python -m pytest tests/ -q     # 162 tests, no network / no model downloads
 ```
 
 Covers: chunk size & overlap guarantees, determinism and normalisation of
