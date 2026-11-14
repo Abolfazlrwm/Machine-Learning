@@ -56,6 +56,28 @@ class MetaFakeRAG:
             },
         }
 
+    def ask_stream(self, question: str, top_k: int | None = None):
+        """Mirror the real ``RAGService.ask_stream`` event contract."""
+        result = self.ask(question, top_k=top_k)
+        meta = result["meta"]
+        yield {
+            "type": "sources",
+            "sources": result["sources"],
+            "retrieval_mode": result["retrieval_mode"],
+        }
+        words = result["answer"].split()
+        for i in range(0, len(words), 3):
+            chunk = " ".join(words[i:i + 3])
+            if i + 3 < len(words):
+                chunk += " "
+            yield {"type": "token", "text": chunk}
+        yield {
+            "type": "done",
+            "cache": meta["cache"],
+            "took_ms": 42,
+            "meta": {"timings_ms": meta["timings_ms"], "query": meta["query"]},
+        }
+
 
 class _StaticRegistry:
     """Registry stand-in: only what create_app and the rag router touch."""
