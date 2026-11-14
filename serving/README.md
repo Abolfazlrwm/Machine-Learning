@@ -65,14 +65,24 @@ curl -s localhost:8000/v1/rag/ask \
 
 ### RAG ask — SSE (`"stream": true`)
 
-The backing LLM providers are non-streaming, so the endpoint grounds the
-answer first and then emits three event types:
+Since v2.6.0 the stream is *real*: OpenAI-compatible and Ollama providers
+yield LLM deltas as they are generated, and the router maps the pipeline's
+events 1:1 onto SSE frames. Backends without a streaming protocol still
+work — the pipeline re-chunks the ready answer — so the contract is
+identical either way:
 
 ```
-event: sources   → {"sources": [...], "retrieval_mode": "hybrid"}
-event: token     → {"text": "چند کلمه از پاسخ"}   (repeated)
-event: done      → {"took_ms": 148}
+event: sources   → {"sources": [...], "retrieval_mode": "hybrid",
+                    "guardrails"/"injection": {...}?}   (flag policy)
+event: token     → {"text": "…"}                       (repeated deltas)
+event: done      → {"took_ms": 148, "request_id": "…", "cache": "miss",
+                    "meta": {timings_ms, query, …}}
+event: error     → {"code": "UPSTREAM_ERROR", "message": "…", "hint": "…"}
 ```
+
+Token deltas concatenate to the full answer; mid-stream failures travel as
+`error` events (the 200 status is already on the wire) with the same
+`{code, message, hint}` contract as the JSON error model.
 
 ```bash
 curl -sN localhost:8000/v1/rag/ask -H 'Content-Type: application/json' \
