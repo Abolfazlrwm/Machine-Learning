@@ -1,5 +1,4 @@
 import numpy as np
-
 from src.chunker import Chunk
 from src.vector_store import VectorStore
 

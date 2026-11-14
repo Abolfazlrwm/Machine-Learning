@@ -2,11 +2,8 @@
 from __future__ import annotations
 
 import pytest
-
 from src.embedder import FakeHashEmbedder
 from src.semantic_cache import SemanticCache
-
-from .conftest import MockLLM
 
 
 class FakeClock:

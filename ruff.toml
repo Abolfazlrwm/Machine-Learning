@@ -1,0 +1,14 @@
+# Lint policy for the Python packages (rag-farsi-assistant/src + serving/app
+# and both test suites). High-signal correctness rules only — style is left
+# to the surrounding code conventions. Pinned explicitly so CI stays stable
+# as ruff's *default* rule set evolves.
+line-length = 100
+
+[lint]
+select = [
+    "E4",  # pycodestyle errors: imports, indentation, line endings
+    "E7",  # comparisons, bare except, statements
+    "E9",  # runtime-level errors (syntax, undefined names)
+    "F",   # pyflakes: unused imports/variables, f-string bugs, redefinitions
+    "I",   # import sorting (isort-compatible)
+]

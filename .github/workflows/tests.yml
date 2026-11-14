@@ -10,13 +10,27 @@ on:
     - cron: "0 5 * * 1"
 
 jobs:
+  lint:
+    name: Lint (ruff, pinned rule set)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Ruff check (ruff.toml pins the rules; independent of ruff defaults)
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff
+          ruff check rag-farsi-assistant/src serving/app rag-farsi-assistant/tests serving/tests
+
   rag-farsi-assistant:
     name: RAG assistant unit tests (py${{ matrix.python-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.12", "3.13"]
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

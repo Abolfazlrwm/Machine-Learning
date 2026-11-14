@@ -1,6 +1,5 @@
 """Tests for the optional re-ranking stage."""
 import pytest
-
 from src.hybrid import HybridRetriever
 from src.rerank import BaseReranker, LexicalReranker, NoopReranker, create_reranker
 

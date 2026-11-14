@@ -23,7 +23,7 @@ from __future__ import annotations
 import threading
 import time
 from contextlib import contextmanager
-from typing import Any, Callable, Iterator
+from typing import Any, Iterator
 
 # ------------------------------------------------------------------- Trace
 
