@@ -113,7 +113,6 @@ class SemanticCache:
         near-misses while tuning the threshold).
         """
         vec = _unit(self._embedder.embed([question])[0])
-        key = self._key(question, namespace)
         now = self._clock()
         with self._lock:
             self._drop_expired(now)

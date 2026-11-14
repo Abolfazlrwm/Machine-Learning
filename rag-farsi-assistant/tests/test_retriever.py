@@ -1,4 +1,3 @@
-import numpy as np
 
 from src.chunker import Chunk
 from src.embedder import FakeHashEmbedder

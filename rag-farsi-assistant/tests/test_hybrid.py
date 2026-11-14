@@ -1,6 +1,5 @@
 """Tests for RRF fusion and the HybridRetriever (dense / sparse / hybrid)."""
 import pytest
-
 from src.chunker import Chunk
 from src.embedder import FakeHashEmbedder
 from src.hybrid import HybridRetriever, rrf_fuse

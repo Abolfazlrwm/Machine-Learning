@@ -23,11 +23,10 @@ from collections import defaultdict
 import numpy as np
 
 from .bm25 import BM25Okapi
-from .chunker import Chunk
 from .embedder import BaseEmbedder
 from .observability import Trace
-from .retriever import Retriever, RetrievalResult
 from .rerank import BaseReranker
+from .retriever import RetrievalResult, Retriever
 from .vector_store import VectorStore
 
 DEFAULT_RRF_K = 60

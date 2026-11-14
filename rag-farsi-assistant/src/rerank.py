@@ -20,7 +20,6 @@ former needs ``pip install sentence-transformers``) or inject any
 from __future__ import annotations
 
 import math
-
 from abc import ABC, abstractmethod
 
 

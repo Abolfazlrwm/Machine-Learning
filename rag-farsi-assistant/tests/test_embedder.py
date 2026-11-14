@@ -1,5 +1,4 @@
 import numpy as np
-
 from src.embedder import FakeHashEmbedder, create_embedder
 
 
