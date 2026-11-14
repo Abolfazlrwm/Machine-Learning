@@ -79,6 +79,35 @@ class FakeRAG:
             "meta": meta,
         }
 
+    def ask_stream(self, question: str, top_k: int | None = None):
+        """Mirror the real ``RAGService.ask_stream`` event contract."""
+        result = self.ask(question, top_k=top_k)
+        meta = result["meta"]
+        sources_event: dict = {
+            "type": "sources",
+            "sources": result["sources"],
+            "retrieval_mode": result["retrieval_mode"],
+        }
+        if meta.get("injection"):
+            sources_event["guardrails"] = meta["guardrails"]
+            sources_event["injection"] = meta["injection"]
+        yield sources_event
+        words = result["answer"].split()
+        for i in range(0, len(words), 3):
+            chunk = " ".join(words[i:i + 3])
+            if i + 3 < len(words):
+                chunk += " "  # trailing space keeps "".join reconstruction exact
+            yield {"type": "token", "text": chunk}
+        yield {
+            "type": "done",
+            "cache": meta.get("cache", "off"),
+            "took_ms": 42,
+            "meta": {
+                "timings_ms": meta.get("timings_ms"),
+                "query": meta.get("query"),
+            },
+        }
+
 
 class FakeSMS:
     name = "sms"

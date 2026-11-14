@@ -167,6 +167,32 @@ class RAGService(BaseLazyService):
             "meta": dict(getattr(result, "meta", {}) or {}),
         }
 
+    def ask_stream(self, question: str, top_k: int | None = None):
+        """Yield the pipeline's streaming events as plain dicts.
+
+        Same failure contract as :meth:`ask`: missing backends raise
+        ``ServiceUnavailable`` before the first event, and LLM/network
+        failures surface as ``UpstreamError`` mid-stream — the router turns
+        that into an SSE ``error`` event instead of a dropped connection.
+        Token deltas pass through untouched; ``sources`` events have their
+        :class:`~src.pipeline.Source` dataclasses converted to dicts so the
+        events are JSON-serialisable all the way to the wire.
+        """
+        self.ensure_ready()
+        try:
+            for event in self._pipeline.answer_stream(question, top_k=top_k):
+                if event["type"] == "sources":
+                    event = dict(event)
+                    event["sources"] = [vars(s) for s in event["sources"]]
+                yield event
+        except ServiceUnavailable:
+            raise
+        except Exception as exc:  # noqa: BLE001 - LLM/network failures land here
+            raise UpstreamError(
+                f"generation failed: {exc}",
+                hint="check the LLM provider (RAG_PROVIDER / Ollama / OpenAI key)",
+            ) from exc
+
 
 # --------------------------------------------------------------------- SMS
 class SmsService(BaseLazyService):

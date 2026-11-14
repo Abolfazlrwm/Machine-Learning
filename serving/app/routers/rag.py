@@ -1,41 +1,102 @@
 """/v1/rag — grounded question answering over the Persian corpus.
 
-Both JSON and SSE (``stream=true``) responses are supported. The backing
-LLM providers are non-streaming, so SSE delivers the already-grounded
-answer in small chunks: ``sources`` first, then ``token`` events, then
-``done`` — enough for progressive rendering without a streaming backend.
+Both JSON and SSE (``stream=true``) responses are supported. The pipeline
+streams real LLM deltas when the provider supports it (OpenAI SSE, Ollama
+NDJSON); backends without a streaming protocol fall back to word-chunked
+events *inside* the pipeline, so the SSE contract is identical either way:
+``sources`` first, then ``token`` events, then ``done``. Failures raised
+mid-stream surface as an SSE ``error`` event instead of a dropped
+connection — the status line is already committed by then.
 """
 from __future__ import annotations
 
 import json
 import time
-from typing import Iterator
+from collections.abc import Iterator
 
 from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
 
+from ..exceptions import APIError
 from ..schemas import AskRequest, AskResponse, InjectionMeta, RAGMeta, SourceModel
 
 router = APIRouter(prefix="/rag", tags=["rag"])
-
-TOKENS_PER_EVENT = 3  # words per SSE "token" event
 
 
 def _sse(event: str, payload: dict) -> str:
     return f"event: {event}\ndata: {json.dumps(payload, ensure_ascii=False)}\n\n"
 
 
-def _chunk_answer(answer: str) -> Iterator[str]:
-    """Yield the answer in small multi-word chunks (whitespace-normalised)."""
-    words = answer.split()
-    for i in range(0, len(words), TOKENS_PER_EVENT):
-        yield " ".join(words[i:i + TOKENS_PER_EVENT])
+def _ask_event_stream(
+    rag_service,
+    question: str,
+    top_k: int | None,
+    request_id: str,
+    metrics_reg,
+) -> Iterator[str]:
+    """Map pipeline events to SSE frames; failures become ``error`` events."""
+    try:
+        for event in rag_service.ask_stream(question, top_k=top_k):
+            kind = event["type"]
+            if kind == "sources":
+                data: dict = {
+                    "sources": event["sources"],
+                    "retrieval_mode": event["retrieval_mode"],
+                }
+                if "guardrails" in event:
+                    data["guardrails"] = event["guardrails"]
+                    data["injection"] = event["injection"]
+                yield _sse("sources", data)
+            elif kind == "token":
+                yield _sse("token", {"text": event["text"]})
+            elif kind == "done":
+                meta = event.get("meta") or {}
+                # Business metrics on the wire: cache outcome + stage latency
+                # (pipeline reports ms; histograms want seconds).
+                if metrics_reg is not None:
+                    metrics_reg.inc("rag_cache_requests", result=event["cache"])
+                    for stage in ("retrieve", "generate"):
+                        timing_ms = (meta.get("timings_ms") or {}).get(stage)
+                        if timing_ms is not None:
+                            metrics_reg.observe(
+                                "rag_stage_duration_seconds",
+                                timing_ms / 1000.0,
+                                stage=stage,
+                            )
+                yield _sse("done", {
+                    "took_ms": event["took_ms"],
+                    "request_id": request_id,
+                    "cache": event["cache"],
+                    "meta": meta,
+                })
+    except APIError as exc:
+        # Mid-stream failures can't change the committed 200 status, so the
+        # error travels as an SSE event with the shared error contract.
+        payload = {"code": exc.code, "message": exc.message}
+        if exc.hint:
+            payload["hint"] = exc.hint
+        yield _sse("error", payload)
 
 
 @router.post("/ask", response_model=AskResponse, response_model_exclude_none=True)
 def ask(payload: AskRequest, request: Request):
     registry = request.app.state.registry
     started = time.perf_counter()
+
+    if payload.stream:
+        request_id = getattr(request.state, "request_id", "-")
+        return StreamingResponse(
+            _ask_event_stream(
+                registry.rag,
+                payload.question,
+                payload.top_k,
+                request_id,
+                request.app.state.metrics,
+            ),
+            media_type="text/event-stream",
+            headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+        )
+
     result = registry.rag.ask(payload.question, top_k=payload.top_k)
     took_ms = int((time.perf_counter() - started) * 1000)
 
@@ -57,25 +118,6 @@ def ask(payload: AskRequest, request: Request):
                 )
     query_info = meta_source.get("query") or {}
     request_id = getattr(request.state, "request_id", "-")
-
-    if payload.stream:
-        def event_stream() -> Iterator[str]:
-            yield _sse("sources", {
-                "sources": result["sources"],
-                "retrieval_mode": result["retrieval_mode"],
-            })
-            for chunk in _chunk_answer(result["answer"]):
-                yield _sse("token", {"text": chunk})
-            yield _sse("done", {
-                "took_ms": took_ms,
-                "request_id": request_id,
-                "cache": meta_source.get("cache", "off"),
-            })
-
-        return StreamingResponse(
-            event_stream(), media_type="text/event-stream",
-            headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
-        )
 
     return AskResponse(
         question=result["question"],
