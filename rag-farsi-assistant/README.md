@@ -144,6 +144,32 @@ TTL + LRU with injectable clocks and expose hit/miss/expiry/eviction stats
 through `pipeline.stats()`. Both are off by default — the evaluation suite
 stays deterministic.
 
+## ⚡ Real-time streaming (v2.6.0)
+
+`RAGPipeline.answer_stream()` is the streaming twin of `answer()`: same
+guardrail policy, same cache identity, same retrieval — but the LLM reply
+is forwarded as it is generated instead of buffered. `LLMProvider.stream()`
+yields deltas on every backend (OpenAI-compatible endpoints parse the SSE
+protocol, Ollama parses its NDJSON stream; anything else buffers
+`generate()` into one delta), and the fragments concatenate byte-for-byte
+to the buffered answer — so the answer cache stores exactly the same
+string either way.
+
+Events arrive as `sources → token* → done`:
+
+- `sources` — citations first, so a UI renders grounding before the first
+  token arrives;
+- `token` — answer fragments (real LLM deltas; cached, extractive and
+  refused answers are re-chunked into small word groups);
+- `done` — cache outcome, stage timings, query plan and, when flagged, the
+  prompt-injection report.
+
+```python
+for event in pipeline.answer_stream("بیش‌برازش چیست؟"):
+    if event["type"] == "token":
+        print(event["text"], end="", flush=True)
+```
+
 ## 📊 Evaluation
 
 ### Retrieval — dense vs sparse vs hybrid

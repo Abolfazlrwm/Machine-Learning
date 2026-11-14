@@ -4,6 +4,51 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.6.0] — 2026-11-14
+
+### Added — rag-farsi-assistant
+- **True token streaming end-to-end** (`src/llm/base.py`,
+  `src/llm/openai_provider.py`, `src/llm/ollama_provider.py`,
+  `src/pipeline.py`): `LLMProvider.stream()` yields incremental text
+  deltas. The default implementation buffers `generate()` into one delta,
+  so *every* provider is stream-capable out of the box; the
+  OpenAI-compatible provider parses the real SSE protocol
+  (`stream=True`, `data:` chunks, `[DONE]` sentinel, keep-alive lines
+  skipped) and the Ollama provider parses its NDJSON chat stream. Deltas
+  concatenate byte-for-byte to the `generate()` reply — the invariant the
+  answer cache relies on.
+- **`RAGPipeline.answer_stream()`**: the streaming twin of `answer()` —
+  same guardrail policy (`block` refuses before retrieval and the LLM;
+  `flag` attaches the injection report to both the `sources` and `done`
+  events), same cache identity (exact TTL and semantic-cache hits serve
+  without re-entering the LLM; the streamed answer is cached on
+  completion). Yields `sources → token* → done` events whose token
+  fragments join to exactly what `answer()` returns; cached, extractive
+  and refused answers are re-chunked into small word-group deltas so
+  progressive rendering never stalls.
+
+### Added — serving
+- **Real SSE streaming on `/v1/rag/ask`** (`stream=true`): the router maps
+  pipeline events 1:1 onto SSE frames — `sources` (grounding plus the
+  injection report when flagged), `token` deltas, `done` (`took_ms`,
+  `request_id`, cache outcome, timings/query meta) — and refreshes the
+  Prometheus business metrics from the `done` event. Mid-stream failures
+  surface as an `error` SSE event carrying the shared
+  `{code, message, hint}` contract instead of a dropped connection.
+- **Release automation** (`.github/workflows/release.yml`): pushing a
+  `v*` tag re-runs the RAG + serving suites on the tagged commit, extracts
+  the matching `CHANGELOG.md` section and publishes the GitHub release —
+  the changelog is the single source of release notes.
+- **`ruff` lint gate** (`ruff.toml`): pinned high-signal rule set
+  (pycodestyle errors, pyflakes, import sorting) across both packages and
+  both test suites, independent of ruff's evolving defaults; `py3.11`
+  joins the RAG test matrix (3.11–3.13).
+- **`CITATION.cff`**: citation metadata for academic use.
+
+### Fixed
+- Lint cleanup across 20 files: unused imports/variables removed, import
+  order normalised, a dead assignment in `SemanticCache.lookup()` dropped.
+
 ## [2.5.0] — 2026-11-13
 
 ### Added — rag-farsi-assistant

@@ -159,9 +159,9 @@ running each project's own training pipeline.
 Projects include pytest suites (unit-level, network-free):
 
 ```bash
-cd rag-farsi-assistant && python -m pytest tests/ -q   # 162 tests
+cd rag-farsi-assistant && python -m pytest tests/ -q   # 177 tests
 cd stock-movement-ml  && python -m pytest tests/ -q    # 28 tests
-cd serving            && python -m pytest tests/ -q    # 36 tests
+cd serving            && python -m pytest tests/ -q    # 40 tests
 ```
 
 ## 🛣 Roadmap
@@ -171,6 +171,7 @@ cd serving            && python -m pytest tests/ -q    # 36 tests
 - [x] Query intelligence & observability: bilingual query expansion, TTL answer cache, stage traces + Prometheus metrics — v2.3.0
 - [x] Semantic answer cache (paraphrase-aware), Prometheus + Grafana stack, bandit + pip-audit security gates, py3.13 matrix + coverage CI, offline latency benchmark — v2.4.0
 - [x] Bilingual prompt-injection guardrails (flag/block), lexical re-ranker + nDCG in the eval harness, MkDocs documentation site on GitHub Pages — v2.5.0
+- [x] Real-time token streaming (OpenAI SSE / Ollama NDJSON → pipeline → SSE), tag-gated release automation, ruff lint gate + py3.11–3.13 matrix, CITATION.cff — v2.6.0
 - [ ] Matrix factorization (SVD/ALS) for the recommender system
 - [ ] PDF ingestion for the RAG assistant
 - [ ] Fine-tuning a Persian BERT for sentiment analysis
@@ -183,6 +184,7 @@ Releases are tagged per milestone — see [CHANGELOG.md](CHANGELOG.md) and the
 
 | Tag | Scope |
 |---|---|
+| `v2.6.0` | True token streaming end-to-end (providers → pipeline.answer_stream → SSE with error events), tag-gated release automation (tests → changelog → release), ruff lint gate, py3.11–3.13 matrix, CITATION.cff |
 | `v2.5.0` | Prompt-injection guardrails (OWASP LLM01), lexical re-ranker + nDCG metric + rerank eval column, MkDocs docs site on GitHub Pages |
 | `v2.4.0` | Semantic answer cache, RAG business metrics, Grafana observability stack, security scans + coverage CI, offline benchmark |
 | `v2.3.0` | Query intelligence (bilingual expansion), stage traces, Prometheus metrics, TTL+LRU answer cache |
