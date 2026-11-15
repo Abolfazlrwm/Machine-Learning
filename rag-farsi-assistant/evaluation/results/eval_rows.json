@@ -1,0 +1,2916 @@
+{
+ "n_questions": 100,
+ "backend": "fake",
+ "retrieval_ranks": [
+  {
+   "question": "بیش‌برازش یا Overfitting چیست و چطور با آن مقابله می‌شود؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "تفاوت یادگیری با نظارت و بدون نظارت چیست؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "یادگیری تقویتی چگونه کار می‌کند؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "چرا در داده‌های نامتوازن دقت (Accuracy) گمراه‌کننده است؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "خوشه‌بندی مشتریان و کاهش بعد با PCA جزو کدام دسته از یادگیری ماشین هستند؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "الگوریتم پس‌انتشار خطا چگونه کار می‌کند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "مکانیزم توجه یا Attention در ترنسفورمر چه کاری انجام می‌دهد؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "چرا بدون تابع فعال‌سازی غیرخطی، شبکه عصبی چندلایه عملاً بی‌فایده است؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "شبکه کانولوشنی برای چه نوع داده‌ای طراحی شده و چگونه کار می‌کند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "برای مقابله با بیش‌برازش در شبکه‌های عصبی بزرگ چه تکنیک‌هایی به کار می‌رود؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "چرا TF-IDF معنای کلمات را از دست می‌دهد و Word Embedding چطور این مشکل را حل می‌کند؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "RAG چیست و چه مزیتی نسبت به حافظه مدل زبانی دارد؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "مکانیزم خودتوجهی یا Self-Attention چگونه مشکل معنای چندگانه کلمات را حل می‌کند؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "مدل‌های زبانی بزرگ چگونه آموزش دیده‌اند و چه توانایی‌هایی پیدا می‌کنند؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "BERT چگونه آموزش می‌بیند و برای چه وظایفی تنظیم می‌شود؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "شبکه کانولوشنی چطور ویژگی‌های تصویر را استخراج می‌کند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "Grad-CAM چه کمکی به توضیح‌پذیری مدل‌های بینایی می‌کند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 2,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "تشخیص اشیا و قطعه‌بندی معنایی چه تفاوتی دارند و کدام مدل‌ها آن‌ها را انجام می‌دهند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "وقتی داده برچسب‌خورده کم است در بینایی ماشین چه راه‌حلی وجود دارد؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 3,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 3,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 3,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "در رویکردهای کلاسیک بینایی ماشین، ویژگی‌ها چگونه از تصویر استخراج می‌شدند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "مسئله شروع سرد در سیستم توصیه‌گر چیست و چگونه حل می‌شود؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "فیلترینگ مشارکتی مبتنی بر کاربر چگونه پیشنهاد می‌سازد؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "مزیت فیلترینگ مشارکتی مبتنی بر آیتم چیست؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "مدل‌های ماتریس فاکتورگیری مانند SVD و ALS چه کاری انجام می‌دهند؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "کیفیت سیستم توصیه‌گر را با چه سنجه‌هایی ارزیابی می‌کنند؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 2,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "رانش داده یا Data Drift چیست و چرا مدل را از کار می‌اندازد؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "هدف MLOps چیست؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "چرا در یادگیری ماشین نسخه‌بندی داده و ردیابی آزمایش‌ها اهمیت دارد؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "الگوهای رایج استقرار مدل یادگیری ماشین کدام‌اند؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 2,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 2,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 2,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "کارت مدل یا Model Card چه اطلاعاتی را شفاف می‌کند؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "یادگیری ماشین را تعریف کنید و بگویید چه تفاوتی با نوشتن قانون صریح برای مسئله دارد.",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "در یادگیری با نظارت، برچسب‌ها چه نقشی دارند و چه کاربردهایی از نمونه‌های آن است؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "هدف یادگیری بدون نظارت چیست و چه کاربردهایی دارد؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "پاداش و جریمه در یادگیری تقویتی چه نقشی دارند؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "نمونه‌های رایج کاربرد یادگیری تقویتی کدام‌اند؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "چرا مدل را روی داده‌هایی که در آموزش ندیده ارزیابی می‌کنیم؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": 3,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "منظور از «توان تعمیم» یک مدل چیست؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 2,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "برای ارزیابی مدل‌های دسته‌بندی از چه سنجه‌هایی استفاده می‌شود؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 2,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "چرا نگاه به ماتریس درهم‌ریختگی و نمودار ROC در ارزیابی ضروری است؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "استفاده از مجموعه اعتبارسنجی و منظم‌سازی برای حل چه مشکلی است؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 3,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "یادگیری عمیق چه نسبتی با یادگیری ماشین دارد و بر چه پایه‌ای بنا شده است؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 3,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 2,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "یک نورون مصنوعی چه محاسبه‌ای روی ورودی‌هایش انجام می‌دهد؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "توابع فعال‌سازی رایج در شبکه‌های عصبی کدام‌اند و چه نقشی دارند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "در پس‌انتشار خطا، سهم هر وزن در خطا چگونه محاسبه می‌شود؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "وزن‌های شبکه عصبی با چه بهینه‌سازهایی به‌روزرسانی می‌شوند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "شبکه بازگشتی و LSTM برای چه نوع داده‌ای مناسب‌اند و چرا؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "ترنسفورمر چه تفاوت اساسی با RNN در پردازش دنباله دارد؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "کدام ابرپارامترها بیشترین نقش را در کیفیت نهایی شبکه دارند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "انتقال یادگیری یا Transfer Learning چگونه کار می‌کند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "انقلاب اخیر یادگیری عمیق با چه معماری‌ای رخ داد و بر پایه چیست؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "افزایش داده (Data Augmentation) در شبکه‌های عصبی چه کمکی می‌کند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "معماری‌های تخصصی یادگیری عمیق برای چه نوع داده‌هایی طراحی شده‌اند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "پردازش زبان طبیعی چه می‌کند و چالش اصلی آن چیست؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "روش‌های کلاسیک نمایش متن مثل کیسه کلمات چه ضعفی دارند؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "جاسازی کلمه (Word Embedding) چه ویژگی‌ای دارد و مثال معروف آن چیست؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "معماری ترنسفورمر چه نقشی در NLP مدرن دارد و هسته آن چیست؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "مدل GPT با چه هدفی آموزش می‌بیند؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 3,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "تفاوت هدف آموزشی GPT و BERT چیست؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 3,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "توهم یا Hallucination در مدل‌های زبانی چیست و RAG چطور آن را کاهش می‌دهد؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "اولین گام در بسیاری از سیستم‌های NLP چیست؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "فرایند دو مرحله‌ای RAG چگونه است؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 3,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 3,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "مدل‌های زبانی بزرگ چرا توانایی‌های نوظهور پیدا می‌کنند؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "برای کاهش هزینه آموزش مدل‌های زبانی چه الگویی پیشنهاد می‌شود؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "dense": {
+    "rank": 3,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   }
+  },
+  {
+   "question": "بینایی ماشین چیست و برای کامپیوتر چالش اصلی کجاست؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "لبه‌یاب کنی، تشخیص گوشه Harris و توصیفگر SIFT متعلق به کدام رویکرد هستند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "معماری‌های مشهور شبکه کانولوشنی چه پیشرفتی در ImageNet ایجاد کردند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "YOLO و Faster R-CNN چه وظیفه‌ای انجام می‌دهند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "U-Net و Mask R-CNN مخصوص کدام وظیفه بینایی هستند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "وظایف اصلی بینایی ماشین را نام ببرید.",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "در بینایی ماشین تکنیک‌های افزایش داده کدام‌اند و چه می‌کنند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 3,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 2,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "مسائل اخلاقی و فنی مهم در بینایی ماشین کدام‌اند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "چرا در CNN لایه‌های اولیه ویژگی‌های ساده و لایه‌های عمیق ویژگی‌های پیچیده می‌آموزند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "با چند صد تصویر برچسب‌خورده چگونه مدل بینایی خوبی می‌سازیم؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "انقلاب واقعی بینایی ماشین با چه رویکردی رخ داد؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "تشخیص اشیا در بینایی ماشین یعنی چه و خروجی آن چیست؟",
+   "expected_doc": "04_computer_vision.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "04_computer_vision.txt"
+   }
+  },
+  {
+   "question": "سیستم توصیه‌گر چیست و در کدام سرویس‌های شناخته‌شده استفاده می‌شود؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "شباهت کاربران در فیلترینگ مشارکتی با چه معیارهایی محاسبه می‌شود؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "فیلترینگ مبتنی بر محتوا چه تفاوتی با فیلترینگ مشارکتی دارد؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "اگر کاربری به فیلم A علاقه داشته باشد، سیستم چگونه فیلم B مشابه را پیشنهاد می‌کند؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "مدل‌های ماتریس فاکتورگیری چه نسبتی با روش ساده همسایگی دارند؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 3,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 2,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "کدام خانواده از مدل‌های توصیه‌گر برنده مسابقه نتفلیکس شد؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": null,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": null,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "فیلتر حباب در سیستم‌های توصیه‌گر چیست؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "برای سنجش کیفیت فهرست پیشنهادها از چه سنجه‌هایی استفاده می‌شود؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "چرا ارزیابی آفلاین به‌تنهایی کافی نیست؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid": {
+    "rank": 3,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 2,
+    "top1_doc": "02_deep_learning_neural_networks.txt"
+   }
+  },
+  {
+   "question": "ماتریس کاربر-آیتم چه چیزی را نگه می‌دارد و مشکل ساختاری آن چیست؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "میانگین وزنی در فیلترینگ مشارکتی مبتنی بر کاربر چه نقشی دارد؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "NDCG و Precision@K در ارزیابی سیستم توصیه‌گر چه چیزی را می‌سنجند؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "05_recommender_systems.txt"
+   }
+  },
+  {
+   "question": "چرخه حیات یک پروژه یادگیری ماشین شامل چه مراحلی است؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "چرخه حیات یادگیری ماشین چه تفاوتی با نرم‌افزار سنتی دارد؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "ردیابی آزمایش‌ها (Experiment Tracking) با چه ابزارهایی انجام می‌شود؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 3,
+    "top1_doc": "04_computer_vision.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "چرا مدل یادگیری ماشین را با Docker بسته‌بندی می‌کنند؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 2,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid": {
+    "rank": 2,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 2,
+    "top1_doc": "01_machine_learning_basics.txt"
+   }
+  },
+  {
+   "question": "خط لوله CI/CD در یادگیری ماشین چه کارهایی را خودکار می‌کند؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 3,
+    "top1_doc": "01_machine_learning_basics.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "نسخه‌بندی کانیاری در استقرار مدل چیست؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "رانش مفهوم (Concept Drift) چیست و چه نسبتی با رانش داده دارد؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "سیستم پایش مدل چه چیزهایی را رصد می‌کند و با عبور از آستانه چه می‌کند؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "در استاندارد عملیاتی امروزی، غیر از کیفیت مدل چه چیزهایی پایش می‌شود؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "استنتاج درون مرورگر یا گوشی چگونه ممکن می‌شود؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": null,
+    "top1_doc": "03_nlp_large_language_models.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "ابزار DVC در MLOps برای چیست؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 2,
+    "top1_doc": "05_recommender_systems.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "توزیع داده واقعی نسبت به زمان آموزش تغییر کند چه اتفاقی می‌افتد؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  },
+  {
+   "question": "اعتبارسنجی مدل جدید در خط لوله CI/CD چه نقشی دارد؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "dense": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "sparse": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   },
+   "hybrid+rerank": {
+    "rank": 1,
+    "top1_doc": "06_mlops_deployment.txt"
+   }
+  }
+ ],
+ "generation_rows": [
+  {
+   "question": "بیش‌برازش یا Overfitting چیست و چطور با آن مقابله می‌شود؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.43383359909057617
+  },
+  {
+   "question": "تفاوت یادگیری با نظارت و بدون نظارت چیست؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.9696969696969697,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3056029677391052
+  },
+  {
+   "question": "یادگیری تقویتی چگونه کار می‌کند؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 0.0,
+   "context_recall": 0.2222222222222222,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.30551862716674805
+  },
+  {
+   "question": "چرا در داده‌های نامتوازن دقت (Accuracy) گمراه‌کننده است؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.2991163730621338
+  },
+  {
+   "question": "خوشه‌بندی مشتریان و کاهش بعد با PCA جزو کدام دسته از یادگیری ماشین هستند؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3969148099422455
+  },
+  {
+   "question": "الگوریتم پس‌انتشار خطا چگونه کار می‌کند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.2413710206747055
+  },
+  {
+   "question": "مکانیزم توجه یا Attention در ترنسفورمر چه کاری انجام می‌دهد؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3207963705062866
+  },
+  {
+   "question": "چرا بدون تابع فعال‌سازی غیرخطی، شبکه عصبی چندلایه عملاً بی‌فایده است؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 0.8333333333333333,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.2603975236415863
+  },
+  {
+   "question": "شبکه کانولوشنی برای چه نوع داده‌ای طراحی شده و چگونه کار می‌کند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4401465058326721
+  },
+  {
+   "question": "برای مقابله با بیش‌برازش در شبکه‌های عصبی بزرگ چه تکنیک‌هایی به کار می‌رود؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.8125,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4418991506099701
+  },
+  {
+   "question": "چرا TF-IDF معنای کلمات را از دست می‌دهد و Word Embedding چطور این مشکل را حل می‌کند؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.5971574783325195
+  },
+  {
+   "question": "RAG چیست و چه مزیتی نسبت به حافظه مدل زبانی دارد؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3953939378261566
+  },
+  {
+   "question": "مکانیزم خودتوجهی یا Self-Attention چگونه مشکل معنای چندگانه کلمات را حل می‌کند؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.29361703991889954
+  },
+  {
+   "question": "مدل‌های زبانی بزرگ چگونه آموزش دیده‌اند و چه توانایی‌هایی پیدا می‌کنند؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4967838227748871
+  },
+  {
+   "question": "BERT چگونه آموزش می‌بیند و برای چه وظایفی تنظیم می‌شود؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.45731744170188904
+  },
+  {
+   "question": "شبکه کانولوشنی چطور ویژگی‌های تصویر را استخراج می‌کند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.40500596165657043
+  },
+  {
+   "question": "Grad-CAM چه کمکی به توضیح‌پذیری مدل‌های بینایی می‌کند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.39284202456474304
+  },
+  {
+   "question": "تشخیص اشیا و قطعه‌بندی معنایی چه تفاوتی دارند و کدام مدل‌ها آن‌ها را انجام می‌دهند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.5001221299171448
+  },
+  {
+   "question": "وقتی داده برچسب‌خورده کم است در بینایی ماشین چه راه‌حلی وجود دارد؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 0.25,
+   "context_recall": 0.55,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.2480209916830063
+  },
+  {
+   "question": "در رویکردهای کلاسیک بینایی ماشین، ویژگی‌ها چگونه از تصویر استخراج می‌شدند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.9333333333333333,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.38771378993988037
+  },
+  {
+   "question": "مسئله شروع سرد در سیستم توصیه‌گر چیست و چگونه حل می‌شود؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.875,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.337245374917984
+  },
+  {
+   "question": "فیلترینگ مشارکتی مبتنی بر کاربر چگونه پیشنهاد می‌سازد؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.37547171115875244
+  },
+  {
+   "question": "مزیت فیلترینگ مشارکتی مبتنی بر آیتم چیست؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.96,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.2626936435699463
+  },
+  {
+   "question": "مدل‌های ماتریس فاکتورگیری مانند SVD و ALS چه کاری انجام می‌دهند؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 0.25,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4525967836380005
+  },
+  {
+   "question": "کیفیت سیستم توصیه‌گر را با چه سنجه‌هایی ارزیابی می‌کنند؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 0.3333333333333333,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3166533410549164
+  },
+  {
+   "question": "رانش داده یا Data Drift چیست و چرا مدل را از کار می‌اندازد؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 0.8333333333333333,
+   "context_recall": 0.9655172413793104,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.5649351477622986
+  },
+  {
+   "question": "هدف MLOps چیست؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.13425642251968384
+  },
+  {
+   "question": "چرا در یادگیری ماشین نسخه‌بندی داده و ردیابی آزمایش‌ها اهمیت دارد؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.5184593200683594
+  },
+  {
+   "question": "الگوهای رایج استقرار مدل یادگیری ماشین کدام‌اند؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.29744455218315125
+  },
+  {
+   "question": "کارت مدل یا Model Card چه اطلاعاتی را شفاف می‌کند؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4035666584968567
+  },
+  {
+   "question": "یادگیری ماشین را تعریف کنید و بگویید چه تفاوتی با نوشتن قانون صریح برای مسئله دارد.",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3848804533481598
+  },
+  {
+   "question": "در یادگیری با نظارت، برچسب‌ها چه نقشی دارند و چه کاربردهایی از نمونه‌های آن است؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4491085410118103
+  },
+  {
+   "question": "هدف یادگیری بدون نظارت چیست و چه کاربردهایی دارد؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3031700849533081
+  },
+  {
+   "question": "پاداش و جریمه در یادگیری تقویتی چه نقشی دارند؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.31916797161102295
+  },
+  {
+   "question": "نمونه‌های رایج کاربرد یادگیری تقویتی کدام‌اند؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 0.8666666666666667,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.24006511270999908
+  },
+  {
+   "question": "چرا مدل را روی داده‌هایی که در آموزش ندیده ارزیابی می‌کنیم؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.9090909090909091,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.5986694693565369
+  },
+  {
+   "question": "منظور از «توان تعمیم» یک مدل چیست؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 0.7058823529411765,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.35550546646118164
+  },
+  {
+   "question": "برای ارزیابی مدل‌های دسته‌بندی از چه سنجه‌هایی استفاده می‌شود؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 0.0,
+   "context_recall": 0.25,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4403613209724426
+  },
+  {
+   "question": "چرا نگاه به ماتریس درهم‌ریختگی و نمودار ROC در ارزیابی ضروری است؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.9565217391304348,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4153917729854584
+  },
+  {
+   "question": "استفاده از مجموعه اعتبارسنجی و منظم‌سازی برای حل چه مشکلی است؟",
+   "expected_doc": "01_machine_learning_basics.txt",
+   "hit": true,
+   "context_precision": 0.3333333333333333,
+   "context_recall": 0.625,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.35744524002075195
+  },
+  {
+   "question": "یادگیری عمیق چه نسبتی با یادگیری ماشین دارد و بر چه پایه‌ای بنا شده است؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 0.25,
+   "context_recall": 0.9545454545454546,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.35812923312187195
+  },
+  {
+   "question": "یک نورون مصنوعی چه محاسبه‌ای روی ورودی‌هایش انجام می‌دهد؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3393896222114563
+  },
+  {
+   "question": "توابع فعال‌سازی رایج در شبکه‌های عصبی کدام‌اند و چه نقشی دارند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.38725608587265015
+  },
+  {
+   "question": "در پس‌انتشار خطا، سهم هر وزن در خطا چگونه محاسبه می‌شود؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3366221487522125
+  },
+  {
+   "question": "وزن‌های شبکه عصبی با چه بهینه‌سازهایی به‌روزرسانی می‌شوند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3788558542728424
+  },
+  {
+   "question": "شبکه بازگشتی و LSTM برای چه نوع داده‌ای مناسب‌اند و چرا؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.44224855303764343
+  },
+  {
+   "question": "ترنسفورمر چه تفاوت اساسی با RNN در پردازش دنباله دارد؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.23840546607971191
+  },
+  {
+   "question": "کدام ابرپارامترها بیشترین نقش را در کیفیت نهایی شبکه دارند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.2729877233505249
+  },
+  {
+   "question": "انتقال یادگیری یا Transfer Learning چگونه کار می‌کند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.31287682056427
+  },
+  {
+   "question": "انقلاب اخیر یادگیری عمیق با چه معماری‌ای رخ داد و بر پایه چیست؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4540717601776123
+  },
+  {
+   "question": "افزایش داده (Data Augmentation) در شبکه‌های عصبی چه کمکی می‌کند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3580574691295624
+  },
+  {
+   "question": "معماری‌های تخصصی یادگیری عمیق برای چه نوع داده‌هایی طراحی شده‌اند؟",
+   "expected_doc": "02_deep_learning_neural_networks.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.7619047619047619,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.34063491225242615
+  },
+  {
+   "question": "پردازش زبان طبیعی چه می‌کند و چالش اصلی آن چیست؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.9166666666666666,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3762523829936981
+  },
+  {
+   "question": "روش‌های کلاسیک نمایش متن مثل کیسه کلمات چه ضعفی دارند؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.24150443077087402
+  },
+  {
+   "question": "جاسازی کلمه (Word Embedding) چه ویژگی‌ای دارد و مثال معروف آن چیست؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 0.25,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.35914865136146545
+  },
+  {
+   "question": "معماری ترنسفورمر چه نقشی در NLP مدرن دارد و هسته آن چیست؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.32646435499191284
+  },
+  {
+   "question": "مدل GPT با چه هدفی آموزش می‌بیند؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.44089049100875854
+  },
+  {
+   "question": "تفاوت هدف آموزشی GPT و BERT چیست؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 0.3333333333333333,
+   "context_recall": 0.9545454545454546,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.2550387978553772
+  },
+  {
+   "question": "توهم یا Hallucination در مدل‌های زبانی چیست و RAG چطور آن را کاهش می‌دهد؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.7333333333333333,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4591105282306671
+  },
+  {
+   "question": "اولین گام در بسیاری از سیستم‌های NLP چیست؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3655916452407837
+  },
+  {
+   "question": "فرایند دو مرحله‌ای RAG چگونه است؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 0.3333333333333333,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.10131725668907166
+  },
+  {
+   "question": "مدل‌های زبانی بزرگ چرا توانایی‌های نوظهور پیدا می‌کنند؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.9285714285714286,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.37144607305526733
+  },
+  {
+   "question": "برای کاهش هزینه آموزش مدل‌های زبانی چه الگویی پیشنهاد می‌شود؟",
+   "expected_doc": "03_nlp_large_language_models.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4036722183227539
+  },
+  {
+   "question": "بینایی ماشین چیست و برای کامپیوتر چالش اصلی کجاست؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3148394525051117
+  },
+  {
+   "question": "لبه‌یاب کنی، تشخیص گوشه Harris و توصیفگر SIFT متعلق به کدام رویکرد هستند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.9166666666666666,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3754088282585144
+  },
+  {
+   "question": "معماری‌های مشهور شبکه کانولوشنی چه پیشرفتی در ImageNet ایجاد کردند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3447662591934204
+  },
+  {
+   "question": "YOLO و Faster R-CNN چه وظیفه‌ای انجام می‌دهند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 0.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3748406767845154
+  },
+  {
+   "question": "U-Net و Mask R-CNN مخصوص کدام وظیفه بینایی هستند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 0.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.29614880681037903
+  },
+  {
+   "question": "وظایف اصلی بینایی ماشین را نام ببرید.",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.1919730007648468
+  },
+  {
+   "question": "در بینایی ماشین تکنیک‌های افزایش داده کدام‌اند و چه می‌کنند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 0.0,
+   "context_recall": 0.3333333333333333,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4400532841682434
+  },
+  {
+   "question": "مسائل اخلاقی و فنی مهم در بینایی ماشین کدام‌اند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 0.3333333333333333,
+   "context_recall": 0.9,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.38108164072036743
+  },
+  {
+   "question": "چرا در CNN لایه‌های اولیه ویژگی‌های ساده و لایه‌های عمیق ویژگی‌های پیچیده می‌آموزند؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.5254630446434021
+  },
+  {
+   "question": "با چند صد تصویر برچسب‌خورده چگونه مدل بینایی خوبی می‌سازیم؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.371618390083313
+  },
+  {
+   "question": "انقلاب واقعی بینایی ماشین با چه رویکردی رخ داد؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.21216711401939392
+  },
+  {
+   "question": "تشخیص اشیا در بینایی ماشین یعنی چه و خروجی آن چیست؟",
+   "expected_doc": "04_computer_vision.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.9333333333333333,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.35055994987487793
+  },
+  {
+   "question": "سیستم توصیه‌گر چیست و در کدام سرویس‌های شناخته‌شده استفاده می‌شود؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4123171269893646
+  },
+  {
+   "question": "شباهت کاربران در فیلترینگ مشارکتی با چه معیارهایی محاسبه می‌شود؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3735753297805786
+  },
+  {
+   "question": "فیلترینگ مبتنی بر محتوا چه تفاوتی با فیلترینگ مشارکتی دارد؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.2152181714773178
+  },
+  {
+   "question": "اگر کاربری به فیلم A علاقه داشته باشد، سیستم چگونه فیلم B مشابه را پیشنهاد می‌کند؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 0.8333333333333333,
+   "context_recall": 0.9411764705882353,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.37619391083717346
+  },
+  {
+   "question": "مدل‌های ماتریس فاکتورگیری چه نسبتی با روش ساده همسایگی دارند؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.2833837866783142
+  },
+  {
+   "question": "کدام خانواده از مدل‌های توصیه‌گر برنده مسابقه نتفلیکس شد؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.20510978996753693
+  },
+  {
+   "question": "فیلتر حباب در سیستم‌های توصیه‌گر چیست؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 0.8888888888888888,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3128056228160858
+  },
+  {
+   "question": "برای سنجش کیفیت فهرست پیشنهادها از چه سنجه‌هایی استفاده می‌شود؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 0.8571428571428571,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3243739902973175
+  },
+  {
+   "question": "چرا ارزیابی آفلاین به‌تنهایی کافی نیست؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 0.3333333333333333,
+   "context_recall": 0.7333333333333333,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.20520462095737457
+  },
+  {
+   "question": "ماتریس کاربر-آیتم چه چیزی را نگه می‌دارد و مشکل ساختاری آن چیست؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 0.0,
+   "context_recall": 0.9230769230769231,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.48630350828170776
+  },
+  {
+   "question": "میانگین وزنی در فیلترینگ مشارکتی مبتنی بر کاربر چه نقشی دارد؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.8571428571428571,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.2736465036869049
+  },
+  {
+   "question": "NDCG و Precision@K در ارزیابی سیستم توصیه‌گر چه چیزی را می‌سنجند؟",
+   "expected_doc": "05_recommender_systems.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.8181818181818182,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3657960593700409
+  },
+  {
+   "question": "چرخه حیات یک پروژه یادگیری ماشین شامل چه مراحلی است؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.21860377490520477
+  },
+  {
+   "question": "چرخه حیات یادگیری ماشین چه تفاوتی با نرم‌افزار سنتی دارد؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.28332430124282837
+  },
+  {
+   "question": "ردیابی آزمایش‌ها (Experiment Tracking) با چه ابزارهایی انجام می‌شود؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4112823009490967
+  },
+  {
+   "question": "چرا مدل یادگیری ماشین را با Docker بسته‌بندی می‌کنند؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 0.5,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.4641466438770294
+  },
+  {
+   "question": "خط لوله CI/CD در یادگیری ماشین چه کارهایی را خودکار می‌کند؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 0.3333333333333333,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3522890508174896
+  },
+  {
+   "question": "نسخه‌بندی کانیاری در استقرار مدل چیست؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.8888888888888888,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.29772263765335083
+  },
+  {
+   "question": "رانش مفهوم (Concept Drift) چیست و چه نسبتی با رانش داده دارد؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.9473684210526315,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.31533077359199524
+  },
+  {
+   "question": "سیستم پایش مدل چه چیزهایی را رصد می‌کند و با عبور از آستانه چه می‌کند؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.6041525602340698
+  },
+  {
+   "question": "در استاندارد عملیاتی امروزی، غیر از کیفیت مدل چه چیزهایی پایش می‌شود؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.3645133972167969
+  },
+  {
+   "question": "استنتاج درون مرورگر یا گوشی چگونه ممکن می‌شود؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 0.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.27914777398109436
+  },
+  {
+   "question": "ابزار DVC در MLOps برای چیست؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 1.0,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.20799367129802704
+  },
+  {
+   "question": "توزیع داده واقعی نسبت به زمان آموزش تغییر کند چه اتفاقی می‌افتد؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 0.0,
+   "context_recall": 0.6428571428571429,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.39845821261405945
+  },
+  {
+   "question": "اعتبارسنجی مدل جدید در خط لوله CI/CD چه نقشی دارد؟",
+   "expected_doc": "06_mlops_deployment.txt",
+   "hit": true,
+   "context_precision": 1.0,
+   "context_recall": 0.9333333333333333,
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.2544648349285126
+  }
+ ],
+ "generation_aggregate": {
+  "n_questions": 100,
+  "doc_hit_rate": 1.0,
+  "context_precision": 0.7683,
+  "context_recall": 0.9337,
+  "faithfulness": 1.0,
+  "answer_relevancy": 0.3553
+ }
+}
