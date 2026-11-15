@@ -4,6 +4,47 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.7.0] — 2026-11-15
+
+### Added — evaluation
+- **Golden set expanded 30 → 100 QA pairs** (`evaluation/qa_pairs.json`):
+  70 new Persian questions grounded in the corpus — new sub-topics plus
+  paraphrase-style variants of existing topics, mirroring real traffic
+  (15–19 per document). The per-document coverage surfaces failure modes
+  the 30-pair set could hide.
+- **Dataset integrity tests + retrieval regression gate**
+  (`tests/test_eval_dataset.py`): uniqueness, schema, per-document
+  coverage and substantive gold answers are pinned; the gate runs the
+  exact `evaluate.py` path (fake backend, hybrid + lexical rerank) and
+  keeps the committed baseline from drifting silently
+  (hit@1 ≥ 0.90, hit@3 ≥ 0.98, MRR ≥ 0.93).
+- **Per-question rows artifact + tool** (`evaluation/build_eval_rows.py`
+  → `evaluation/results/eval_rows.json`): rank of the expected document
+  per question, per retrieval mode, plus the RAGAS-style generation rows
+  — the raw material for error analysis, recomputed in-repo.
+- **Error-analysis notebook** (`evaluation/notebooks/error_analysis.ipynb`,
+  pre-executed, deterministic) and its written companion
+  `docs/rag/error-analysis.md`: failure families computed from real runs,
+  not anecdotes.
+
+### Analysis highlights (CI-reproducible baseline, n=100)
+- **Lexical re-ranker: hybrid hit@1 0.81 → 0.92 — 11 fixes, 0 regressions.**
+- BM25 is the strongest single channel (hit@1 0.92, hit@3 1.00); the dense
+  channel is deliberately weak under the fake hash embedder.
+- The single top-3 miss is an **RRF dilution case**: a sparse-rank-1
+  document fused out when the dense channel has no signal.
+- Residual rank-2/3 cases are **cross-document topic overlap** (CNN in
+  docs 02 vs 04; the «الگو» false friend) — the designed fix is the
+  neural cross-encoder (`RAG_RERANKER=cross-encoder`).
+- Generation (extractive, n=100): context precision 0.768, context recall
+  0.934, faithfulness 1.000.
+
+### Changed — docs
+- `docs/rag/evaluation.md`: golden-set section, committed-reports table
+  and reproduce commands updated; `docs/rag/error-analysis.md` added to
+  the MkDocs nav; README evaluation tables now show the 100-pair baseline
+  alongside the historical real-embedding numbers.
+
 ## [2.6.0] — 2026-11-14
 
 ### Added — rag-farsi-assistant

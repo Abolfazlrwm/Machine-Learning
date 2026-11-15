@@ -174,10 +174,11 @@ for event in pipeline.answer_stream("بیش‌برازش چیست؟"):
 
 ### Retrieval — dense vs sparse vs hybrid
 
-30 golden Persian questions over the 6-document corpus
-(`evaluation/qa_pairs.json`, 5 per document), measuring whether the correct
+100 golden Persian questions over the 6-document corpus
+(`evaluation/qa_pairs.json`, 15–19 per document), measuring whether the correct
 source document appears in the top-k (`Hit@k`) and the mean reciprocal rank
-(`MRR`). Measured with **`intfloat/multilingual-e5-base`** embeddings (CPU):
+(`MRR`). The real-embedding headline numbers below were measured with
+**`intfloat/multilingual-e5-base`** on the pre-v2.7.0 30-pair set:
 
 ```bash
 python evaluate.py --compare --generation --rebuild \
@@ -193,24 +194,33 @@ python evaluate.py --compare --generation --rebuild \
 Dense and sparse each miss a different question — exactly the failure mode
 Reciprocal Rank Fusion exists for. Fusing the two rankings recovers both
 (Hit@1 0.933 → **0.967**, MRR 0.967 → **0.983**), so `hybrid` is the default
-retrieval mode. (With the dependency-free `--backend fake` hash embedder the
-picture flips and sparse dominates — a good reminder that fusion is only as
-good as the signals you feed it.)
+retrieval mode.
 
-The same harness now also reports **nDCG@k** and a `hybrid+rerank` column:
-the hybrid candidates passed through the offline `LexicalReranker`. On the
-CI-reproducible baseline (`evaluation/results/eval_report_ci.md`) the
-re-rank stage lifts hybrid hit@1 0.80 → **0.90** and MRR 0.894 → **0.944**,
-matching BM25 while keeping both fused signals — the neural cross-encoder
-plugs into the same call site when the model can be downloaded.
+The same harness also reports **nDCG@k** and a `hybrid+rerank` column: the
+hybrid candidates passed through the offline `LexicalReranker`. On the
+current **100-pair CI-reproducible baseline**
+(`evaluation/results/eval_report_ci.json`, fake hash embedder — deterministic,
+no downloads) the picture is:
+
+| Retrieval mode (fake backend, n=100) | Hit@1 | Hit@3 | MRR |
+|---|---|---|---|
+| dense | 0.63 | 0.86 | 0.735 |
+| sparse (BM25) | 0.92 | 1.00 | 0.958 |
+| hybrid (RRF) | 0.81 | 0.99 | 0.888 |
+| hybrid + rerank | **0.92** | 0.99 | 0.952 |
+
+At this scale the re-rank stage is a **pure win: 11 fixes, 0 regressions**
+(hybrid hit@1 0.81 → 0.92). Where the remaining errors come from — RRF
+dilution, cross-document topic overlap, lexical gaps — is analysed
+question-by-question in the [error analysis](../docs/rag/error-analysis.md)
+page and its pre-executed notebook. The neural cross-encoder plugs into the
+same call site when the model can be downloaded.
 
 ### Generation — RAGAS-style suite (`evaluation/metrics.py`)
 
 Deterministic, judge-free proxies of the four RAGAS dimensions, computed over
-the same golden set. Answers are produced by the extractive fallback and
-scored with the same E5 embedder (`answer relevancy` = question ↔ answer
-cosine), so the whole suite reproduces on CPU; run it behind a live LLM
-provider for true generative scoring:
+the golden set. On the pre-v2.7.0 30-pair set with the extractive fallback
+scored by the real E5 embedder:
 
 | Metric | Value |
 |---|---|
@@ -219,6 +229,11 @@ provider for true generative scoring:
 | context recall | 0.979 |
 | faithfulness | 1.000 |
 | answer relevancy (E5 cosine) | 0.846 |
+
+On the 100-pair CI baseline (fake-backend cosine, extractive answers):
+doc hit rate 1.000 · context precision 0.768 · context recall 0.934 ·
+faithfulness 1.000 · answer relevancy 0.355 — per-question rows live in
+`evaluation/results/eval_rows.json`.
 
 ### Safety — prompt-injection guardrails (`src/guardrails.py`)
 
@@ -234,7 +249,7 @@ contain «نادیده» stay below the threshold — pinned by tests.
 
 ```bash
 pip install -r requirements-dev.txt
-python -m pytest tests/ -q     # 162 tests, no network / no model downloads
+python -m pytest tests/ -q     # 183 tests, no network / no model downloads
 ```
 
 Covers: chunk size & overlap guarantees, determinism and normalisation of
