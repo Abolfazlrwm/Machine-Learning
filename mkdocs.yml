@@ -53,6 +53,7 @@ nav:
       - Architecture: rag/architecture.md
       - Retrieval: rag/retrieval.md
       - Evaluation: rag/evaluation.md
+      - Error analysis: rag/error-analysis.md
       - Guardrails: rag/safety.md
   - Serving API:
       - Endpoints: serving/api.md
