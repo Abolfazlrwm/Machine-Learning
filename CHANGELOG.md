@@ -4,6 +4,21 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.8.1] — 2026-11-16
+
+### Added — live demo for TinyGPT
+- **Hugging Face Space** [`Abol0pati/tiny-gpt-fa`](https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa)
+  (Gradio): Persian prompt → the committed 2 MB float64 checkpoint
+  continues it, with temperature / top-k / length / seed controls and
+  deterministic, seed-repeatable output. The Space vendors the same
+  `src/` stack (autograd + transformer + tokenizer) and ships the model
+  files, so it runs on the free CPU tier.
+- `hf-space-tiny-gpt/` in the repo holds the Space app verbatim, and
+  `scripts/deploy_tiny_gpt_space.py` deploys it in one command
+  (`HF_TOKEN=... python scripts/deploy_tiny_gpt_space.py`).
+- Live-demo badges on the root README, the project README and the docs
+  page; Space paths join the ruff lint gate.
+
 ## [2.8.0] — 2026-11-16
 
 ### Added — tiny-gpt-from-scratch (new project)

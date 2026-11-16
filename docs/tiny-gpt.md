@@ -1,5 +1,8 @@
 # TinyGPT from scratch
 
+[**🎙 Live demo on Hugging Face Spaces**](https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa)
+— the committed 2 MB checkpoint generates Persian text in the browser.
+
 A Persian char-level transformer — **autograd engine, transformer blocks,
 Adam optimizer and tokenizer — all written against raw NumPy**, with zero
 ML frameworks. It trains on the same six Persian documents the RAG
