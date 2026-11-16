@@ -4,6 +4,54 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.8.0] — 2026-11-16
+
+### Added — tiny-gpt-from-scratch (new project)
+- **A complete language-modelling stack against raw NumPy**: a tape-based
+  reverse-mode autograd engine, a decoder-only transformer (pre-LN
+  blocks, causal multi-head attention, ReLU FFN), bias-corrected Adam, a
+  char-level tokenizer and train/sample CLIs — **no PyTorch, no JAX**.
+- **Every primitive is pinned against central-difference numerical
+  gradients** (float64; observed max errors 1e-10 … 4e-09), plus graph
+  semantics: gradient accumulation across tensor reuse, un-broadcasting
+  to parent shapes, causal-mask isolation. The checks caught two real
+  bugs during development (LayerNorm γ/β reduction axes; reference
+  cycles in the graph that OOM-killed long runs).
+- **Trained for real**: 249k params on the RAG corpus's 9,665 Persian
+  chars, 600 Adam steps in 65 s on CPU — train loss 4.89 → 1.22, val
+  2.74 (memorisation of a tiny corpus, reported honestly); committed
+  `artifacts/` hold the loss history, samples and tokenizer. 32 tests.
+
+### Changed — recommender-system
+- **Matrix factorization landed** (the roadmap item): `ALSRecommender`
+  (alternating ridge solves, bias folded into the factors, seeded) and
+  `SVDRecommender` (global-mean fill + rank-15 truncation) with
+  cold-start fallbacks, on the shared `BaseRecommender` interface —
+  14 synthetic CI-safe tests including exact rank-k recovery.
+- **Interface unification + real fixes**: the data loader now owns the
+  `user_id`/`item_id` naming and can download MovieLens
+  (`download=True` / `python -m src.data_loader`); `main.py` was
+  rewired to the `BaseRecommender` family (it passed a pivot into a
+  ratings-DataFrame API) and evaluates four models on a per-user split;
+  User-Based CF similarity now runs on **mean-centered** rating vectors
+  as the README always claimed; the real-data test bounds its ranking
+  metrics to a fixed 100-user sample (full-user P@K is an hours-long
+  scan).
+- Real four-model comparison on MovieLens: Item-CF RMSE **0.875** ·
+  ALS 0.914 · User-CF (centered) 0.896 · SVD 0.992 — all in the
+  published 0.87–0.95 baseline band, with the un-tuned-ALS honesty
+  stated.
+
+### CI
+- `tests.yml` gains **TinyGPT** (numpy+pytest) and **Recommender**
+  (numpy/pandas/sklearn/scipy) jobs; the ruff gate now covers both new
+  projects' `src/` and `tests/`.
+
+### Docs
+- New MkDocs pages `docs/tiny-gpt.md` and `docs/recsys.md` under a
+  "From scratch" section; root README project table and test counts
+  updated.
+
 ## [2.7.0] — 2026-11-15
 
 ### Added — evaluation
