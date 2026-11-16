@@ -16,9 +16,10 @@ documented methodology.
 
 | Project | Domain | Key techniques | Headline result |
 |---|---|---|---|
-| [`rag-farsi-assistant`](rag-farsi-assistant/) | LLM / Retrieval (RAG) | Persian RAG: E5 embeddings + FAISS **fused with a from-scratch BM25 via RRF**, bilingual query expansion (Persian <-> English), exact + semantic (paraphrase-aware) answer cache, per-stage traces + **Prometheus metrics**, switchable dense/sparse/hybrid modes, re-rank stage (offline lexical / neural cross-encoder), **bilingual prompt-injection guardrails**, RAGAS-style eval suite, Ollama/OpenAI providers, Streamlit chat | 30-pair golden set: hybrid Hit@1 = 0.967, MRR = 0.983 (E5+BM25 via RRF) · context recall 0.98 · 162 tests |
+| [`tiny-gpt-from-scratch`](tiny-gpt-from-scratch/) | Deep learning from scratch | **Reverse-mode autograd engine + decoder-only transformer + Adam, all raw NumPy** — no PyTorch/JAX; every primitive verified against numerical gradients; Persian char-level training | 249k params, 65 s CPU training (loss 4.89 → 1.22) · grad-check errors ~1e-10 · 32 tests |
+| [`rag-farsi-assistant`](rag-farsi-assistant/) | LLM / Retrieval (RAG) | Persian RAG: E5 embeddings + FAISS **fused with a from-scratch BM25 via RRF**, bilingual query expansion (Persian <-> English), exact + semantic (paraphrase-aware) answer cache, per-stage traces + **Prometheus metrics**, switchable dense/sparse/hybrid modes, re-rank stage (offline lexical / neural cross-encoder), **bilingual prompt-injection guardrails**, RAGAS-style eval suite, Ollama/OpenAI providers, Streamlit chat | **100-pair golden set**: re-rank lifts hybrid Hit@1 0.81 → 0.92 (11 fixes, 0 regressions) · E5 hybrid Hit@1 = 0.967 · 183 tests |
 | [`ai-text-detector`](ai-text-detector/) | NLP classification | TF-IDF + stylometric features (sentence length variation, punctuation habits), Linear SVM vs NB vs LR | Accuracy 0.897 · F1 0.899 · ROC-AUC 0.964 |
-| [`recommender-system`](recommender-system/) | RecSys | User-based & item-based collaborative filtering **from scratch** (pandas/NumPy) on MovieLens 105k | User-CF RMSE 0.877 · Item-CF RMSE 0.925 |
+| [`recommender-system`](recommender-system/) | RecSys | User-based & item-based CF **and matrix factorization (ALS + truncated SVD) all from scratch** on MovieLens | Item-CF RMSE 0.875 · ALS 0.914 · 25 tests |
 | [`stock-movement-ml`](stock-movement-ml/) | Finance / time series | 20 technical indicators, walk-forward validation, leakage-free backtest with costs, Plotly dashboard | OOS ROC-AUC 0.53 (Random Forest), +25.45% on 696 out-of-sample days |
 | [`sms-spam`](sms-spam/) | NLP baseline | TF-IDF (1–2 grams) + Logistic Regression, 5-fold GridSearchCV | Accuracy 0.975 · ROC-AUC 0.987 |
 
@@ -52,6 +53,20 @@ documented methodology.
 - **recommender-system** — collaborative filtering implemented from first
   principles (similarity matrices, weighted predictions, RMSE/MAE evaluation),
   no recommendation libraries.
+- **tiny-gpt-from-scratch** — the whole deep-learning stack, hand-built:
+  a tape-based reverse-mode autograd engine whose every primitive is
+  checked against central-difference numerical gradients, a decoder-only
+  transformer on top of it, bias-corrected Adam, and a char-level
+  tokenizer — then trained on the RAG corpus's Persian text for 65 s on
+  CPU. The gradient checks caught two real bugs during development
+  (LayerNorm γ/β reduction axes and reference cycles that OOM-killed
+  long runs), which is exactly the kind of thing "just use PyTorch"
+  never teaches.
+- **recommender-system** — collaborative filtering implemented from first
+  principles (mean-centered user similarity, item-based k-NN) **plus
+  matrix factorization from scratch — ALS with bias folded into the
+  ridge closed form, and a truncated-SVD baseline** — all four compared
+  on the same per-user MovieLens split.
 - **stock-movement-ml** — financial ML done honestly: walk-forward
   validation instead of a single split, signals aligned to next-day returns,
   transaction costs, and results reported *including* the uncomfortable ones
@@ -62,6 +77,11 @@ documented methodology.
 Each project is self-contained with its own `requirements.txt` and README:
 
 ```bash
+# TinyGPT from scratch (NumPy only — trains in ~65 s on CPU)
+cd tiny-gpt-from-scratch && pip install numpy pytest
+python -m pytest tests/ -q
+python -m src.train --steps 600 && python -m src.generate --prompt "یادگیری ماشین"
+
 # RAG assistant (needs an Ollama model or an OpenAI-compatible key)
 cd rag-farsi-assistant
 pip install -r requirements.txt
@@ -71,8 +91,9 @@ streamlit run app.py
 # AI text detector
 cd ai-text-detector && pip install -r requirements.txt
 
-# Recommender system
+# Recommender system (CF + ALS on MovieLens; downloads the dataset on first run)
 cd recommender-system && pip install -r requirements.txt
+python -m src.main
 
 # Stock movement (walk-forward pipeline + dashboard)
 cd stock-movement-ml && pip install -r requirements.txt
@@ -159,9 +180,11 @@ running each project's own training pipeline.
 Projects include pytest suites (unit-level, network-free):
 
 ```bash
-cd rag-farsi-assistant && python -m pytest tests/ -q   # 183 tests
-cd stock-movement-ml  && python -m pytest tests/ -q    # 28 tests
-cd serving            && python -m pytest tests/ -q    # 40 tests
+cd tiny-gpt-from-scratch && python -m pytest tests/ -q  # 32 tests
+cd rag-farsi-assistant && python -m pytest tests/ -q    # 183 tests
+cd recommender-system  && python -m pytest tests/ -q    # 25 tests
+cd stock-movement-ml   && python -m pytest tests/ -q    # 28 tests
+cd serving             && python -m pytest tests/ -q    # 40 tests
 ```
 
 ## 🛣 Roadmap
@@ -173,7 +196,7 @@ cd serving            && python -m pytest tests/ -q    # 40 tests
 - [x] Bilingual prompt-injection guardrails (flag/block), lexical re-ranker + nDCG in the eval harness, MkDocs documentation site on GitHub Pages — v2.5.0
 - [x] Real-time token streaming (OpenAI SSE / Ollama NDJSON → pipeline → SSE), tag-gated release automation, ruff lint gate + py3.11–3.13 matrix, CITATION.cff — v2.6.0
 - [x] Golden set 30 → 100 QA pairs, per-question error analysis (pre-executed notebook + failure families), dataset integrity tests + retrieval regression gate — v2.7.0
-- [ ] Matrix factorization (SVD/ALS) for the recommender system
+- [x] **New project: TinyGPT from scratch** (autograd + Persian char-level transformer, gradient-checked) **and matrix factorization (ALS/SVD) for the recommender** — v2.8.0
 - [ ] PDF ingestion for the RAG assistant
 - [ ] Fine-tuning a Persian BERT for sentiment analysis
 - [ ] Hyperparameter tuning with Optuna for the stock pipeline
@@ -185,6 +208,7 @@ Releases are tagged per milestone — see [CHANGELOG.md](CHANGELOG.md) and the
 
 | Tag | Scope |
 |---|---|
+| `v2.8.0` | **New project: TinyGPT from scratch** — NumPy-only autograd engine + Persian char-level transformer, numerically gradient-checked (32 tests) — and matrix factorization (ALS/SVD) landing in the recommender with a real four-model MovieLens comparison |
 | `v2.7.0` | Golden set 30 → 100 QA pairs (corpus-grounded + paraphrase variants), per-question error analysis (notebook + failure families: rerank 0.81 → 0.92 with 0 regressions), dataset integrity tests + retrieval regression gate |
 | `v2.6.0` | True token streaming end-to-end (providers → pipeline.answer_stream → SSE with error events), tag-gated release automation (tests → changelog → release), ruff lint gate, py3.11–3.13 matrix, CITATION.cff |
 | `v2.5.0` | Prompt-injection guardrails (OWASP LLM01), lexical re-ranker + nDCG metric + rerank eval column, MkDocs docs site on GitHub Pages |

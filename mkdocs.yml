@@ -60,5 +60,8 @@ nav:
       - Observability: serving/observability.md
   - Deployment: deployment.md
   - Stock ML: stock.md
+  - From scratch:
+      - TinyGPT (autograd + transformer): tiny-gpt.md
+      - Recommender (CF + ALS): recsys.md
 
 strict: true
