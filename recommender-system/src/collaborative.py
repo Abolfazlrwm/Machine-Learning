@@ -68,10 +68,21 @@ class _CFBase(BaseRecommender):
 
 
 class UserBasedCF(_CFBase):
-    """Predicts ratings using similarity between users."""
+    """Predicts ratings using similarity between users.
+
+    Similarity runs on *mean-centered* rating vectors — comparing raw
+    vectors treats a missing rating as 0, which confuses "disliked" with
+    "not seen" and punishes users who rate everything highly. Centering
+    per user (and re-zeroing the unrated cells) is what the classic
+    user-based CF recipe actually prescribes.
+    """
 
     def _compute_similarity(self):
-        self.similarity = cosine_similarity(self.matrix)
+        centered = self.matrix.toarray().astype(float)
+        rated = centered > 0  # ratings are 0.5-5.0, so 0 means "not rated"
+        centered -= self.user_means[:, np.newaxis]
+        centered[~rated] = 0.0
+        self.similarity = cosine_similarity(centered)
         np.fill_diagonal(self.similarity, 0)
 
     def predict(self, user_id: int, item_id: int) -> float:
@@ -89,15 +100,22 @@ class UserBasedCF(_CFBase):
             return self._mean_rating_for_user(user_id)
 
         neighbor_sims = sims[rated_mask]
-        top_k = np.argsort(neighbor_sims)[-self.k_neighbors:]
+        neighbor_ratings = item_ratings[rated_mask]
+        neighbor_means = self.user_means[rated_mask]
 
-        weights = neighbor_sims[top_k]
-        ratings = item_ratings[rated_mask][top_k]
-
-        if weights.sum() == 0:
+        # only positively-similar neighbours vote (an anti-neighbour's
+        # dislike is noise for a k-NN vote); classic centered formula:
+        # predict user_mean + Σ sim·(neighbour_rating − neighbour_mean) / Σ|sim|
+        positive = neighbor_sims > 0
+        if not positive.any():
             return self._mean_rating_for_user(user_id)
 
-        return float(np.dot(weights, ratings) / np.sum(np.abs(weights)))
+        top_k = np.argsort(neighbor_sims[positive])[-self.k_neighbors:]
+        weights = neighbor_sims[positive][top_k]
+        deviations = neighbor_ratings[positive][top_k] - neighbor_means[positive][top_k]
+
+        prediction = self._mean_rating_for_user(user_id) + np.dot(weights, deviations) / weights.sum()
+        return float(np.clip(prediction, 0.5, 5.0))
 
     def recommend(self, user_id: int, n: int = 10) -> list:
         if user_id not in self.user_index:

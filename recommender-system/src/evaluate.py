@@ -1,5 +1,5 @@
 """RMSE / MAE evaluation for a fitted recommender against a held-out
-test set of (userId, movieId, rating) rows.
+test set of (user_id, item_id, rating) rows.
 """
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import pandas as pd
 def evaluate(model, test_ratings: pd.DataFrame) -> dict[str, float]:
     errors = []
     for _, row in test_ratings.iterrows():
-        pred = model.predict(int(row.userId), int(row.movieId))
+        pred = model.predict(int(row.user_id), int(row.item_id))
         errors.append(pred - row.rating)
 
     errors = np.array(errors)
