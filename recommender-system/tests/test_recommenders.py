@@ -7,8 +7,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from user_based_cf import UserBasedCF
 from item_based_cf import ItemBasedCF
+from user_based_cf import UserBasedCF
 
 
 @pytest.fixture

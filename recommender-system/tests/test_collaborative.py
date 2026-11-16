@@ -7,15 +7,14 @@ Basic correctness tests + an evaluation run on MovieLens 100K
 Run with:  pytest tests/ -v -s
 """
 
-import sys
 import os
+import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import pandas as pd
 import pytest
-
-from src.collaborative import UserBasedCF, ItemBasedCF
+from src.collaborative import ItemBasedCF, UserBasedCF
 
 
 @pytest.fixture
@@ -77,10 +76,17 @@ def test_full_movielens_evaluation():
 
     train = ratings.sample(frac=0.8, random_state=42)
     test = ratings.drop(train.index)
+    # precision_recall_at_k calls recommend() per user — every CF candidate
+    # is re-scored — so the ranking metrics run on a fixed 100-user sample
+    # (mirrors src/main.py); RMSE/MAE cover the full held-out set.
+    pr_users = test[test.user_id.isin(
+        pd.Series(test.user_id.unique()).sample(100, random_state=42))]
 
     for name, cls in [("User-Based CF", UserBasedCF), ("Item-Based CF", ItemBasedCF)]:
         model = cls(k_neighbors=30).fit(train)
         metrics = model.evaluate(test)
-        pr = model.precision_recall_at_k(test, k=10)
+        pr = model.precision_recall_at_k(pr_users, k=10)
         print(f"\n{name}: RMSE={metrics['rmse']:.4f}  MAE={metrics['mae']:.4f}  "
               f"Precision@10={pr['precision_at_k']:.4f}  Recall@10={pr['recall_at_k']:.4f}")
+        assert metrics["rmse"] < 1.1
+        assert metrics["n_evaluated"] > 10_000
