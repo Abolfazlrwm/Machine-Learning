@@ -1,5 +1,13 @@
 # 🧠 TinyGPT from Scratch — Persian char-level transformer, zero frameworks
 
+[![Live demo](https://img.shields.io/badge/Live_demo-HuggingFace_Spaces-FFD21E?style=flat&labelColor=1a1b26)](https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa)
+
+**Try it live** — the committed 2 MB checkpoint runs in a browser demo
+([Abol0pati/tiny-gpt-fa](https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa)):
+type a Persian prompt, tune temperature / top-k / seed, and watch the
+char-level model continue it. The Space ships the same vendored
+`src/` stack as this folder.
+
 A complete language-modelling stack written against raw NumPy: a
 **tape-based reverse-mode autograd engine**, a **decoder-only
 transformer** (pre-LN blocks, causal multi-head attention, ReLU FFN),
