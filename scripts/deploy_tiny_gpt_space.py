@@ -4,9 +4,10 @@
     HF_TOKEN=hf_xxx python scripts/deploy_tiny_gpt_space.py
 
 Creates (or reuses) https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa
-and uploads `hf-space-tiny-gpt/` (vendored code + the committed 2 MB
-float64 checkpoint). Requires `pip install huggingface_hub` and a token
-with write access to the Abol0pati account.
+and uploads `hf-space-tiny-gpt/`. The Space is **static** (free tier): the
+browser runs the vendored `src/` stack in Pyodide/WebAssembly against the
+committed 2 MB checkpoint, so no CPU/Gradio hosting is needed. Requires
+`pip install huggingface_hub` and a token with write access.
 """
 from __future__ import annotations
 
@@ -32,8 +33,8 @@ def main() -> None:
 
     api = HfApi(token=args.token)
     url = f"https://huggingface.co/spaces/{args.repo_id}"
-    print(f"creating/reusing Space {args.repo_id} (sdk=gradio) ...")
-    api.create_repo(repo_id=args.repo_id, repo_type="space", space_sdk="gradio",
+    print(f"creating/reusing static Space {args.repo_id} ...")
+    api.create_repo(repo_id=args.repo_id, repo_type="space", space_sdk="static",
                     private=False, exist_ok=True)
     print(f"uploading {SPACE_DIR} ...")
     api.upload_folder(repo_id=args.repo_id, repo_type="space",

@@ -1,7 +1,9 @@
 # TinyGPT from scratch
 
 [**🎙 Live demo on Hugging Face Spaces**](https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa)
-— the committed 2 MB checkpoint generates Persian text in the browser.
+— a static Space that runs this exact NumPy stack in your browser via
+Pyodide/WebAssembly against the committed 2 MB checkpoint (seed-repeatable,
+bit-identical to CPython).
 
 A Persian char-level transformer — **autograd engine, transformer blocks,
 Adam optimizer and tokenizer — all written against raw NumPy**, with zero

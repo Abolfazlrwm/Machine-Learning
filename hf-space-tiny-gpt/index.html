@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🧠 TinyGPT فارسی — GPT از صفر، در مرورگر</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+<script src="https://cdn.jsdelivr.net/pyodide/v0.27.2/full/pyodide.js"></script>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <h1>🧠 تولید متن فارسی با GPT ساخته‌شده از صفر</h1>
+    <p class="lead">
+      موتور autograd + ترنسفورمر + Adam، <b>همه با NumPy خام</b> — بدون PyTorch.
+      کل مدل ۲۴۹هزار-پارامتری با WebAssembly <b>داخل مرورگر شما</b> اجرا می‌شود؛ هیچ سروری در کار نیست.
+      کد و آموزش: <a href="https://github.com/Abolfazlrwm/Machine-Learning/tree/main/tiny-gpt-from-scratch" target="_blank" rel="noopener">tiny-gpt-from-scratch</a>
+      در <a href="https://github.com/Abolfazlrwm/Machine-Learning" target="_blank" rel="noopener">پرتفولیوی ML</a>.
+    </p>
+    <div id="status" class="status busy">در حال بارگذاری…</div>
+  </header>
+
+  <section class="panel">
+    <div class="grid">
+      <div class="col">
+        <label for="prompt">پرامپت فارسی</label>
+        <textarea id="prompt" rows="3">یادگیری ماشین</textarea>
+
+        <label for="temperature">Temperature — کم‌تر = محافظه‌کارتر: <span id="t-val" class="val">0.8</span></label>
+        <input type="range" id="temperature" min="0.1" max="1.5" step="0.05" value="0.8">
+
+        <label for="topk">Top-k — فقط k نویسهٔ محتمل‌تر: <span id="k-val" class="val">12</span></label>
+        <input type="range" id="topk" min="1" max="50" step="1" value="12">
+
+        <label for="nchars">طول ادامه (نویسه): <span id="n-val" class="val">220</span></label>
+        <input type="range" id="nchars" min="50" max="400" step="10" value="220">
+
+        <label for="seed">Seed (برای تکرارپذیری)</label>
+        <input type="number" id="seed" value="7" step="1">
+
+        <button id="generate" disabled>تولید کن</button>
+      </div>
+
+      <div class="col">
+        <label for="output">خروجی مدل</label>
+        <textarea id="output" rows="13" readonly dir="rtl" placeholder="خروجی اینجا ظاهر می‌شود…"></textarea>
+        <div id="stats" class="stats"></div>
+      </div>
+    </div>
+
+    <div class="examples">
+      نمونه‌ها:
+      <button class="chip" data-prompt="یادگیری ماشین">یادگیری ماشین</button>
+      <button class="chip" data-prompt="شبکهٔ عصبی">شبکهٔ عصبی</button>
+      <button class="chip" data-prompt="بیش‌برازش چیست">بیش‌برازش چیست</button>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>این مدل چه بلدی؟</b> حروف، شروع واژه‌ها، نیم‌فاصله و نشانه‌گذاری فارسی را
+    یاد گرفته؛ روانی نویسه‌ای نیازمند دادهٔ چند مرتبهٔ بزرگ‌تر است — loss آموزش
+    ۱٫۲۲ در برابر ۲٫۷۴ اعتبارسنجی یعنی مدل روی ۹٬۶۶۵ کاراکتر حفظ‌کردن را شروع
+    کرده. این محدودیت صادقانه، بخشی از نتیجه است.</p>
+  </footer>
+</main>
+
+<script type="text/python" id="py-bootstrap">
+import sys, json
+import numpy as np
+
+sys.path.insert(0, "/space")
+from src.model import TinyGPT
+from src.tokenizer import CharTokenizer
+
+log = json.load(open("/model/train_log.json", encoding="utf-8"))
+cfg = log["config"]
+tok = CharTokenizer.from_json("/model/tokenizer.json")
+state = np.load("/model/params.npz")
+model = TinyGPT(cfg["vocab"], dim=cfg["dim"], n_layers=cfg["n_layers"],
+                n_heads=cfg["n_heads"], max_t=cfg["max_t"])
+model.load_state_dict({k: np.asarray(v) for k, v in state.items()})
+state.close()
+
+INFO = {"vocab": cfg["vocab"], "params": cfg["n_params"],
+        "train_sec": log["elapsed_sec"],
+        "train_loss": round(log["final_train_loss"], 2),
+        "val_loss": round(log["final_val_loss"], 2)}
+
+def generate(prompt, temperature, top_k, n_chars, seed):
+    """The same sampling loop as the repo's generate.py — one RNG per call."""
+    prompt = str(prompt)
+    if not prompt.strip():
+        return json.dumps({"text": "", "note": "یک پرامپت فارسی بنویسید.", "info": INFO},
+                          ensure_ascii=False)
+    ids = tok.encode(prompt)
+    if not ids:
+        return json.dumps({"text": prompt,
+                           "note": "هیچ نویسه‌ای از پرامپت در واژگان ۱۰۰ نویسه‌ای مدل نبود.",
+                           "info": INFO}, ensure_ascii=False)
+    rng = np.random.default_rng(int(seed))
+    out = model.sample(ids, n_new=int(n_chars), temperature=float(temperature),
+                       top_k=int(top_k) if int(top_k) > 0 else None, rng=rng)
+    text = tok.decode(out)
+    note = (f"seed {int(seed)} · T={float(temperature):.2f} · top-k={int(top_k)} · "
+            f"{INFO['params']:,} params · loss {INFO['train_loss']} / {INFO['val_loss']}")
+    return json.dumps({"text": text, "note": note, "info": INFO}, ensure_ascii=False)
+</script>
+<script src="app.js"></script>
+</body>
+</html>
