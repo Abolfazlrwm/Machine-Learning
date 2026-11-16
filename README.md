@@ -185,6 +185,7 @@ cd rag-farsi-assistant && python -m pytest tests/ -q    # 183 tests
 cd recommender-system  && python -m pytest tests/ -q    # 25 tests
 cd stock-movement-ml   && python -m pytest tests/ -q    # 28 tests
 cd serving             && python -m pytest tests/ -q    # 40 tests
+cd ai-text-detector    && python -m pytest tests/ -q    # 6 tests
 ```
 
 ## 🛣 Roadmap
