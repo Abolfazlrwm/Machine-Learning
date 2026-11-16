@@ -5,8 +5,9 @@
 **Try it live** — the committed 2 MB checkpoint runs in a browser demo
 ([Abol0pati/tiny-gpt-fa](https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa)):
 type a Persian prompt, tune temperature / top-k / seed, and watch the
-char-level model continue it. The Space ships the same vendored
-`src/` stack as this folder.
+char-level model continue it. The Space is static (free tier): Pyodide
+runs this folder's *unchanged* `src/` stack in WebAssembly inside your
+browser — no server, no port, bit-identical output to CPython.
 
 A complete language-modelling stack written against raw NumPy: a
 **tape-based reverse-mode autograd engine**, a **decoder-only

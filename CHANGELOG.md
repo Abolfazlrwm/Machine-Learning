@@ -4,15 +4,33 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.8.2] — 2026-11-16
+
+### Changed — the TinyGPT Space ships as a Static Space
+- Hugging Face no longer hosts new Gradio Spaces on free accounts
+  (creation returns `402 Payment Required`; only **Static Spaces** are
+  free). Instead of paying for PRO or dropping the demo, the Space now
+  runs **entirely in the visitor's browser**: Pyodide loads Python +
+  NumPy in WebAssembly, fetches the vendored `src/` stack and the 2 MB
+  checkpoint from the Space, and executes the *unchanged* repo code.
+  Same URL, zero hosting cost, no server.
+- Verified end-to-end: the browser-side generation with seed 7 /
+  T=0.8 / top-k=12 produces **bit-identical text** to the CPython run,
+  confirming the WASM path and sampling determinism across platforms.
+- `hf-space-tiny-gpt/` now holds `index.html` + `app.js` + `style.css`
+  (Persian RTL UI, Vazirmatn font, examples, seed-repeatable controls);
+  `scripts/deploy_tiny_gpt_space.py` creates the Space with
+  `space_sdk="static"`.
+
 ## [2.8.1] — 2026-11-16
 
 ### Added — live demo for TinyGPT
-- **Hugging Face Space** [`Abol0pati/tiny-gpt-fa`](https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa)
-  (Gradio): Persian prompt → the committed 2 MB float64 checkpoint
+- **Hugging Face Space** [`Abol0pati/tiny-gpt-fa`](https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa):
+  Persian prompt → the committed 2 MB float64 checkpoint
   continues it, with temperature / top-k / length / seed controls and
-  deterministic, seed-repeatable output. The Space vendors the same
-  `src/` stack (autograd + transformer + tokenizer) and ships the model
-  files, so it runs on the free CPU tier.
+  deterministic, seed-repeatable output. First shipped as a Gradio app;
+  switched to a static, browser-side build in v2.8.2 after HF's free-tier
+  change (see above).
 - `hf-space-tiny-gpt/` in the repo holds the Space app verbatim, and
   `scripts/deploy_tiny_gpt_space.py` deploys it in one command
   (`HF_TOKEN=... python scripts/deploy_tiny_gpt_space.py`).
