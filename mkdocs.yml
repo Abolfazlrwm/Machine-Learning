@@ -61,6 +61,7 @@ nav:
   - Deployment: deployment.md
   - Stock ML: stock.md
   - AI text detector: ai-text-detector.md
+  - SMS spam (NLP baseline): sms-spam.md
   - From scratch:
       - TinyGPT (autograd + transformer): tiny-gpt.md
       - Recommender (CF + ALS): recsys.md

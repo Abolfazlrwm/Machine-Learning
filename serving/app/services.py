@@ -202,7 +202,7 @@ class SmsService(BaseLazyService):
 
     def __init__(self, root: Path) -> None:
         super().__init__()
-        self._model_path = root / "sms-spam" / "spam_classifier.pkl"
+        self._model_path = root / "sms-spam" / "artifacts" / "spam_classifier.pkl"
         self._model = None
         self._version = "unavailable"
 
@@ -211,8 +211,8 @@ class SmsService(BaseLazyService):
             return ServiceStatus(True, str(self._model_path.name))
         return ServiceStatus(
             False,
-            "sms-spam/spam_classifier.pkl not found — train it with "
-            "`python spam_classifier.py --train spam.csv`",
+            "sms-spam/artifacts/spam_classifier.pkl not found — train it with "
+            "`python -m src.train --train data/spam.csv`",
         )
 
     @staticmethod
@@ -245,7 +245,7 @@ class SmsService(BaseLazyService):
         if not self._model_path.exists():
             raise ServiceUnavailable(
                 "spam classifier artifact missing",
-                hint="run `python spam_classifier.py --train spam.csv` in sms-spam/",
+                hint="run `python -m src.train --train data/spam.csv` in sms-spam/",
             )
         import joblib  # lazy: only needed when the service is actually used
 

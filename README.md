@@ -100,8 +100,9 @@ cd stock-movement-ml && pip install -r requirements.txt
 python main.py --ticker AAPL --start 2018-01-01 --end 2025-01-01
 
 # SMS spam baseline
-cd sms-spam && pip install pandas scikit-learn nltk joblib
-python spam_classifier.py --train spam.csv
+cd sms-spam && pip install -r requirements.txt
+python -m src.predict --predict "Free entry in 2 a wkly comp!"   # committed artifact
+python -m src.train --train data/spam.csv                        # retrain from scratch
 ```
 
 ## 🖥 Serving API — one FastAPI layer over all three model families
@@ -169,7 +170,7 @@ python download_data.py
 |---|---|---|
 | `recommender-system` | MovieLens ml-latest-small (`ratings.csv`, `movies.csv`) | [GroupLens](https://grouplens.org/datasets/movielens/) |
 | `ai-text-detector` | Human vs AI Generated Text (`Data`, `Labels`) | Kaggle — mirrored byte-for-byte as a [release asset](https://github.com/Abolfazlrwm/Machine-Learning/releases/tag/datasets-v1) |
-| `sms-spam` | SMS Spam Collection (5,574 messages) | bundled at `sms-spam/spam.csv` |
+| `sms-spam` | SMS Spam Collection (5,574 messages) | bundled at `sms-spam/data/spam.csv` |
 
 Trained model artifacts (`*.joblib`, `*.pkl`) and generated reports
 (`stock-movement-ml/reports/`) are git-ignored as well — recreate them by
@@ -186,6 +187,7 @@ cd recommender-system  && python -m pytest tests/ -q    # 25 tests
 cd stock-movement-ml   && python -m pytest tests/ -q    # 28 tests
 cd serving             && python -m pytest tests/ -q    # 40 tests
 cd ai-text-detector    && python -m pytest tests/ -q    # 6 tests
+cd sms-spam            && python -m pytest tests/ -q    # 7 tests
 ```
 
 ## 🛣 Roadmap

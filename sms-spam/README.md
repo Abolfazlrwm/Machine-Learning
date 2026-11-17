@@ -2,12 +2,12 @@
 
 Baseline NLP classifier for the classic [SMS Spam Collection]
 (https://archive.ics.uci.edu/dataset/228/sms+spam+collection): TF-IDF
-(1–2 grams) + Logistic Regression wrapped in a single scikit-learn
-`Pipeline`, tuned with 5-fold `GridSearchCV`.
+(1–2 grams) + Logistic Regression in a single scikit-learn `Pipeline`,
+tuned with 5-fold `GridSearchCV`.
 
 ## Results
 
-Trained on the included `spam.csv` (5,574 messages, 20% holdout):
+Trained on the bundled `data/spam.csv` (5,574 messages, 20% holdout):
 
 | Metric | Score |
 |---|---|
@@ -21,13 +21,27 @@ Best hyperparameters found by the grid search: `C = 10`, `liblinear` solver.
 ## Usage
 
 ```bash
-pip install pandas scikit-learn nltk joblib
+pip install -r requirements.txt
 
-# train, evaluate and save the model
-python spam_classifier.py --train spam.csv
+# classify a message with the committed artifact
+python -m src.predict --predict "Free entry in 2 a wkly comp!"
 
-# classify a single message with the saved model
-python spam_classifier.py --predict "Free entry in 2 a wkly comp!"
+# retrain, evaluate and refresh artifacts/spam_classifier.pkl
+python -m src.train --train data/spam.csv
+```
+
+## Structure
+
+```
+src/preprocess.py   cleaning: lowercase, strip URLs/digits/punctuation,
+                    NLTK stop words + WordNet lemmatization (lazy download)
+src/train.py        dataset loader, pipeline builder, GridSearchCV entry
+                    point — train_model() returns its metrics dict
+src/predict.py      inference against artifacts/spam_classifier.pkl
+data/spam.csv       the bundled UCI dataset (5,574 messages)
+artifacts/          committed fitted pipeline (~228 KB)
+tests/              7 network-free unit tests (cleaning, loader, pipeline,
+                    train→predict roundtrip, graceful missing-model path)
 ```
 
 ## Pipeline
@@ -36,8 +50,8 @@ python spam_classifier.py --predict "Free entry in 2 a wkly comp!"
    removal + WordNet lemmatization.
 2. Vectorization — TF-IDF, max 5,000 features, unigrams + bigrams.
 3. Model — Logistic Regression, `C` tuned over {0.1, 1, 10}.
-4. Persistence — fitted pipeline saved to `spam_classifier.pkl` and reused
-   by `--predict`.
+4. Persistence — fitted pipeline saved to `artifacts/spam_classifier.pkl`
+   and reused by `predict.py`.
 
 Spam recall (0.84) is the weak spot: with ~87% ham messages the model is
 conservative, so class weighting or threshold tuning would be the natural
