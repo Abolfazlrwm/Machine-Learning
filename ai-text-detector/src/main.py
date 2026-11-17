@@ -1,10 +1,10 @@
 import time
-import joblib
 from pathlib import Path
 
+import joblib
 from data_loader import load_dataset, split_dataset
-from model import tfidf_pipeline, hybrid_pipeline, MODELS
 from evaluate import evaluate, print_report
+from model import MODELS, hybrid_pipeline, tfidf_pipeline
 
 MODEL_PATH = Path(__file__).resolve().parent.parent / "models" / "best_model.joblib"
 

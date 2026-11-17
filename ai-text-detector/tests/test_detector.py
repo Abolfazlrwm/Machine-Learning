@@ -1,13 +1,14 @@
 import sys
 from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from features import StylometricFeatures, FEATURE_NAMES
-from model import tfidf_pipeline, hybrid_pipeline
+from features import FEATURE_NAMES, StylometricFeatures
+from model import hybrid_pipeline, tfidf_pipeline
 from sklearn.naive_bayes import MultinomialNB
 
 
