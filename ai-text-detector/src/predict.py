@@ -1,7 +1,8 @@
 import sys
-import numpy as np
 from pathlib import Path
+
 import joblib
+import numpy as np
 
 MODEL_PATH = Path(__file__).resolve().parent.parent / "models" / "best_model.joblib"
 

@@ -1,10 +1,9 @@
-from sklearn.pipeline import Pipeline, FeatureUnion
+from features import StylometricFeatures
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression, SGDClassifier
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.preprocessing import MaxAbsScaler
-
-from features import StylometricFeatures
 
 
 def tfidf_pipeline(clf):
