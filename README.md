@@ -25,6 +25,23 @@ documented methodology.
 
 ## 🧭 What each project demonstrates
 
+The flagship RAG pipeline, end to end:
+
+```mermaid
+flowchart LR
+    Q(["Persian question"]) --> G{"prompt-injection detector"}
+    G -- "blocked" --> R(["grounded refusal"])
+    G -- "clean" --> C{"answer cache: exact TTL + semantic"}
+    C -- "hit" --> A(["cached answer + sources"])
+    C -- "miss" --> U["query understanding + cross-language expansion"]
+    U --> H["hybrid retrieval: E5/FAISS + BM25 -> RRF"]
+    H --> RR["re-rank: lexical / cross-encoder"]
+    RR --> P["numbered-context Persian prompt"]
+    P --> L["LLM: Ollama <-> OpenAI-compatible"]
+    L --> A2(["grounded answer + citations + traces"])
+    A2 -.-> M[["Prometheus + Grafana"]]
+```
+
 - **rag-farsi-assistant** — the full modern RAG loop: chunking with overlap,
   multilingual embeddings (E5 with automatic query/passage prefixes), FAISS
   vector search, **hybrid retrieval that fuses dense + BM25 rankings with
@@ -200,6 +217,8 @@ cd sms-spam            && python -m pytest tests/ -q    # 7 tests
 - [x] Real-time token streaming (OpenAI SSE / Ollama NDJSON → pipeline → SSE), tag-gated release automation, ruff lint gate + py3.11–3.13 matrix, CITATION.cff — v2.6.0
 - [x] Golden set 30 → 100 QA pairs, per-question error analysis (pre-executed notebook + failure families), dataset integrity tests + retrieval regression gate — v2.7.0
 - [x] **New project: TinyGPT from scratch** (autograd + Persian char-level transformer, gradient-checked) **and matrix factorization (ALS/SVD) for the recommender** — v2.8.0
+- [x] TinyGPT live demo: free-tier HF Space that runs the unchanged NumPy stack in-browser (Pyodide/WASM) — v2.8.1 / v2.8.2
+- [x] **Platform consistency pass**: ai-text-detector into CI + docs, sms-spam modernized to the src/tests shape (numbers reproduced), Makefile + pre-commit, CodeQL SAST + coverage gate, mermaid architecture diagrams — v2.9.0
 - [ ] PDF ingestion for the RAG assistant
 - [ ] Fine-tuning a Persian BERT for sentiment analysis
 - [ ] Hyperparameter tuning with Optuna for the stock pipeline

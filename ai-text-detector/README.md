@@ -43,11 +43,11 @@ Not a huge jump but consistent enough that I don't think it's noise.
 ```bash
 pip install -r requirements.txt
 
-# use the model that's already trained and committed:
-python src/predict.py "your text here"
-
-# or retrain from scratch (takes maybe a minute):
+# train once (~1 min on CPU) — the artifact stays out of git by policy:
 python src/main.py
+
+# then predict as much as you like:
+python src/predict.py "your text here"
 ```
 
 Example:
