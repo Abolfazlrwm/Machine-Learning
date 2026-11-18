@@ -21,6 +21,24 @@ question ─► query analysis (expansion, folding) ──────┘       
                                      grounded Persian answer + sources [1][2]
 ```
 
+The same flow, including the safety and cache layers that wrap every
+request:
+
+```mermaid
+flowchart LR
+    Q(["Persian question"]) --> G{"prompt-injection detector"}
+    G -- "blocked" --> R(["grounded refusal + detection report"])
+    G -- "clean" --> C{"answer cache: exact TTL + semantic (paraphrase-aware)"}
+    C -- "hit" --> A(["cached answer + sources, zero pipeline cost"])
+    C -- "miss" --> U["query understanding: script profiling + cross-language expansion"]
+    U --> H["hybrid retrieval: E5/FAISS dense + from-scratch BM25 -> RRF fusion"]
+    H --> RR["re-rank: lexical (offline) / cross-encoder (neural)"]
+    RR --> P["numbered-context strict Persian prompt"]
+    P --> L["LLM provider: Ollama <-> OpenAI-compatible"]
+    L --> A2(["grounded answer + citations [1][2] + per-stage traces"])
+    A2 -.-> M[["Prometheus metrics + Grafana dashboards"]]
+```
+
 ## Layers
 
 | layer | module | responsibility |

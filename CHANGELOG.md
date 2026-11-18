@@ -4,6 +4,45 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.9.0] — 2026-11-18
+
+### Added — platform consistency pass
+Every project now meets the same bar: structured code, CI, lint, docs.
+
+- **ai-text-detector joins the platform**: its own CI job
+  (`ai-text-detector`), lint-gate membership (8 auto-fixable violations
+  fixed), and a MkDocs page (`docs/ai-text-detector.md`) in the nav.
+  A full retraining run reproduced the README numbers exactly (linear
+  SVM hybrid, accuracy 0.897 / F1 0.899 / ROC-AUC 0.964); the stale
+  "already trained and committed" claim in its README was corrected —
+  the artifact stays out of git by the repo's policy, and training
+  takes about a minute.
+- **sms-spam modernized** from a single script into the standard
+  `src/` + `tests/` shape: lazy NLTK data (no network at import),
+  `train_model()` that returns its metrics dict, a committed 228 KB
+  artifact, 7 deterministic unit tests, its own CI job and a docs page.
+  The full retrain via the new package reproduces the original numbers
+  *exactly* (0.9749 / 0.9872 / CV 0.979, spam P/R/F1 0.97/0.84/0.90,
+  best `C=10`); `serving/` was pointed at the new artifact path
+  (all 40 serving tests green).
+- **Developer experience**: `Makefile` (`make test` / `lint` /
+  `coverage` / `docs-serve` / `api` / `up` / `bench` / `space-deploy` —
+  each mirroring what CI runs) and `.pre-commit-config.yaml` pinning
+  ruff + hygiene hooks; CONTRIBUTING documents both.
+- **Security**: CodeQL SAST workflow (python + javascript-typescript,
+  `security-extended`, weekly schedule) alongside the existing
+  bandit + pip-audit gates, and a **coverage gate** on the RAG suite
+  (`--cov-fail-under=90`, measured 92.5%).
+- **Mermaid architecture diagrams** of the full RAG loop (guardrails →
+  cache → hybrid retrieval → re-rank → LLM → metrics) on the repo
+  landing page and in `docs/rag/architecture.md`; mkdocs superfences
+  configured to render them.
+
+### Fixed
+- Stale `sms-spam/spam.csv` dataset path and `spam_classifier.py`
+  invocation in the root README; serving's "artifact missing" hints now
+  point at the real train command.
+
 ## [2.8.2] — 2026-11-16
 
 ### Changed — the TinyGPT Space ships as a Static Space

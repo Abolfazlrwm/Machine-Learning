@@ -57,9 +57,11 @@ python src/predict.py "your text here"
 python src/main.py
 ```
 
-The committed checkpoint is small enough to live in git; `predict.py`
-falls back to a sigmoid over `decision_function` when the wrapped
-classifier exposes no `predict_proba`.
+The trained artifact lands at `models/best_model.joblib` (git-ignored by
+the repo's "no trained artifacts in git" policy — retrain in about a
+minute with `python src/main.py`). `predict.py` falls back to a sigmoid
+over `decision_function` when the wrapped classifier exposes no
+`predict_proba`.
 
 ## Testing
 
