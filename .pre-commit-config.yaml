@@ -1,0 +1,28 @@
+# Pre-commit hooks — the same rule set CI enforces, shifted left.
+#   pip install pre-commit && pre-commit install
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.4
+    hooks:
+      - id: ruff
+        args: [--fix]
+        files: ^(rag-farsi-assistant|serving|tiny-gpt-from-scratch|recommender-system|ai-text-detector|sms-spam)/|^(app|__init__)\.py$|^hf-space-tiny-gpt/|^scripts/deploy_tiny_gpt_space\.py$
+      - id: ruff-format
+        # formatting is opt-in; the repo pins style via ruff.toml rules
+        stages: [manual]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        # model artifacts and CSVs are data — leave them untouched
+        exclude: \.(pkl|npz|csv|joblib|json)$
+      - id: end-of-file-fixer
+        exclude: \.(pkl|npz|csv|joblib)$
+      - id: check-yaml
+        exclude: deploy/grafana/dashboards/.*\.json$
+      - id: check-added-large-files
+        args: [--maxkb=2048]
+        exclude: (params\.npz|spam_classifier\.pkl)$
+      - id: mixed-line-ending
+        args: [--fix=lf]
