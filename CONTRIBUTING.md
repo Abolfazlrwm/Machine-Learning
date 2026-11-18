@@ -30,7 +30,16 @@ python download_data.py
 Then run the test suite:
 
 ```bash
-python -m pytest tests/ -q
+make test          # every project, in one command
+make lint          # ruff with the same rule set CI enforces
+make coverage      # RAG assistant with the CI coverage invocation
+```
+
+`make help` lists all targets (docs, docker stack, latency benchmark,
+Space deploy). To run the same checks automatically on every commit:
+
+```bash
+pip install pre-commit && pre-commit install
 ```
 
 Each sub-project is independent; keep your change scoped to the one you are
