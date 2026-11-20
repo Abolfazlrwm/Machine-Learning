@@ -107,7 +107,7 @@ curl -s "localhost:8000/v1/stock/signal?ticker=AAPL"
 |---|---|---|
 | `ML_REPO_ROOT` | auto | Repo root (auto-detected two levels up) |
 | `SERVING_API_KEY` | unset | If set, `/v1/*` requires `X-API-Key` (health stays open) |
-| `CORS_ORIGINS` | `*` | Comma-separated allowed origins |
+| `CORS_ORIGINS` | *(empty — no cross-origin access)* | Comma-separated allowed origins; set explicitly to the front-end's exact origin(s) |
 | `RAG_*` | see RAG `.env.example` | All RAG knobs (backend, provider, retrieval mode, …) |
 | `RAG_SEMANTIC_CACHE` | `0` | Paraphrase-aware answer reuse via embedding similarity |
 | `RAG_SEMANTIC_CACHE_THRESHOLD` | `0.92` | Cosine gate for the semantic cache |
