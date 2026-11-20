@@ -4,4 +4,4 @@ yfinance>=1.8.0
 scikit-learn>=1.9.1
 xgboost>=3.4.1
 matplotlib>=3.7.0
-plotly>=5.18.0
+plotly>=7.1.0
