@@ -14,5 +14,11 @@ COPY src ./src
 COPY data ./data
 COPY app.py main.py evaluate.py ./
 
+# Streamlit writes ~/.streamlit config state; a named home directory for the
+# runtime user keeps that working without root.
+RUN useradd --system --uid 1000 --create-home appuser \
+    && chown -R appuser:appuser /app
+USER appuser
+
 EXPOSE 8501
 CMD ["streamlit", "run", "app.py", "--server.address", "0.0.0.0", "--server.port", "8501"]
