@@ -1,8 +1,8 @@
 """FastAPI application factory: routing, auth, CORS, error model, health."""
 from __future__ import annotations
 
-import logging
 import hmac
+import logging
 import os
 import time
 import uuid
