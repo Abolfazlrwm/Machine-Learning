@@ -50,7 +50,7 @@ jobs:
         run: python -m pytest tests/ -q --cov=src --cov-report=term-missing:skip-covered --cov-report=xml --cov-fail-under=90
       - name: Upload coverage report
         if: matrix.python-version == '3.12'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: rag-coverage-py312
           path: rag-farsi-assistant/coverage.xml
