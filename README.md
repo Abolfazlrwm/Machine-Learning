@@ -12,6 +12,16 @@ documented methodology.
 <p align="center"><img src="assets/demo.gif" alt="demo" width="100%"></p>
 
 
+> [!IMPORTANT]
+> **Flagship: [`tiny-gpt-from-scratch`](tiny-gpt-from-scratch/)** — a tape-based
+> reverse-mode autograd engine, a decoder-only transformer and bias-corrected
+> Adam, all in raw NumPy, with every primitive verified against numerical
+> gradients. It is the deepest artifact in this repo: it demonstrates an
+> understanding of backpropagation and transformer internals, not library
+> calls. **If you read only one project here, make it this one.** The applied
+> projects and how they differ from my other RAG/agent work are mapped in
+> [Project boundaries](#project-boundaries).
+
 ## 🗂 Projects
 
 | Project | Domain | Key techniques | Headline result |
@@ -25,7 +35,7 @@ documented methodology.
 
 ## 🧭 What each project demonstrates
 
-The flagship RAG pipeline, end to end:
+The applied-AI flagship pipeline, end to end:
 
 ```mermaid
 flowchart LR
@@ -67,9 +77,6 @@ flowchart LR
 - **ai-text-detector** — classic feature engineering: does *style* reveal
   machine text better than *vocabulary*? Hybrid TF-IDF + stylometric features
   beat plain TF-IDF across all three classifiers.
-- **recommender-system** — collaborative filtering implemented from first
-  principles (similarity matrices, weighted predictions, RMSE/MAE evaluation),
-  no recommendation libraries.
 - **tiny-gpt-from-scratch** — the whole deep-learning stack, hand-built:
   a tape-based reverse-mode autograd engine whose every primitive is
   checked against central-difference numerical gradients, a decoder-only
@@ -88,6 +95,18 @@ flowchart LR
   validation instead of a single split, signals aligned to next-day returns,
   transaction costs, and results reported *including* the uncomfortable ones
   (daily direction ≈ coin flip).
+
+### Project boundaries
+
+Three projects here touch RAG/agents on purpose — they are not the same work
+done three times:
+
+| Project | Role | What is unique here |
+|---|---|---|
+| `rag-farsi-assistant` (this repo) | **Research lab** | Techniques are invented and evaluated here first: hybrid BM25+RRF retrieval (BM25 from scratch, Persian-aware), re-ranking, bilingual prompt-injection guardrails, RAGAS-style golden-set evals with per-question error analysis |
+| [docubot](https://github.com/Abolfazlrwm/docubot) | **Product** | The proven ideas hardened into a multi-tenant backend: Django 5.2 + pgvector + Celery, idempotent async pipeline, API keys with budgets, SSE, page-level citations |
+| [nexusagent](https://github.com/Abolfazlrwm/nexusagent) / [NexusHub](https://github.com/Abolfazlrwm/NexusHub) | **Runtime & platform** | The agent tool-loop, memory and provider abstraction as a zero-dependency core (on PyPI); NexusHub consumes nexusagent — its own RAG/eval layers are explicitly roadmap, not shipped |
+
 
 ## 🚀 Quick start
 
