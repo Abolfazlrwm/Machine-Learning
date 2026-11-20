@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+import hmac
 import os
 import time
 import uuid
@@ -25,7 +26,9 @@ def _verify_api_key(api_key: str | None):
     """Build the X-API-Key dependency (only when a key is configured)."""
 
     async def verify(x_api_key: str | None = Header(default=None)) -> None:
-        if api_key and x_api_key != api_key:
+        # Constant-time comparison so a caller cannot measure how many key
+        # bytes matched and reconstruct the value byte by byte.
+        if api_key and (x_api_key is None or not hmac.compare_digest(x_api_key, api_key)):
             raise HTTPException(
                 status_code=401,
                 detail={"code": "UNAUTHORIZED",
@@ -80,8 +83,12 @@ def create_app(
     app.state.started_at = time.monotonic()
 
     # ---- middleware -----------------------------------------------------
+    # The default used to be "*" which allows any website to call the
+    # serving endpoints from a browser. The deployment is meant for a known
+    # front-end, so the safe default is no cross-origin access at all;
+    # operators opt in via CORS_ORIGINS (comma-separated exact origins).
     cors_origins = [
-        o.strip() for o in os.environ.get("CORS_ORIGINS", "*").split(",") if o.strip()
+        o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()
     ]
     app.add_middleware(
         CORSMiddleware,
