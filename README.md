@@ -20,14 +20,25 @@ screenshot to open the live app.
 | Ask in Persian → E5 + BM25 (RRF) hybrid retrieval → extractive answer with **numbered citations** + sources | The 249k-param NumPy transformer **runs in the browser** (Pyodide/WASM) — same code as the repo, no server, seed + temperature + top-k controls |
 | [Open the Space ↗](https://huggingface.co/spaces/Abol0pati/farsi-rag-assistant) | [Open the Space ↗](https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa) |
 
-**And the API layer itself** — the FastAPI serving app (`serving/`) ships
-as a deployable Docker Space (`hf-space-serving/`, index pre-baked at build
-time): Swagger UI at `/docs`, SSE streaming RAG answers, `/v1/sms/predict`,
-Prometheus `/v1/metrics`. One command deploys it:
+**And the API layer itself** — a live tour of the FastAPI serving app:
+[**API Live page**](https://abolfazlrwm.github.io/Machine-Learning/api-live/) with the
+real Swagger UI (built from the committed OpenAPI snapshot) plus verbatim
+captured responses from a running session — health with graceful
+degradation, spam `0.948`, a cited Persian RAG answer with per-stage
+timings, the SSE token stream and the Prometheus exposition.
 
-```bash
-HF_TOKEN=hf_... make space-deploy-api   # → https://abol0pati-ml-portfolio-api.hf.space/docs
-```
+<p align="center">
+  <a href="https://abolfazlrwm.github.io/Machine-Learning/api-live/">
+    <img src="assets/demo/api-live-outputs.png" alt="API Live — Swagger UI + real captured responses" width="88%">
+  </a>
+</p>
+
+Run it live on your machine: `pip install -r serving/requirements.txt` then
+`ML_REPO_ROOT=$PWD uvicorn serving.app.main:app --port 8000` → open `/docs`.
+A ready Docker Space package also ships (`hf-space-serving/`,
+`make space-deploy-api`) — note that **Hugging Face now requires a PRO
+subscription** for Docker/Gradio Spaces on free cpu-basic hardware
+(static Spaces remain free).
 
 
 

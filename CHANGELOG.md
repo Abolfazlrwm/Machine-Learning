@@ -33,6 +33,32 @@ and versioning follows SemVer on the repository-level tags (`v*`).
   portfolio (325 tests, 11 CI jobs) and topics include fastapi,
   prometheus, autograd.
 
+### Fixed — embedding default drift (caught during the live API capture)
+- Rebuilding the index and asking the API a real Persian question exposed
+  that `RAGConfig.embedding_model` had drifted to **e5-base (768-dim)**
+  while every published artifact is **e5-small (384-dim)** — the static
+  Space's precomputed embeddings, the committed `storage/meta.json`
+  dimension and the evaluated Hit@1 numbers. The default is back to
+  `intfloat/multilingual-e5-small`, pinned by a contract test so it
+  cannot silently drift again.
+
+### Added — the API layer gets a live tour (no hosting required)
+- **`API Live` docs page** (`docs/api-live.md`): the real Swagger UI
+  (rendered from a committed `openapi.json` snapshot, try-it-out disabled
+  on the static site) plus **verbatim captured responses** from a running
+  session — `GET /v1/health` showing graceful degradation (rag+sms up,
+  stock 503), `POST /v1/sms/classify` at `p(spam)=0.948` in 1 ms, a cited
+  Persian RAG answer with per-stage timings (`bm25: 3ms, dense: 22ms`),
+  the SSE event stream (`sources` -> `token` x3 -> `done`) and the
+  Prometheus exposition. Raw captures are committed under
+  `docs/assets/api-demo/`; the README live-demo section carries the
+  screenshot and the run-locally commands.
+- **Hugging Face hosting reality documented**: Docker/Gradio Spaces on
+  free cpu-basic now require a PRO subscription (402 Payment Required —
+  hit while deploying `hf-space-serving/`). The Space package stays ready
+  with an explicit note; the no-cost demo paths are the two static Spaces
+  and the API Live page.
+
 ## [2.9.0] — 2026-11-18
 
 ### Added — platform consistency pass

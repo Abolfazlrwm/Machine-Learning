@@ -60,6 +60,7 @@ nav:
       - Error analysis: rag/error-analysis.md
       - Guardrails: rag/safety.md
   - Serving API:
+      - API Live demo: api-live.md
       - Endpoints: serving/api.md
       - Observability: serving/observability.md
   - Deployment: deployment.md
