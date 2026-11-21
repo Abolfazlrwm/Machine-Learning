@@ -1,5 +1,4 @@
 import pytest
-
 from src.chunker import chunk_documents, split_text
 from src.data_loader import Document, load_documents
 

@@ -11,7 +11,8 @@ LINT_TARGETS = rag-farsi-assistant/src serving/app rag-farsi-assistant/tests ser
                recommender-system/src recommender-system/tests \
                ai-text-detector/src ai-text-detector/tests \
                sms-spam/src sms-spam/tests \
-               hf-space-tiny-gpt/src scripts/deploy_tiny_gpt_space.py
+               hf-space-tiny-gpt/src scripts/deploy_tiny_gpt_space.py \
+               scripts/deploy_serving_space.py
 
 .PHONY: help lint fix test coverage docs-build docs-serve api up down bench space-deploy
 
