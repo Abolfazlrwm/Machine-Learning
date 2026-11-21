@@ -26,7 +26,7 @@ jobs:
         # + mock LLM, no heavy sentence-transformers/torch stack needed.
         run: |
           python -m pip install --upgrade pip
-          pip install numpy requests pytest
+          pip install numpy requests pytest pypdf
           pip install -r serving/requirements-dev.txt
       - name: RAG assistant tests
         working-directory: rag-farsi-assistant
