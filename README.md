@@ -9,7 +9,17 @@ scikit-learn pipelines to LLM-powered retrieval. Every project ships with a
 structured codebase (`src/` + `tests/`), real evaluation numbers and a
 documented methodology.
 
-<p align="center"><img src="assets/demo.gif" alt="demo" width="100%"></p>
+## ⚡ Live demos — the product, one click away
+
+No install, no signup: both demos run **entirely in your browser**. Click a
+screenshot to open the live app.
+
+| 🤖 Persian RAG assistant — hybrid retrieval with citations | 🧠 TinyGPT — GPT built from scratch, generating Persian |
+|---|---|
+| [![RAG demo: a cited Persian answer on overfitting](assets/demo/rag-answer.png)](https://huggingface.co/spaces/Abol0pati/farsi-rag-assistant) | [![TinyGPT demo: char-level model generating Persian text](assets/demo/tinygpt-generate.png)](https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa) |
+| Ask in Persian → E5 + BM25 (RRF) hybrid retrieval → extractive answer with **numbered citations** + sources | The 249k-param NumPy transformer **runs in the browser** (Pyodide/WASM) — same code as the repo, no server, seed + temperature + top-k controls |
+| [Open the Space ↗](https://huggingface.co/spaces/Abol0pati/farsi-rag-assistant) | [Open the Space ↗](https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa) |
+
 
 
 > [!IMPORTANT]
