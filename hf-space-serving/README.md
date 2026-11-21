@@ -10,6 +10,12 @@ pinned: false
 
 # ML Portfolio — live REST API
 
+> **Hosting note:** Hugging Face requires a **PRO subscription** for
+> Docker/Gradio Spaces on free cpu-basic hardware (402 Payment Required
+> otherwise). Static Spaces stay free — which is why the portfolio's two
+> visitor-facing demos are static. Deploy this Space after subscribing,
+> or host the image anywhere that runs Docker (`docs/deployment.md` §2b).
+
 One FastAPI serving layer over the portfolio's model families, deployed as
 a Hugging Face Docker Space. Open **`/docs`** for the interactive
 Swagger UI and call the endpoints right from the browser:

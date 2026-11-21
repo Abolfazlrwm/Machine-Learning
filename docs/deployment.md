@@ -30,6 +30,12 @@ One compose file brings up the FastAPI service, Prometheus scraping
 
 ### 2b. The API as a Hugging Face Docker Space
 
+> Hugging Face requires a **PRO subscription** for Docker/Gradio Spaces on
+> free cpu-basic hardware (static Spaces remain free). Without PRO the
+> create call returns `402 Payment Required`; the package below stays
+> ready for when you subscribe, or point any Docker host at
+> `hf-space-serving/Dockerfile`.
+
 `hf-space-serving/` packages the same serving stack for Spaces
 (`sdk: docker`, port 7860). The image build **pre-bakes the RAG index and
 the E5 model cache**, so the Space is warm as soon as it reports Running;
