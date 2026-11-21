@@ -40,3 +40,15 @@ def test_factory_unknown_backend():
 def test_factory_fake_backend():
     embedder = create_embedder("fake", "ignored", dimension=32)
     assert embedder.dimension == 32
+
+
+class TestEmbedderConfigContract:
+    def test_default_model_is_e5_small(self):
+        """The published numbers (hybrid Hit@1 = 0.967, the static Space's
+        precomputed 384-dim embeddings, storage/meta.json dimension=384)
+        were all produced with multilingual-e5-small — pin the default so
+        it cannot silently drift to another E5 variant (base is 768-dim
+        and mismatches every committed index)."""
+        from src.config import RAGConfig
+
+        assert RAGConfig().embedding_model == "intfloat/multilingual-e5-small"

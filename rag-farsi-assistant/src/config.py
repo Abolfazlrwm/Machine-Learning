@@ -45,7 +45,7 @@ class RAGConfig:
     # --- embeddings -----------------------------------------------------
     # backend: "sentence-transformers" (real) or "fake" (hash-based, no deps)
     embedding_backend: str = "sentence-transformers"
-    embedding_model: str = "intfloat/multilingual-e5-base"
+    embedding_model: str = "intfloat/multilingual-e5-small"
     embedding_dimension: int = 384  # only used by the "fake" backend
 
     # --- generation -----------------------------------------------------
