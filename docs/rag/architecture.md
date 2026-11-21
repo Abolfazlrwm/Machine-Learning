@@ -9,7 +9,7 @@ touching application code.
 ## Data flow
 
 ```
-data/*.txt ──► chunker ──► embedder ──► FAISS store ──┐
+data/*.txt + *.pdf ──► chunker ──► embedder ──► FAISS store ──┐
                                                       ├─► retriever (MMR / RRF / rerank)
 question ─► query analysis (expansion, folding) ──────┘        │
                                                                ▼
@@ -44,7 +44,7 @@ flowchart LR
 | layer | module | responsibility |
 |---|---|---|
 | config | `src/config.py` | dataclass + `RAG_*` env mapping, one source of truth |
-| ingestion | `src/data_loader.py`, `src/chunker.py` | load `data/*.txt`, sliding-window chunks (700/150) |
+| ingestion | `src/data_loader.py`, `src/chunker.py` | load `data/*.txt` / `.md` / `.pdf` (pypdf, lazy), sliding-window chunks (700/150) |
 | embeddings | `src/embedder.py` | `sentence-transformers` (real) or deterministic hashing (offline/CI) |
 | lexical | `src/bm25.py` | BM25 with k1/b tuning, Persian-aware tokenizer |
 | fusion | `src/hybrid.py` | RRF fusion of dense + BM25, MMR diversification, re-rank hook |

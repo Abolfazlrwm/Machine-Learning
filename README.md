@@ -27,7 +27,7 @@ documented methodology.
 | Project | Domain | Key techniques | Headline result |
 |---|---|---|---|
 | [`tiny-gpt-from-scratch`](tiny-gpt-from-scratch/) | Deep learning from scratch | **Reverse-mode autograd engine + decoder-only transformer + Adam, all raw NumPy** — no PyTorch/JAX; every primitive verified against numerical gradients; Persian char-level training | 249k params, 65 s CPU training (loss 4.89 → 1.22) · grad-check errors ~1e-10 · 32 tests |
-| [`rag-farsi-assistant`](rag-farsi-assistant/) | LLM / Retrieval (RAG) | Persian RAG: E5 embeddings + FAISS **fused with a from-scratch BM25 via RRF**, bilingual query expansion (Persian <-> English), exact + semantic (paraphrase-aware) answer cache, per-stage traces + **Prometheus metrics**, switchable dense/sparse/hybrid modes, re-rank stage (offline lexical / neural cross-encoder), **bilingual prompt-injection guardrails**, RAGAS-style eval suite, Ollama/OpenAI providers, Streamlit chat | **100-pair golden set**: re-rank lifts hybrid Hit@1 0.81 → 0.92 (11 fixes, 0 regressions) · E5 hybrid Hit@1 = 0.967 · 183 tests |
+| [`rag-farsi-assistant`](rag-farsi-assistant/) | LLM / Retrieval (RAG) | Persian RAG: E5 embeddings + FAISS **fused with a from-scratch BM25 via RRF**, bilingual query expansion (Persian <-> English), exact + semantic (paraphrase-aware) answer cache, per-stage traces + **Prometheus metrics**, switchable dense/sparse/hybrid modes, **PDF ingestion** (.txt/.md/.pdf), re-rank stage (offline lexical / neural cross-encoder), **bilingual prompt-injection guardrails**, RAGAS-style eval suite, Ollama/OpenAI providers, Streamlit chat | **100-pair golden set**: re-rank lifts hybrid Hit@1 0.81 → 0.92 (11 fixes, 0 regressions) · E5 hybrid Hit@1 = 0.967 · 187 tests |
 | [`ai-text-detector`](ai-text-detector/) | NLP classification | TF-IDF + stylometric features (sentence length variation, punctuation habits), Linear SVM vs NB vs LR | Accuracy 0.897 · F1 0.899 · ROC-AUC 0.964 |
 | [`recommender-system`](recommender-system/) | RecSys | User-based & item-based CF **and matrix factorization (ALS + truncated SVD) all from scratch** on MovieLens | Item-CF RMSE 0.875 · ALS 0.914 · 25 tests |
 | [`stock-movement-ml`](stock-movement-ml/) | Finance / time series | 20 technical indicators, walk-forward validation, leakage-free backtest with costs, Plotly dashboard | OOS ROC-AUC 0.53 (Random Forest), +25.45% on 696 out-of-sample days |
@@ -218,7 +218,7 @@ Projects include pytest suites (unit-level, network-free):
 
 ```bash
 cd tiny-gpt-from-scratch && python -m pytest tests/ -q  # 32 tests
-cd rag-farsi-assistant && python -m pytest tests/ -q    # 183 tests
+cd rag-farsi-assistant cd rag-farsi-assistant && python -m pytest tests/ -q    # 183 testscd rag-farsi-assistant && python -m pytest tests/ -q    # 183 tests python -m pytest tests/ -q    # 187 tests
 cd recommender-system  && python -m pytest tests/ -q    # 25 tests
 cd stock-movement-ml   && python -m pytest tests/ -q    # 28 tests
 cd serving             && python -m pytest tests/ -q    # 40 tests
@@ -238,7 +238,7 @@ cd sms-spam            && python -m pytest tests/ -q    # 7 tests
 - [x] **New project: TinyGPT from scratch** (autograd + Persian char-level transformer, gradient-checked) **and matrix factorization (ALS/SVD) for the recommender** — v2.8.0
 - [x] TinyGPT live demo: free-tier HF Space that runs the unchanged NumPy stack in-browser (Pyodide/WASM) — v2.8.1 / v2.8.2
 - [x] **Platform consistency pass**: ai-text-detector into CI + docs, sms-spam modernized to the src/tests shape (numbers reproduced), Makefile + pre-commit, CodeQL SAST + coverage gate, mermaid architecture diagrams — v2.9.0
-- [ ] PDF ingestion for the RAG assistant
+- [x] PDF ingestion for the RAG assistant (.txt/.md/.pdf, lazy pypdf, scan-skip warning) — v2.10.0
 - [ ] Fine-tuning a Persian BERT for sentiment analysis
 - [ ] Hyperparameter tuning with Optuna for the stock pipeline
 

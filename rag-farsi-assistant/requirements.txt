@@ -1,4 +1,6 @@
 # Runtime dependencies for the Persian RAG assistant
+# PDF ingestion — imported lazily, text-only installs work without it
+pypdf>=3.0
 sentence-transformers>=2.2.2
 faiss-cpu>=1.7.4
 numpy>=2.5.4

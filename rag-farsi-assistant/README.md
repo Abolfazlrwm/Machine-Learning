@@ -32,7 +32,7 @@ question ──► query plan ──►│ fold · script mix · expand │
                           └─────────────┬──────────────┘
                      original │        │ expanded (lexical only)
                               ▼        ▼
-data/*.txt ──► chunker ──► embedder ──► FAISS store ──┐
+data/*.txt + *.pdf ──► chunker ──► embedder ──► FAISS store ──┐
                                                       ├─► RRF fusion ─► top-k
 lexical query ──► BM25 (from scratch) ────────────────┘        │
                                                                ▼
@@ -48,7 +48,7 @@ lexical query ──► BM25 (from scratch) ────────────
 | Module | Responsibility |
 |---|---|
 | `src/config.py` | single `RAGConfig` dataclass, `RAG_*` env overrides |
-| `src/data_loader.py` | loads `.txt` / `.md` corpus into `Document` objects |
+| `src/data_loader.py` | loads `.txt` / `.md` / `.pdf` corpus into `Document` objects |
 | `src/chunker.py` | paragraph→sentence-aware splitting with overlap (Persian sentence enders `؟ ! .` supported) |
 | `src/embedder.py` | `SentenceTransformerEmbedder` (auto E5 prefixes) + `FakeHashEmbedder` fallback |
 | `src/vector_store.py` | FAISS `IndexFlatIP` (cosine on normalised vectors) with pure-NumPy fallback, save/load |
