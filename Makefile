@@ -53,3 +53,6 @@ bench:  ## offline latency benchmark for the serving layer
 
 space-deploy:  ## redeploy the TinyGPT static Space (needs HF_TOKEN env var)
 	$(PYTHON) scripts/deploy_tiny_gpt_space.py
+
+space-deploy-api:  ## deploy the REST API Docker Space (needs HF_TOKEN env var)
+	$(PYTHON) scripts/deploy_serving_space.py

@@ -4,6 +4,35 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.10.0] — 2026-11-22
+
+### Added — PDF ingestion (roadmap item, closed)
+- The RAG data loader now accepts **`.pdf` alongside `.txt` / `.md`**:
+  per-page extraction via `pypdf` (lazy import — text-only installs never
+  pay for it), pages joined with blank lines so the chunker treats them
+  naturally. Scanned / image-only PDFs (no extractable text) are skipped
+  **with a visible stderr warning** instead of silently indexing an empty
+  document. 4 new tests (187 total) using a hand-built minimal-PDF
+  fixture — no extra test dependency; `pypdf` wired into the CI job and
+  `requirements.txt`.
+
+### Added — live-demo experience
+- **Live-demo gallery at the top of the README**: real screenshots
+  captured from the two running Spaces (a cited Persian RAG answer on an
+  overfitting question; TinyGPT generating Persian text in-browser),
+  each click-through to the live app. The 1.1 MB stale `demo.gif` is
+  retired in favour of the crisp product shots.
+- **The API layer gets a deployable demo**: `hf-space-serving/` packages
+  the FastAPI stack as a Hugging Face **Docker Space** (port 7860) with
+  the RAG index + E5 model cache **pre-baked at build time** — the Space
+  is warm the moment it reports Running. `scripts/deploy_serving_space.py`
+  assembles the exact COPY set, validates it, and uploads;
+  `make space-deploy-api` is the one-command entry point. Deployment
+  shape documented in `docs/deployment.md` §2b.
+- Repository metadata refreshed: description now reflects the full
+  portfolio (325 tests, 11 CI jobs) and topics include fastapi,
+  prometheus, autograd.
+
 ## [2.9.0] — 2026-11-18
 
 ### Added — platform consistency pass

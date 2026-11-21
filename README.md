@@ -20,6 +20,16 @@ screenshot to open the live app.
 | Ask in Persian → E5 + BM25 (RRF) hybrid retrieval → extractive answer with **numbered citations** + sources | The 249k-param NumPy transformer **runs in the browser** (Pyodide/WASM) — same code as the repo, no server, seed + temperature + top-k controls |
 | [Open the Space ↗](https://huggingface.co/spaces/Abol0pati/farsi-rag-assistant) | [Open the Space ↗](https://huggingface.co/spaces/Abol0pati/tiny-gpt-fa) |
 
+**And the API layer itself** — the FastAPI serving app (`serving/`) ships
+as a deployable Docker Space (`hf-space-serving/`, index pre-baked at build
+time): Swagger UI at `/docs`, SSE streaming RAG answers, `/v1/sms/predict`,
+Prometheus `/v1/metrics`. One command deploys it:
+
+```bash
+HF_TOKEN=hf_... make space-deploy-api   # → https://abol0pati-ml-portfolio-api.hf.space/docs
+```
+
+
 
 
 > [!IMPORTANT]

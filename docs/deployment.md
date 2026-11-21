@@ -28,6 +28,20 @@ One compose file brings up the FastAPI service, Prometheus scraping
 `/metrics`, and Grafana with a provisioned dashboard — see
 [Observability](serving/observability.md).
 
+### 2b. The API as a Hugging Face Docker Space
+
+`hf-space-serving/` packages the same serving stack for Spaces
+(`sdk: docker`, port 7860). The image build **pre-bakes the RAG index and
+the E5 model cache**, so the Space is warm as soon as it reports Running;
+the SMS service ships its committed artifact, and services without
+artifacts degrade to a machine-readable `503` instead of crashing. Deploy
+with one command (needs a write token):
+
+```bash
+HF_TOKEN=hf_... make space-deploy-api
+# Swagger UI: https://abol0pati-ml-portfolio-api.hf.space/docs
+```
+
 ## 3. Local / Streamlit
 
 ```bash
