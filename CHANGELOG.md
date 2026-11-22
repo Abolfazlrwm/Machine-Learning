@@ -4,6 +4,28 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.10.1] — 2026-11-22
+
+### Fixed
+- **Embedding default restored to `intfloat/multilingual-e5-small`**: the
+  live API capture exposed a 768-vs-384 dimension drift against every
+  published artifact (static Space embeddings, storage meta, Hit@1 evals).
+  A contract test now pins the default so config and published artifacts
+  can never silently diverge again.
+
+### Added
+- **API Live tour docs page**: the committed `openapi.json` snapshot
+  rendered as a real Swagger UI, plus verbatim captured responses from a
+  running session — health, spam 0.948, a cited hybrid RAG answer with
+  per-stage timings, an SSE stream chunk and Prometheus metrics.
+- **Governance**: `.github/CODEOWNERS` with the default review policy;
+  `CITATION.cff` re-synced to the release tag (was stuck at v2.6.0).
+
+### Docs
+- Hugging Face now gates Docker/Gradio Spaces behind PRO (402 observed in
+  the deploy attempt) — hosting notes on the Space card and deployment §2b;
+  the packaged Space stays ready for when PRO is available.
+
 ## [2.10.0] — 2026-11-22
 
 ### Added — PDF ingestion (roadmap item, closed)
