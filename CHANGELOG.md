@@ -4,6 +4,29 @@ All notable changes to this portfolio are documented here.
 The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and versioning follows SemVer on the repository-level tags (`v*`).
 
+## [2.11.0] — 2026-11-23
+
+### Added — engineering transparency
+- **Engineering Decision Records**: a new docs page (`docs/adr.md`, also in
+  the site nav) captures the *why* behind the load-bearing choices — RRF over
+  learned fusion, BM25 written from scratch with Persian-aware tokenisation,
+  the E5-small default and its dimension contract test, network-free CI with
+  a fake embedder + mock LLM, the bounded re-rank stage, bilingual
+  prompt-injection guardrails, the two-layer answer cache, SSE streaming +
+  per-stage Prometheus metrics, honest-numbers discipline (the stock
+  project's OOS ROC-AUC 0.53 stays published on purpose), the raw-NumPy
+  autograd engine, the Pyodide/WASM static Space and the unified serving API.
+- **Weekly link check** (lychee): internal + external links across README and
+  docs are validated on a schedule — informational and non-blocking, report
+  attached to the run summary and as an artifact.
+- **Repo hygiene**: `.gitattributes` (LF normalisation, binary markers for
+  datasets/images, generated artifacts excluded from the language bar) and
+  `.editorconfig` (consistent whitespace across editors).
+
+### Changed
+- **README badge row** now carries CodeQL, Python 3.12 and Ruff badges; the
+  duplicate plain Tests badge is retired.
+
 ## [2.10.1] — 2026-11-22
 
 ### Fixed

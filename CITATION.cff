@@ -10,8 +10,8 @@ authors:
     given-names: Abolfazl
     website: https://github.com/Abolfazlrwm
 type: software
-version: v2.10.1
-date-released: "2026-11-22"
+version: v2.11.0
+date-released: "2026-11-23"
 license: MIT
 repository-code: "https://github.com/Abolfazlrwm/Machine-Learning"
 keywords:
