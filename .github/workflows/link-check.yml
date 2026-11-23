@@ -1,0 +1,53 @@
+name: Link check
+
+# Weekly informational check of every internal and external link in the
+# README and docs. Deliberately NON-blocking: a dead link annotates the run
+# and the report artifact, it does not turn the repo's CI red.
+on:
+  schedule:
+    - cron: "0 4 * * 1" # Mondays 04:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lychee:
+    name: Check links (informational)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run lychee link checker
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress
+            --max-retries 3
+            --timeout 20
+            --exclude-loopback
+            --exclude '\.local$'
+            './**/*.md'
+          format: markdown
+          output: /tmp/lychee-report.md
+          fail: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Attach the report to the run summary
+        if: always()
+        run: |
+          if [ -f /tmp/lychee-report.md ]; then
+            cat /tmp/lychee-report.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "lychee produced no report file" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload the report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: link-check-report
+          path: /tmp/lychee-report.md
+          if-no-files-found: ignore
