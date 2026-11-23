@@ -1,0 +1,17 @@
+# Line-ending normalisation: LF everywhere, Windows scripts keep CRLF
+* text=auto eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# Datasets and binaries: never mangle line endings, never diff
+*.csv -text
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+
+# Generated artifacts — excluded from the GitHub language statistics
+rag-farsi-assistant/storage/** linguist-generated
+**/artifacts/** linguist-generated
