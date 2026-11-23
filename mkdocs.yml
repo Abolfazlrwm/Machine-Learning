@@ -64,6 +64,7 @@ nav:
       - Endpoints: serving/api.md
       - Observability: serving/observability.md
   - Deployment: deployment.md
+  - Engineering decisions: adr.md
   - Stock ML: stock.md
   - AI text detector: ai-text-detector.md
   - SMS spam (NLP baseline): sms-spam.md
