@@ -2,7 +2,7 @@
 # PDF ingestion — imported lazily, text-only installs work without it
 pypdf>=3.0
 sentence-transformers>=2.2.2
-faiss-cpu>=1.7.4
+faiss-cpu>=1.16.0
 numpy>=2.5.4
 requests>=2.31.0
 streamlit>=1.67.0
