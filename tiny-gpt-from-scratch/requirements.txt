@@ -1,2 +1,2 @@
-numpy>=2.5.4
+numpy>=2.5.5
 pytest>=7.4
